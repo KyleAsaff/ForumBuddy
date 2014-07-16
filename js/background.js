@@ -8,7 +8,7 @@ var localDataStore = {
     // Get value at specific index of array
     getIndexOf: function(key, index) {
         if (localStorage.getItem(key) === null)
-        return false;
+            return false;
         else
             return (JSON.parse(localStorage.getItem(key))[index]);
     },
@@ -74,10 +74,19 @@ if (localStorage.getItem("offset") === null)
 // store local storage value in offset
 var offset = localStorage.getItem("offset");
 
+// function to query, store, and fetch posts
 function fetchPosts() {
-    console.log(offset);
+    // add 1 to the offset and store new offset
+    offset = parseInt(offset) + 1;
+    localStorage.setItem("offset", offset);
 
-    // Search query
+    // Reset offset after it reaches 99
+    if (parseInt(offset) > 98) {
+        localStorage.setItem("offset", 0);
+        offset = 0;
+    }
+
+    // get data from search query
     var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top"
     $.get(query, function(data) {
 
@@ -130,19 +139,11 @@ function fetchPosts() {
         $(".response").append($block).html();
     });
 
-    // add 1 to the offset and store new offset
-    offset = parseInt(offset) + 1;
-    localStorage.setItem("offset", offset);
-
     //Logs for debugging
+    console.log(offset);
     console.log(query);
     console.log(localDataStore.get("replies"));
 
-    // Reset offset after it reaches 99
-    if (parseInt(offset) > 98) {
-        localStorage.setItem("offset", 0);
-        offset = 0;
-    }
 }
 
 fetchPosts();
