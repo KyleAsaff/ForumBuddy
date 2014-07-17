@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="/js/jquery-1.11.1.js"></script>
+    <script src="/js/handlebars-v1.3.0.js"></script>
+    <script src="/js/popup.js"></script>
+    <script src="/js/background.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/popup.css" />
+    <meta charset=utf-8 />
+    <title>test</title>
+</head>
+
+<body>
+    <div class="container">
+        <script id="template" type="text/x-handlebars-template">
+            <ul id="tabs">
+                <li><a href="javascript:void(0)">Mentions</a>
+                </li>
+                <li><a href="javascript:void(0)">Subscriptions</a>
+                </li>
+            </ul>
+            <div class="post">
+                {{#each this}}
+                <div class="date">
+                    {{postDate}} {{postTime}}
+                </div>
+                <div class="threadinfo">
+                    <h2>Thread: {{threadTitle}}</h2>
+                    by: {{postAuthor}}
+                </div>
+                <div class="views">
+                    {{threadViews}} {{threadReplies}}
+                </div>
+                <div class="postinfo">
+                    {{postDesc}}
+                </div>
+                {{/each}}
+            </div>
+        </script>
+    </div>
+    <div class="response"></div>
+</body>
+
+</html>

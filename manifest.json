@@ -4,9 +4,9 @@
     "manifest_version": 2,
     "description": "A buddy for forums",
     "icons": {
-        "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
+        "16": "icons/icon2_16.png",
+        "48": "icons/icon2_48.png",
+        "128": "icons/icon2_128.png"
     },
     "default_locale": "en",
     "background": {
@@ -15,9 +15,9 @@
     },
     "options_page": "src/options/index.html",
     "browser_action": {
-        "default_icon": "icons/icon19.png",
+        "default_icon": "icons/icon2_19.png",
         "default_title": "Forum Buddy",
-        "default_popup": ""
+        "default_popup": "src/browser_action/popup.html"
     },
     "permissions": [
         "cookies",
@@ -30,5 +30,6 @@
         "<all_urls>",
         "clipboardWrite"
     ],
-    "devtools_page": "devtools/devtools.html"
+    "devtools_page": "devtools/devtools.html",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

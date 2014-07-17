@@ -118,7 +118,7 @@ function fetchPosts() {
             var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postLinkBuffer);
 
             // fail safe if cant get post from page
-            if (postBuffer.postID === "")
+            if (postBuffer.postAuthor === "")
                 return false;
 
             // fill new array of data to concat with data in localstore
@@ -136,7 +136,7 @@ function fetchPosts() {
             repliesBuffer = [];
         }
 
-        $(".response").append($block).html();
+        //  $(".response").append($block).html();
     });
 
     //Logs for debugging
@@ -147,4 +147,4 @@ function fetchPosts() {
 }
 
 fetchPosts();
-setInterval(fetchPosts, 60 * 500);
+setInterval(fetchPosts, 60 * 800);
