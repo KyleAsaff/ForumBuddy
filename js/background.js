@@ -1,3 +1,8 @@
+/*!
+ * background.js
+ * Crawls the search results for whenever your username is mentioned on the forums
+ */
+
 // Object for storing post data
 function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, postDesc, postLink) {
     // this.raw = raw;

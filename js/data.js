@@ -1,3 +1,8 @@
+/*!
+ * data.js
+ * contains methods for retreiving object data from localStorage
+ */
+
 var localDataStore = {
     // Get item
     get: function(key) {
