@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="/js/jquery-1.11.1.js"></script>
+    <script src="/js/handlebars-v1.3.0.js"></script>
+    <script src="/js/popup.js"></script>
+    <script src="/js/data.js"></script>
+    <link rel="stylesheet/less" href="/css/popup.less" />
+    <script src="/js/less-1.7.3.min.js"></script>
+    <meta charset=utf-8 />
+    <title>test</title>
+</head>
+
+<body>
+    <div class="container">
+        <script id="template" type="text/x-handlebars-template">
+            <div class="headerbar">
+            forumBuddy
+            </div>
+            <div class="topbar"> 
+                <div class="leftaccountinfo">
+
+                    <div id="avi">
+                        <img src="/icons/profiledefault_thumb.jpg" width="80px" height="80px">
+                    </div>
+
+                    <div id="user">
+                        <ul id="userinfo">
+                            <li>
+                                <a href="/username">user</a>
+                            </li>
+                            <li>
+                                <a href="/userCP">userCPbutton</a>
+                            </li>
+                            <li>
+                                <a href="/userlink">userlink</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class= "rightaccountinfo">
+                    <div class="mentions">
+                    <a>Mentions</a> 
+                    </div>
+                    <div class="actions">
+                        <ul id="switch">
+                            <li>
+                                <a>show button</a>
+                            </li>
+                            <li>
+                                <a>hide button</a>
+                            </li>
+                        </ul> 
+                    </div>
+                </div>
+            </div>
+            <div class="scrollcontainer">
+                <div class="timeline">
+                    {{#each this}}
+                    <div class="post">
+                        <div class="posttop">
+                            <ul class="postinfo">
+                                <li>
+                                    <a href="{{postAuthorLink}}" target="_blank">{{postAuthor}}</a>
+                                </li>
+                                <li>
+                                    <a href="{{threadTitle}}" target="_blank">{{threadTitle}}</a>
+                                </li>
+                                <li>
+                                    <a id="date">{{postDate}} {{postTime}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="postbottom">
+                            <a href="{{postLink}}" target="_blank">{{postDesc}}</a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="bottombar">
+                <a href="javascript:void(0)" id="popout-button">D</a>
+                <div id="forum-select-input">
+                    <option value="" selected>forum.bodybuilding.com</option>
+                </div>
+                <a href="options/index.html" target="_blank" id="settings-button">S</a>
+            </div>
+        </script>
+    </div>
+</body>
+
+</html>

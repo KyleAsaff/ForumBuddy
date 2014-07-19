@@ -3,8 +3,39 @@
  * Crawls the search results for whenever your username is mentioned on the forums
  */
 
+ // Function to change "yesterday" or "today" into real date
+function getToday() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    var date = (mm + '/' + dd + '/' + yyyy);
+    return(date);
+}
+
+function getYesterday() {
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    var dd = yesterday.getDate();
+    var mm = yesterday.getMonth() + 1;
+    var yyyy = yesterday.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    var date = (mm + '-' + dd + '-' + yyyy);
+    return(date);
+}
 // Object for storing post data
-function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, postDesc, postLink) {
+function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, postDesc, postDescLong, postLink) {
     // this.raw = raw;
     this.postID = postID;
     this.threadTitle = threadTitle;
@@ -17,7 +48,9 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
     this.postTime = postTime;
     this.postDesc = postDesc;
     this.postLink = postLink;
-};
+    this.postDescLong = postDescLong;
+    this.visible = 1;
+}
 
 var url = "http://forum.bodybuilding.com/";
 var repliesBuffer = [];
@@ -43,7 +76,7 @@ function fetchPosts() {
     }
 
     // get data from search query
-    var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top"
+    var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top";
     $.get(query, function(data) {
 
         var $page = $(data);
@@ -69,9 +102,20 @@ function fetchPosts() {
             var postDescBuffer = $rawBuffer.find("h3.posttitle a:first").text();
             var threadRepliesBuffer = $rawBuffer.find("dl.userstats dd:first").text();
             var threadViewsBuffer = $rawBuffer.find("dl.userstats dd:last").text();
+            var postDescLongBuffer = $rawBuffer.find("blockquote.postcontent").text().trim().replace(/\n\s*\n/g, '\n');
 
             // Create a post object with the buffer data
-            var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postLinkBuffer);
+            var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
+
+            // If you are the post author, dont add to localstore
+            if (postBuffer.postAuthor === "user")
+                return false;
+
+            // Convert date into real date
+            if(postBuffer.postDate === "Yesterday")
+                postBuffer.postDate = getYesterday();
+            if(postBuffer.postDate === "Today")
+                postBuffer.postDate = new getToday();
 
             // fail safe if cant get post from page
             if (postBuffer.postAuthor === "")
@@ -79,7 +123,7 @@ function fetchPosts() {
 
             // fill new array of data to concat with data in localstore
             if (postBuffer.postID === localDataStore.getIndexOf("replies", 0).postID) {
-                localDataStore.appendToFront("replies", repliesBuffer)
+                localDataStore.appendToFront("replies", repliesBuffer);
                 repliesBuffer = [];
                 return false;
             } else
@@ -91,8 +135,6 @@ function fetchPosts() {
             localDataStore.appendToFront("replies", repliesBuffer);
             repliesBuffer = [];
         }
-
-        //  $(".response").append($block).html();
     });
 
     //Logs for debugging

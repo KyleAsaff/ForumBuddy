@@ -18,6 +18,8 @@ DONE:
 - Basic scraping algorithm for querying the search results database.
 - Timer to scrape every minute
 - Store all posts in localStorage
+- Change "yesterday" and "today" to the real date
+- Created basic UI for chrome extension
 
 TO DO:
 - Settings page
@@ -27,3 +29,5 @@ TO DO:
 - Display a badge by donaters usernames
 - Improve scrape algorithm to get mention results almost instantaneously
 - Display subscriptions in popup page
+- Sort results by date field in memory instead of top query search
+- Scrape and display lastest reputation received data

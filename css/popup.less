@@ -1,0 +1,266 @@
+@font-face{font-family:'WebSymbolsRegular';src:url('/icons/websymbols-regular-webfont.ttf') format('truetype');
+
+}
+
+@headerbar_color: #00547A;
+@default_width: 380px;
+
+
+html {
+    float: left;
+    //min-height: 500px;
+    overflow: hidden;
+    position: relative;
+}
+
+body {
+    min-width: @default_width;
+    height:100%;
+    min-height:100%;
+    overflow: hidden;
+    font-family: "Helvetica Neue", Verdana, Helvetica, Arial;
+    font-size: 10px;
+    position: relative;
+    margin: 0px;
+}
+
+div .banner {
+
+}
+
+div .header {
+    //margin-top: 5px;
+    height: 100%;
+    display: block;
+    position: relative;
+    font-size: 11px;
+
+    background: -webkit-linear-gradient(rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+    background: -o-linear-gradient(rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+    background: linear-gradient(rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+    .personalinfo {
+        display: inline-block;
+        vertical-align: top;
+
+        .username {
+            display: block;
+        }
+
+        .usercp {
+            display: block;
+        }
+
+        .forumhome {
+            display: block;
+            color: black;
+        }
+        .forumhome:hover {
+            color: grey;
+        }
+
+    }
+
+    .actions {
+        display: inline-block;
+        position: absolute;
+        margin-right: 5px;
+        right: 0;
+        bottom: 0;
+
+        .readposts {
+            font-size: 13px;
+            display: block;
+        }
+    }
+}
+
+div .tabs {
+    display: block;
+    top-margin: 20px;
+    font-size: 11px;
+}
+
+div .scrollcontainer {
+        display: block;
+        overflow-y: auto;
+        max-height: 400px;
+        min-height:400px;
+}
+
+div .post {
+    display: block;
+    padding: 0px;
+    border: 1px solid black;
+   // -webkit-border-radius: 4px;
+  //  -moz-border-radius: 4px;
+    //border-radius: 4px;
+    margin-bottom: 4px;
+    margin-right: 5px;
+}
+
+div .posttop {
+    padding: 0px;
+    overflow: hidden;
+    position: relative;
+
+    .postdate {
+        background: -webkit-linear-gradient(rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%);
+        background: -o-linear-gradient(rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%);
+        background: linear-gradient(rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%);
+        font-size: 9px;
+        display: block;
+        border-bottom: 1px solid black;
+    
+    }
+}
+div .postbody {
+    overflow: hidden;
+    background: -webkit-linear-gradient(rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+    background: -o-linear-gradient(rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+    background: linear-gradient(rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+
+    .postinfo {
+        font-size: 12px;
+        text-align: justify;
+        display: block;
+        margin: 5px;
+
+        .author {
+        display: inline-block;
+        font-weight: bold;
+        color: black;
+        }
+
+        .title {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 10px;
+        font-style: italic;
+        color: grey;
+        white-space: nowrap;
+        width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+        }
+
+        .title:hover {
+            color: black;
+        }
+
+        .desc {
+        margin-top: 6px;
+        display: block;
+        font-size: 11px;
+        
+    }
+    }
+}
+
+div .footer {
+    height: 30px;
+    width: 100%;
+    display: block;
+    position: relative;
+    bottom: 0;
+    font-size: 11px;
+
+    background: -webkit-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10+,Safari5.1+ */
+
+    .popout {
+        display: inline-block;
+        font-family: WebSymbolsRegular;
+        font-size: 20px;
+        color: grey;
+        text-decoration: none;
+    }
+
+    .settings {
+        display: inline-block;
+        font-family: WebSymbolsRegular;
+        font-size: 20px;
+        color: grey;
+        //margin-right: 10px;
+        text-decoration: none;
+    }
+
+    .account-select {
+        display: inline-block;
+        width: 85%;
+        text-align: center;
+    }
+
+    .popout:hover{
+        color: black;
+    }
+
+    .settings:hover {
+        color: black;
+    }
+
+}
+
+.icon {
+    font-family: WebSymbolsRegular;
+}
+
+.onoffswitch {
+    display: inline-block;
+    position: relative; width: 76px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+
+.onoffswitch-checkbox {
+    display: none;
+}
+
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #666666; border-radius: 5px;
+}
+
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+}
+
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 15px; padding: 0; line-height: 15px;
+    font-size: 10px; color: white; font-family: Verdana, Trebuchet, Arial, sans-serif; //font-weight: bold;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+.onoffswitch-inner:before {
+    content: "Show";
+    padding-left: 5px;
+    background-color: #969696; color: #FFFFFF;
+}
+
+.onoffswitch-inner:after {
+    content: "Hide";
+    padding-right: 9px;
+    background-color: #DEDEDE; color: #666666;
+    text-align: right;
+}
+
+.onoffswitch-switch {
+    display: block; width: 30px; margin: 0px;
+    background: #FFFFFF;
+    border: 2px solid #666666; border-radius: 5px;
+    position: absolute; top: 0; bottom: 0; right: 42px;
+    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+    background-image: -moz-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: -webkit-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: -o-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}

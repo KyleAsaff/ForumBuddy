@@ -4,10 +4,10 @@
 <head>
     <script src="/js/jquery-1.11.1.js"></script>
     <script src="/js/handlebars-v1.3.0.js"></script>
-    <script src="/js/less-1.7.3.min.js"></script>
     <script src="/js/popup.js"></script>
     <script src="/js/data.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/popup.css" />
+    <link rel="stylesheet/less" href="/css/popup.less" />
+    <script src="/js/less-1.7.3.min.js"></script>
     <meta charset=utf-8 />
     <title>test</title>
 </head>
@@ -15,32 +15,67 @@
 <body>
     <div class="container">
         <script id="template" type="text/x-handlebars-template">
-            <ul id="tabs">
-                <li><a href="javascript:void(0)">Mentions</a>
-                </li>
-                <li><a href="javascript:void(0)">Subscriptions</a>
-                </li>
-            </ul>
-            <div class="post">
-                {{#each this}}
-                <div class="date">
-                    {{postDate}} {{postTime}}
-                </div>
-                <div class="threadinfo">
-                    <h2>Thread: {{threadTitle}}</h2>
-                    by: {{postAuthor}}
-                </div>
-                <div class="views">
-                    {{threadViews}} {{threadReplies}}
-                </div>
-                <div class="postinfo">
-                    {{postDesc}}
-                </div>
-                {{/each}}
+            <div class="banner">
             </div>
+            <div class="header">
+                <span class="avi">
+                    <img src="/icons/profiledefault_thumb.jpg">
+                </span>
+                <span class="personalinfo">
+                    <a class="username">Username</a>
+                    <button class="usercp" type="button">UserCP</button>
+                    <a class="forumhome" href="http://forum.bodybuilding.com" target="_blank">Forum Homepage</a>
+                </span>
+                <span class ="actions">
+                    <a class="readposts">Read Posts</a>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </span>
+            </div>
+            <div class = "tabs">
+            <span class="Mentions">
+            <a><span class="icon">c</span> Mentions</a>
+            </span>
+            </div>
+            <div class="scrollcontainer">
+                <div class="timeline">
+                    {{#each this}}
+                    <div class="post">
+                        <div class="posttop">
+                            <span class="postdate">
+                                <span class="date">{{postDate}}</span>
+                                <span class="Time">{{postTime}}</span>
+                            </span>
+                        </div>
+                    <div class="postbody">
+                            <span class="postinfo">
+                                <a class="author" href="{{postAuthorLink}}" target="_blank"><span class="icon">U</span>{{postAuthor}}</a>
+                                <a class="title" href="{{postLink}}" target="_blank">{{threadTitle}}</a>
+                                <a class="desc">{{postDescLong}}</a>
+                            </span>
+                        </div>
+                    </div>
+                {{/each}}
+                </div>
+            </div>
+        <div class="footer">
+            <a href="javascript:void(0)" class="popout">D</a>
+            <div class="account-select">
+            <select id="account-select-input">
+                <option value="bodybuilding">forum.bodybuilding.com</option>
+            </select>
+            </div>
+            <a href="/src/options/index.html" target="_blank" class="settings">S</a>
+        </div>
+    </div>
         </script>
     </div>
-    <div class="response"></div>
 </body>
 
 </html>
+
