@@ -49,7 +49,7 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
     this.postDesc = postDesc;
     this.postLink = postLink;
     this.postDescLong = postDescLong;
-    this.visible = 1;
+    this.visible = true;
 }
 
 var url = "http://forum.bodybuilding.com/";
@@ -59,6 +59,7 @@ var user = "nilekyle";
 // create an offset value in local storage if none
 if (localStorage.getItem("offset") === null)
     localStorage.setItem("offset", 0);
+
 
 // store local storage value in offset
 var offset = localStorage.getItem("offset");
@@ -108,8 +109,8 @@ function fetchPosts() {
             var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
 
             // If you are the post author, dont add to localstore
-            if (postBuffer.postAuthor === "user")
-                return false;
+            if (postBuffer.postAuthor === user)
+                return true;
 
             // Convert date into real date
             if(postBuffer.postDate === "Yesterday")

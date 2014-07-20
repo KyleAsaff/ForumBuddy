@@ -20,7 +20,7 @@ var localDataStore = {
 
     // Create new Item 
     set: function(key, value) {
-        localStorage.setItem(key, JSON.stringify(value))
+        localStorage.setItem(key, JSON.stringify(value));
     },
 
     // Adds new items to the front of an array in localStorage
