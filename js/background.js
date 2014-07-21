@@ -3,7 +3,36 @@
  * Crawls the search results for whenever your username is mentioned on the forums
  */
 
- // Function to change "yesterday" or "today" into real date
+if (window.addEventListener) {
+    window.addEventListener("storage", onStorage, false);
+} else {
+    window.attachEvent("onstorage", onStorage);
+};
+
+function onStorage(data) {
+    badgeColor = "#646464";
+    chrome.browserAction.setBadgeBackgroundColor({
+        color: badgeColor
+    });
+    var unreadmessages = 0;
+    var tempArray = localDataStore.get("replies");
+
+    for (i = 0; i < tempArray.length; i++) {
+        if (tempArray[i].visible === true)
+            unreadmessages++;
+    }
+    if (unreadmessages === 0) {
+        chrome.browserAction.setBadgeText({
+            text: ""
+        });
+    } else {
+        chrome.browserAction.setBadgeText({
+            text: unreadmessages.toString()
+        });
+    }
+};
+
+// Function to change "yesterday" or "today" into real date
 function getToday() {
     var today = new Date();
     var dd = today.getDate();
@@ -16,7 +45,7 @@ function getToday() {
         mm = '0' + mm;
     }
     var date = (mm + '/' + dd + '/' + yyyy);
-    return(date);
+    return (date);
 }
 
 function getYesterday() {
@@ -32,7 +61,7 @@ function getYesterday() {
         mm = '0' + mm;
     }
     var date = (mm + '-' + dd + '-' + yyyy);
-    return(date);
+    return (date);
 }
 // Object for storing post data
 function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, postDesc, postDescLong, postLink) {
@@ -113,9 +142,9 @@ function fetchPosts() {
                 return true;
 
             // Convert date into real date
-            if(postBuffer.postDate === "Yesterday")
+            if (postBuffer.postDate === "Yesterday")
                 postBuffer.postDate = getYesterday();
-            if(postBuffer.postDate === "Today")
+            if (postBuffer.postDate === "Today")
                 postBuffer.postDate = new getToday();
 
             // fail safe if cant get post from page
@@ -143,6 +172,7 @@ function fetchPosts() {
     console.log(query);
     console.log(localDataStore.get("replies"));
 
+    onStorage("replies");
 }
 
 fetchPosts();

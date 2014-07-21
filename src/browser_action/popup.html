@@ -9,7 +9,7 @@
     <link rel="stylesheet/less" href="/css/popup.less" />
     <script src="/js/less-1.7.3.min.js"></script>
     <meta charset=utf-8 />
-    <title>test</title>
+    <title>Forum Buddy</title>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
                 </span>
                 <span class="personalinfo">
                     <a class="username">Username</a>
-                    <button class="usercp" type="button">UserCP</button>
+                    <a class="usercp" href="http://forum.bodybuilding.com/usercp.php" target="_blank"><button type="button">User CP</button></a>
                     <a class="forumhome" href="http://forum.bodybuilding.com" target="_blank">Forum Homepage</a>
                 </span>
                 <span class ="actions">
@@ -39,7 +39,12 @@
             </div>
             <div class = "tabs">
             <span class="Mentions">
-            <a><span class="icon">c</span> Mentions</a>
+                <a><span class="icon">c</span> Mentions</a>
+            </span>
+            <span class="markall">
+                <a>Mark all:</a>
+                <button class="mark-btn" id="read" type="button">Read</button>
+                <button class="mark-btn" id="unread" type="button">Unread</button>
             </span>
             </div>
             <div class="scrollcontainer">
