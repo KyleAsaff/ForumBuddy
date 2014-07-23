@@ -3,10 +3,11 @@
 // https://github.com/frankkohlhepp/fancy-settings
 // License: LGPL v2.1
 //
-(function () {
+
+$(function() {
     var settings,
         Bundle;
-    
+
     settings = new Store("settings");
     Bundle = new Class({
         // Attributes:
@@ -23,101 +24,11 @@
         //  - get
         //  - set
         "Implements": Events,
-        
-        "initialize": function (params) {
+
+        "initialize": function(params) {
             this.params = params;
             this.params.searchString = "•" + this.params.tab + "•" + this.params.group + "•";
-            
-            this.createDOM();
-            this.setupDOM();
-            this.addEvents();
-            
-            if (this.params.id !== undefined) {
-                this.element.set("id", this.params.id);
-            }
-            
-            if (this.params.name !== undefined) {
-                this.set(settings.get(this.params.name), true);
-            }
-            
-            this.params.searchString = this.params.searchString.toLowerCase();
-        },
-        
-        "addEvents": function () {
-            this.element.addEvent("change", (function (event) {
-                if (this.params.name !== undefined) {
-                    settings.set(this.params.name, this.get());
-                }
-                
-                this.fireEvent("action", this.get());
-            }).bind(this));
-        },
-        
-        "get": function () {
-            return this.element.get("value");
-        },
-        
-        "set": function (value, noChangeEvent) {
-            this.element.set("value", value);
-            
-            if (noChangeEvent !== true) {
-                this.element.fireEvent("change");
-            }
-            
-            return this;
-        }
-    });
-    
-    Bundle.Description = new Class({
-        // text
-        "Extends": Bundle,
-        "addEvents": undefined,
-        "get": undefined,
-        "set": undefined,
-        
-        "initialize": function (params) {
-            this.params = params;
-            this.params.searchString = "";
-            
-            this.createDOM();
-            this.setupDOM();
-        },
-        
-        "createDOM": function () {
-            this.bundle = new Element("div", {
-                "class": "setting bundle description " + this.params.name
-            });
-            
-            this.container = new Element("div", {
-                "class": "setting container description " + this.params.name
-            });
-            
-            this.element = new Element("p", {
-                "class": "setting element description " + this.params.name
-            });
-        },
-        
-        "setupDOM": function () {
-            if (this.params.text !== undefined) {
-                this.element.set("html", this.params.text);
-            }
-            
-            this.element.inject(this.container);
-            this.container.inject(this.bundle);
-        }
-    });
-    
-    Bundle.Button = new Class({
-        // label, text
-        // action -> click
-        "Extends": Bundle,
-        "get": undefined,
-        "set": undefined,
-        
-        "initialize": function (params) {
-            this.params = params;
-            this.params.searchString = "•" + this.params.tab + "•" + this.params.group + "•";
-            
+
             this.createDOM();
             this.setupDOM();
             this.addEvents();
@@ -125,228 +36,318 @@
             if (this.params.id !== undefined) {
                 this.element.set("id", this.params.id);
             }
-            
+
+            if (this.params.name !== undefined) {
+                this.set(settings.get(this.params.name), true);
+            }
+
             this.params.searchString = this.params.searchString.toLowerCase();
         },
-        
-        "createDOM": function () {
+
+        "addEvents": function() {
+            this.element.addEvent("change", (function(event) {
+                if (this.params.name !== undefined) {
+                    settings.set(this.params.name, this.get());
+                }
+
+                this.fireEvent("action", this.get());
+            }).bind(this));
+        },
+
+        "get": function() {
+            return this.element.get("value");
+        },
+
+        "set": function(value, noChangeEvent) {
+            this.element.set("value", value);
+
+            if (noChangeEvent !== true) {
+                this.element.fireEvent("change");
+            }
+
+            return this;
+        }
+    });
+
+    Bundle.Description = new Class({
+        // text
+        "Extends": Bundle,
+        "addEvents": undefined,
+        "get": undefined,
+        "set": undefined,
+
+        "initialize": function(params) {
+            this.params = params;
+            this.params.searchString = "";
+
+            this.createDOM();
+            this.setupDOM();
+        },
+
+        "createDOM": function() {
             this.bundle = new Element("div", {
-                "class": "setting bundle button " + this.params.name
+                "class": "setting bundle description"
             });
-            
+
             this.container = new Element("div", {
-                "class": "setting container button " + this.params.name
+                "class": "setting container description"
             });
-            
-            this.element = new Element("input", {
-                "class": "setting element button " + this.params.name,
-                "type": "button"
-            });
-            
-            this.label = new Element("label", {
-                "class": "setting label button " + this.params.name
+
+            this.element = new Element("p", {
+                "class": "setting element description"
             });
         },
-        
-        "setupDOM": function () {
+
+        "setupDOM": function() {
+            if (this.params.text !== undefined) {
+                this.element.set("html", this.params.text);
+            }
+
+            this.element.inject(this.container);
+            this.container.inject(this.bundle);
+        }
+    });
+
+    Bundle.Button = new Class({
+        // label, text
+        // action -> click
+        "Extends": Bundle,
+        "get": undefined,
+        "set": undefined,
+
+        "initialize": function(params) {
+            this.params = params;
+            this.params.searchString = "•" + this.params.tab + "•" + this.params.group + "•";
+
+            this.createDOM();
+            this.setupDOM();
+            this.addEvents();
+
+            if (this.params.id !== undefined) {
+                this.element.set("id", this.params.id);
+            }
+
+            this.params.searchString = this.params.searchString.toLowerCase();
+        },
+
+        "createDOM": function() {
+            this.bundle = new Element("div", {
+                "class": "setting bundle button"
+            });
+
+            this.container = new Element("div", {
+                "class": "setting container button"
+            });
+
+            this.element = new Element("input", {
+                "class": "setting element button",
+                "type": "button"
+            });
+
+            this.label = new Element("label", {
+                "class": "setting label button"
+            });
+        },
+
+        "setupDOM": function() {
             if (this.params.label !== undefined) {
                 this.label.set("html", this.params.label);
                 this.label.inject(this.container);
                 this.params.searchString += this.params.label + "•";
             }
-            
+
             if (this.params.text !== undefined) {
                 this.element.set("value", this.params.text);
                 this.params.searchString += this.params.text + "•";
             }
-            
+
             this.element.inject(this.container);
             this.container.inject(this.bundle);
         },
-        
-        "addEvents": function () {
-            this.element.addEvent("click", (function () {
+
+        "addEvents": function() {
+            this.element.addEvent("click", (function() {
                 this.fireEvent("action");
             }).bind(this));
         }
     });
-    
+
     Bundle.Text = new Class({
         // label, text, masked
         // action -> change & keyup
         "Extends": Bundle,
-        
-        "createDOM": function () {
+
+        "createDOM": function() {
             this.bundle = new Element("div", {
-                "class": "setting bundle text " + this.params.name
+                "class": "setting bundle text"
             });
-            
+
             this.container = new Element("div", {
-                "class": "setting container text " + this.params.name
+                "class": "setting container text"
             });
-            
+
             this.element = new Element("input", {
-                "class": "setting element text " + this.params.name,
+                "class": "setting element text",
                 "type": "text"
             });
-            
+
             this.label = new Element("label", {
-                "class": "setting label text " + this.params.name
+                "class": "setting label text"
             });
         },
-        
-        "setupDOM": function () {
+
+        "setupDOM": function() {
             if (this.params.label !== undefined) {
                 this.label.set("html", this.params.label);
                 this.label.inject(this.container);
                 this.params.searchString += this.params.label + "•";
             }
-            
+
             if (this.params.text !== undefined) {
                 this.element.set("placeholder", this.params.text);
                 this.params.searchString += this.params.text + "•";
             }
-            
+
             if (this.params.masked === true) {
                 this.element.set("type", "password");
                 this.params.searchString += "password" + "•";
             }
-            
+
             this.element.inject(this.container);
             this.container.inject(this.bundle);
         },
-        
-        "addEvents": function () {
-            var change = (function (event) {
+
+        "addEvents": function() {
+            var change = (function(event) {
                 if (this.params.name !== undefined) {
                     settings.set(this.params.name, this.get());
                 }
-                
+
                 this.fireEvent("action", this.get());
             }).bind(this);
-            
+
             this.element.addEvent("change", change);
             this.element.addEvent("keyup", change);
         }
     });
-    
+
     Bundle.Checkbox = new Class({
         // label
         // action -> change
         "Extends": Bundle,
-        
-        "createDOM": function () {
+
+        "createDOM": function() {
             this.bundle = new Element("div", {
-                "class": "setting bundle checkbox " + this.params.name
+                "class": "setting bundle checkbox"
             });
-            
+
             this.container = new Element("div", {
-                "class": "setting container checkbox " + this.params.name
+                "class": "setting container checkbox"
             });
-            
+
             this.element = new Element("input", {
                 "id": String.uniqueID(),
-                "class": "setting element checkbox " + this.params.name,
+                "class": "setting element checkbox",
                 "type": "checkbox",
                 "value": "true"
             });
-            
+
             this.label = new Element("label", {
-                "class": "setting label checkbox " + this.params.name,
+                "class": "setting label checkbox",
                 "for": this.element.get("id")
             });
         },
-        
-        "setupDOM": function () {
+
+        "setupDOM": function() {
             this.element.inject(this.container);
             this.container.inject(this.bundle);
-            
+
             if (this.params.label !== undefined) {
                 this.label.set("html", this.params.label);
                 this.label.inject(this.container);
                 this.params.searchString += this.params.label + "•";
             }
         },
-        
-        "get": function () {
+
+        "get": function() {
             return this.element.get("checked");
         },
-        
-        "set": function (value, noChangeEvent) {
+
+        "set": function(value, noChangeEvent) {
             this.element.set("checked", value);
-            
+
             if (noChangeEvent !== true) {
                 this.element.fireEvent("change");
             }
-            
+
             return this;
         }
     });
-    
+
     Bundle.Slider = new Class({
         // label, max, min, step, display, displayModifier
         // action -> change
         "Extends": Bundle,
-        
-        "initialize": function (params) {
+
+        "initialize": function(params) {
             this.params = params;
             this.params.searchString = "•" + this.params.tab + "•" + this.params.group + "•";
-            
+
             this.createDOM();
             this.setupDOM();
             this.addEvents();
-            
+
             if (this.params.name !== undefined) {
                 this.set((settings.get(this.params.name) || 0), true);
             } else {
                 this.set(0, true);
             }
-            
+
             this.params.searchString = this.params.searchString.toLowerCase();
         },
-        
-        "createDOM": function () {
+
+        "createDOM": function() {
             this.bundle = new Element("div", {
-                "class": "setting bundle slider " + this.params.name
+                "class": "setting bundle slider"
             });
-            
+
             this.container = new Element("div", {
-                "class": "setting container slider " + this.params.name
+                "class": "setting container slider"
             });
-            
+
             this.element = new Element("input", {
-                "class": "setting element slider " + this.params.name,
+                "class": "setting element slider",
                 "type": "range"
             });
-            
+
             this.label = new Element("label", {
-                "class": "setting label slider " + this.params.name
+                "class": "setting label slider"
             });
-            
+
             this.display = new Element("span", {
-                "class": "setting display slider " + this.params.name
+                "class": "setting display slider"
             });
         },
-        
-        "setupDOM": function () {
+
+        "setupDOM": function() {
             if (this.params.label !== undefined) {
                 this.label.set("html", this.params.label);
                 this.label.inject(this.container);
                 this.params.searchString += this.params.label + "•";
             }
-            
+
             if (this.params.max !== undefined) {
                 this.element.set("max", this.params.max);
             }
-            
+
             if (this.params.min !== undefined) {
                 this.element.set("min", this.params.min);
             }
-            
+
             if (this.params.step !== undefined) {
                 this.element.set("step", this.params.step);
             }
-            
+
             this.element.inject(this.container);
             if (this.params.display !== false) {
                 if (this.params.displayModifier !== undefined) {
@@ -358,13 +359,13 @@
             }
             this.container.inject(this.bundle);
         },
-        
-        "addEvents": function () {
-            this.element.addEvent("change", (function (event) {
+
+        "addEvents": function() {
+            this.element.addEvent("change", (function(event) {
                 if (this.params.name !== undefined) {
                     settings.set(this.params.name, this.get());
                 }
-                
+
                 if (this.params.displayModifier !== undefined) {
                     this.display.set("text", this.params.displayModifier(this.get()));
                 } else {
@@ -373,14 +374,14 @@
                 this.fireEvent("action", this.get());
             }).bind(this));
         },
-        
-        "get": function () {
+
+        "get": function() {
             return Number.from(this.element.get("value"));
         },
-        
-        "set": function (value, noChangeEvent) {
+
+        "set": function(value, noChangeEvent) {
             this.element.set("value", value);
-            
+
             if (noChangeEvent !== true) {
                 this.element.fireEvent("change");
             } else {
@@ -390,34 +391,36 @@
                     this.display.set("text", Number.from(value));
                 }
             }
-            
+
             return this;
         }
     });
-    
+
     Bundle.PopupButton = new Class({
         // label, options[{value, text}]
         // action -> change
         "Extends": Bundle,
-        
-        "createDOM": function () {
+
+        "createDOM": function() {
             this.bundle = new Element("div", {
-                "class": "setting bundle popup-button " + this.params.name
+                "class": "setting bundle popup-button"
             });
-            
+
             this.container = new Element("div", {
-                "class": "setting container popup-button " + this.params.name
+                "class": "setting container popup-button"
             });
-            
+
             this.element = new Element("select", {
-                "class": "setting element popup-button " + this.params.name
+                "class": "setting element popup-button"
             });
-            
+
             this.label = new Element("label", {
-                "class": "setting label popup-button " + this.params.name
+                "class": "setting label popup-button"
             });
-            
-            if (this.params.options === undefined) { return; }
+
+            if (this.params.options === undefined) {
+                return;
+            }
 
             // convert array syntax into object syntax for options
             function arrayToObject(option) {
@@ -436,13 +439,15 @@
                 this.params.options.each((function(values, option) {
                     values.push(arrayToObject(option));
                 }).bind(this, values));
-                this.params.options = { "values": values };
+                this.params.options = {
+                    "values": values
+                };
             }
 
             var groups;
             if (this.params.options.groups !== undefined) {
                 groups = {};
-                this.params.options.groups.each((function (groups, group) {
+                this.params.options.groups.each((function(groups, group) {
                     this.params.searchString += (group) + "•";
                     groups[group] = (new Element("optgroup", {
                         "label": group,
@@ -459,16 +464,14 @@
                     var parent;
                     if (option.group && this.params.options.groups) {
                         if ((option.group - 1) in this.params.options.groups) {
-                            option.group = this.params.options.groups[option.group-1];
+                            option.group = this.params.options.groups[option.group - 1];
                         }
                         if (option.group in groups) {
                             parent = groups[option.group];
-                        }
-                        else {
+                        } else {
                             parent = this.element;
                         }
-                    }
-                    else {
+                    } else {
                         parent = this.element;
                     }
 
@@ -479,88 +482,90 @@
                 }).bind(this, groups));
             }
         },
-        
-        "setupDOM": function () {
+
+        "setupDOM": function() {
             if (this.params.label !== undefined) {
                 this.label.set("html", this.params.label);
                 this.label.inject(this.container);
                 this.params.searchString += this.params.label + "•";
             }
-            
+
             this.element.inject(this.container);
             this.container.inject(this.bundle);
         }
     });
-    
+
     Bundle.ListBox = new Class({
         // label, options[{value, text}]
         // action -> change
         "Extends": Bundle.PopupButton,
-        
-        "createDOM": function () {
+
+        "createDOM": function() {
             this.bundle = new Element("div", {
-                "class": "setting bundle list-box " + this.params.name
+                "class": "setting bundle list-box"
             });
-            
+
             this.container = new Element("div", {
-                "class": "setting container list-box " + this.params.name
+                "class": "setting container list-box"
             });
-            
+
             this.element = new Element("select", {
-                "class": "setting element list-box " + this.params.name,
+                "class": "setting element list-box",
                 "size": "2"
             });
-            
+
             this.label = new Element("label", {
-                "class": "setting label list-box " + this.params.name
+                "class": "setting label list-box"
             });
-            
-            if (this.params.options === undefined) { return; }
-            this.params.options.each((function (option) {
+
+            if (this.params.options === undefined) {
+                return;
+            }
+            this.params.options.each((function(option) {
                 this.params.searchString += (option.text || option.value) + "•";
-                
+
                 (new Element("option", {
                     "value": option.value,
                     "text": option.text || option.value
                 })).inject(this.element);
             }).bind(this));
         },
-        
-        "get": function () {
+
+        "get": function() {
             return (this.element.get("value") || undefined);
         }
     });
-    
+
     Bundle.Textarea = new Class({
         // label, text, value
         // action -> change & keyup
         "Extends": Bundle,
-        
-        "createDOM": function () {
+
+        "createDOM": function() {
             this.bundle = new Element("div", {
-                "class": "setting bundle textarea " + this.params.name
+                "class": "setting bundle textarea"
             });
-            
+
             this.container = new Element("div", {
-                "class": "setting container textarea " + this.params.name
+                "class": "setting container textarea"
             });
-            
+
             this.element = new Element("textarea", {
-                "class": "setting element textarea " + this.params.name
+                "class": "setting element textarea"
             });
-            
+
             this.label = new Element("label", {
-                "class": "setting label textarea " + this.params.name
+                "class": "setting label textarea"
             });
         },
-        
-        "setupDOM": function () {
+
+        "setupDOM": function() {
             if (this.params.label !== undefined) {
                 this.label.set("html", this.params.label);
                 this.label.inject(this.container);
                 this.params.searchString += this.params.label + "•";
             }
-            
+
             if (this.params.text !== undefined) {
                 this.element.set("placeholder", this.params.text);
                 this.params.searchString += this.params.text + "•";
@@ -569,20 +574,20 @@
             if (this.params.value !== undefined) {
                 this.element.appendText(this.params.text);
             }
-            
+
             this.element.inject(this.container);
             this.container.inject(this.bundle);
         },
-        
-        "addEvents": function () {
-            var change = (function (event) {
+
+        "addEvents": function() {
+            var change = (function(event) {
                 if (this.params.name !== undefined) {
                     settings.set(this.params.name, this.get());
                 }
-                
+
                 this.fireEvent("action", this.get());
             }).bind(this);
-            
+
             this.element.addEvent("change", change);
             this.element.addEvent("keyup", change);
         }
@@ -592,99 +597,101 @@
         // label, options[{value, text}]
         // action -> change
         "Extends": Bundle,
-        
-        "createDOM": function () {
+
+        "createDOM": function() {
             var settingID = String.uniqueID();
-            
+
             this.bundle = new Element("div", {
-                "class": "setting bundle radio-buttons " + this.params.name
+                "class": "setting bundle radio-buttons"
             });
-            
+
             this.label = new Element("label", {
-                "class": "setting label radio-buttons " + this.params.name
+                "class": "setting label radio-buttons"
             });
-            
+
             this.containers = [];
             this.elements = [];
             this.labels = [];
-            
-            if (this.params.options === undefined) { return; }
-            this.params.options.each((function (option) {
+
+            if (this.params.options === undefined) {
+                return;
+            }
+            this.params.options.each((function(option) {
                 var optionID,
                     container;
-                
+
                 this.params.searchString += (option.text || option.value) + "•";
-                
+
                 optionID = String.uniqueID();
                 container = (new Element("div", {
-                    "class": "setting container radio-buttons " + this.params.name
+                    "class": "setting container radio-buttons"
                 })).inject(this.bundle);
                 this.containers.push(container);
-                
+
                 this.elements.push((new Element("input", {
                     "id": optionID,
                     "name": settingID,
-                    "class": "setting element radio-buttons " + this.params.name,
+                    "class": "setting element radio-buttons",
                     "type": "radio",
                     "value": option.value
                 })).inject(container));
-                
+
                 this.labels.push((new Element("label", {
-                    "class": "setting element-label radio-buttons " + this.params.name,
+                    "class": "setting element-label radio-buttons",
                     "for": optionID,
                     "text": option.text || option.value
                 })).inject(container));
             }).bind(this));
         },
-        
-        "setupDOM": function () {
+
+        "setupDOM": function() {
             if (this.params.label !== undefined) {
                 this.label.set("html", this.params.label);
                 this.label.inject(this.bundle, "top");
                 this.params.searchString += this.params.label + "•";
             }
         },
-        
-        "addEvents": function () {
-            this.bundle.addEvent("change", (function (event) {
+
+        "addEvents": function() {
+            this.bundle.addEvent("change", (function(event) {
                 if (this.params.name !== undefined) {
                     settings.set(this.params.name, this.get());
                 }
-                
+
                 this.fireEvent("action", this.get());
             }).bind(this));
         },
-        
-        "get": function () {
-            var checkedEl = this.elements.filter((function (el) {
+
+        "get": function() {
+            var checkedEl = this.elements.filter((function(el) {
                 return el.get("checked");
             }).bind(this));
             return (checkedEl[0] && checkedEl[0].get("value"));
         },
-        
-        "set": function (value, noChangeEvent) {
-            var desiredEl = this.elements.filter((function (el) {
+
+        "set": function(value, noChangeEvent) {
+            var desiredEl = this.elements.filter((function(el) {
                 return (el.get("value") === value);
             }).bind(this));
             desiredEl[0] && desiredEl[0].set("checked", true);
-            
+
             if (noChangeEvent !== true) {
                 this.bundle.fireEvent("change");
             }
-            
+
             return this;
         }
     });
-    
+
     this.Setting = new Class({
-        "initialize": function (container) {
+        "initialize": function(container) {
             this.container = container;
         },
-        
-        "create": function (params) {
+
+        "create": function(params) {
             var types,
                 bundle;
-            
+
             // Available types
             types = {
                 "description": "Description",
@@ -697,7 +704,7 @@
                 "listBox": "ListBox",
                 "radioButtons": "RadioButtons"
             };
-            
+
             if (types.hasOwnProperty(params.type)) {
                 bundle = new Bundle[types[params.type]](params);
                 bundle.bundleContainer = this.container;

@@ -17,22 +17,25 @@
         <link rel="stylesheet" href="custom.css" media="screen">
         
         <!-- JavaScripts -->
+
         <script src="lib/mootools-core.js"></script>
+        <script src="/js/jquery-1.11.1.js"></script>
+        <script src="js/classes/fancy-settings.js"></script>
         <script src="lib/store.js"></script>
         <script src="js/classes/tab.js"></script>
         <script src="js/classes/setting.js"></script>
         <script src="js/classes/search.js"></script>
-        <script src="js/classes/fancy-settings.js"></script>
         <script src="i18n.js"></script>
         <script src="js/i18n.js"></script>
         <script src="manifest.js"></script>
         <script src="settings.js"></script>
+        <script src="custom.js"></script>
     </head>
     <body class="no-select">
         <div id="sidebar" class="fancy">
             <img id="icon" src="" alt=""><h1 id="settings-label"></h1>
             <div id="tab-container">
-                <div id="search-container" class="tab">
+                <div id="search-container" class="tab" hidden>
                     <input id="search" type="search" placeholder="">
                 </div>
             </div>

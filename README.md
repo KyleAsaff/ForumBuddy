@@ -31,3 +31,4 @@ TO DO:
 - Display subscriptions in popup page
 - Sort results by date field in memory instead of top query search
 - Scrape and display lastest reputation received data
+- disable x button

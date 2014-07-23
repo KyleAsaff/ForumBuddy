@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!-- saved from url=(0074)index.html -->
+<html slick-uniqueid="1">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title id="title">Forum Buddy</title>
+
+    <!-- Stylesheets -->
+    <link id="favicon" rel="icon" href="chrome-extension://gllckkcedkgdgeighbpomjofcplockda/icons/icon2_48.png">
+    <link rel="stylesheet" href="lib/default.css" media="screen">
+    <link rel="stylesheet" href="css/main.css" media="screen">
+    <link rel="stylesheet" href="css/setting.css" media="screen">
+    <link rel="stylesheet" href="custom.css" media="screen">
+
+    <!-- JavaScripts -->
+    <script src="lib/mootools-core.js"></script>
+    <script src="js/jquery-1.11.1.js"></script>
+    <script src="js/classes/fancy-settings.js"></script>
+    <script src="lib/store.js"></script>
+    <script src="js/classes/tab.js"></script>
+    <script src="js/classes/setting.js"></script>
+    <script src="js/classes/search.js"></script>
+    <script src="i18n.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="manifest.js"></script>
+    <script src="settings.js"></script>
+</head>
+
+<body class="no-select">
+    <div id="sidebar" class="fancy">
+        <img id="icon" src="/icons/icon2_48.png" alt="">
+        <h1 id="settings-label">Settings</h1>
+        <div id="tab-container">
+            <div id="search-container" class="tab" hidden>
+                <input id="search" type="search" placeholder="Search...">
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div id="search-result-container" class="tab-content">
+            <h2 id="search-label">Search</h2>
+            <div class="setting bundle description" id="nothing-found">
+                <div class="setting container description">
+                    <p class="setting element description">No matches were found.</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <h2>Accounts</h2>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Active Accounts</td>
+                    <td class="setting group-content">
+                        <div class="user-container">
+                            <div class="avi"></div>
+                            <div class="info-container">
+                                <div class="user-name">
+                                </div>
+                                <div class="notifcation-options">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="disable"></div>
+
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">nilekyle</p>
+                            </div>
+                        </div>
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">Notify for:</p>
+                            </div>
+                        </div>
+                        <div class="setting bundle checkbox">
+                            <div class="setting container checkbox">
+                                <input id="hxxnjwki" class="setting element checkbox" type="checkbox" value="true">
+                                <label class="setting label checkbox" for="hxxnjwki">Mentions</label>
+                            </div>
+                        </div>
+                        <div class="setting bundle checkbox">
+                            <div class="setting container checkbox">
+                                <input id="hxxnjwkk" class="setting element checkbox" type="checkbox" value="true">
+                                <label class="setting label checkbox" for="hxxnjwkk">Subscriptions</label>
+                            </div>
+                        </div>
+                        <div class="setting bundle checkbox">
+                            <div class="setting container checkbox">
+                                <input id="hxxnjwkm" class="setting element checkbox" type="checkbox" value="true">
+                                <label class="setting label checkbox" for="hxxnjwkm">Personal Messages</label>
+                            </div>
+                        </div>
+                        <div class="setting bundle checkbox">
+                            <div class="setting container checkbox">
+                                <input id="hxxnjwko" class="setting element checkbox" type="checkbox" value="true">
+                                <label class="setting label checkbox" for="hxxnjwko">Recent Reputation</label>
+                            </div>
+                        </div>
+                        <div class="setting bundle button">
+                            <div class="setting container button">
+                                <input class="setting element button" type="button" value="Default">
+                            </div>
+                        </div>
+                        <div class="setting bundle button">
+                            <div class="setting container button">
+                                <input class="setting element button" type="button" value="Disable">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Update Account</td>
+                    <td class="setting group-content">
+                        <div class="setting bundle button">
+                            <div class="setting container button">
+                                <input class="setting element button" type="button" value="Refresh">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-content">
+            <h2>News Feed Options</h2>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Mentions</td>
+                    <td class="setting group-content">
+                        <div class="setting bundle checkbox">
+                            <div class="setting container checkbox">
+                                <input id="hxxnjwkq" class="setting element checkbox" type="checkbox" value="true">
+                                <label class="setting label checkbox" for="hxxnjwkq">Short Descriptions</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-content">
+            <h2>About</h2>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Version</td>
+                    <td class="setting group-content">
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">1.0.0</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Follow for Updates</td>
+                    <td class="setting group-content">
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">@ForumBuddy</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Created By</td>
+                    <td class="setting group-content">
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">Kyle Asaff</p>
+                            </div>
+                        </div>
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">@KyleAsaff - Twitter</p>
+                            </div>
+                        </div>
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">nilekyle - Bodybuilding.com Uername</p>
+                            </div>
+                        </div>
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">http://kylesbox.com - Website</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Report Bug</td>
+                    <td class="setting group-content">
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">http://bodybuilding.com/ - Thread</p>
+                            </div>
+                        </div>
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">forumbuddy@kylesbox.com</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-content">
+            <h2>Donations</h2>
+            <table class="setting group">
+                <tr>
+                    <td class="setting group-name">Donate</td>
+                    <td class="setting group-content">
+                        <div class="setting bundle description">
+                            <div class="setting container description">
+                                <p class="setting element description">plz donate</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
