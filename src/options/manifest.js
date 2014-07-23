@@ -13,7 +13,7 @@ this.manifest = {
             "group": "Active Accounts",
             "name": "active_avi",
             "type": "description",
-            "text": "<div class='avi_div'><img class='avi' src='http://imagecdn.bodybuilding.com/img/user_images/growable/2013/05/05/15484342/profilepic/kSsWaxniRNmWaPPqHuBzqMTLtxwlkeMLbuAip.jpg' alt='nilekyle'></div><div class='userinfo_container'><div class='username'>nilekyle</div><div class='notifyfor'><span>Notify For: </span><div class='options'><label class='accopt_label'><input class='accopt_checkbox' type='checkbox' id='mentions' value='mentions_val' checked/>Mentions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='subs' value='subs_val' disabled/>Subscriptions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='pm' value='pm_val' disabled/>Personal Messages</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='reps' value='reps_val' disabled/>Recent Reputation</label></div></div></div>"
+            "text": "<div class='avi_div'><img class='avi' id='useravi' src=''></div><div class='userinfo_container'><div class='username' id='username'></div><div class='notifyfor'><span>Notify For: </span><div class='options'><label class='accopt_label'><input class='accopt_checkbox' type='checkbox' id='mentions' value='mentions_val'/>Mentions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='subs' value='subs_val' disabled/>Subscriptions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='pm' value='pm_val' disabled/>Personal Messages</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='reps' value='reps_val' disabled/>Recent Reputation</label></div></div></div>"
         },
         /*{
             "tab": "Accounts",
@@ -34,13 +34,13 @@ this.manifest = {
             "group": "Active Accounts",
             "name": "disable_acc",
             "type": "description",
-            "text": "<div class='disable_acc'><button type='button' class='disable_btn'>Disable</button></div>"
+            "text": "<div class='button_acc'><div class='enable_acc'><button type='button' class='enable_btn'>Enable</button></div><div class='disable_acc'><button type='button' class='disable_btn'>Disable</button></div></div>"
         }, {
             "tab": "Accounts",
             "group": "Active Accounts",
             "name": "active_avi",
             "type": "description",
-            "text": "<td class='nodata'>Please make sure you are logged in</td>"
+            "text": "" /*"<td class='nodata'>Please make sure you are logged in</td>"*/
         }, {
             "tab": "Accounts",
             "group": "Update Accounts",

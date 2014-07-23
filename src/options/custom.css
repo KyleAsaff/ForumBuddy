@@ -24,6 +24,10 @@ body {
 	float: right;
 }
 
+.notifyfor {
+        margin-top: 10px;
+}
+
 .userinfo_container {
 	display: inline-block;
 	vertical-align: top;
@@ -32,11 +36,12 @@ body {
 
 .options {
 	margin-left: 15px;
+    margin-top: 3px;
 }
 
 .username {
 	display: inline-block;
-	margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .accopt_label {
@@ -56,13 +61,26 @@ body {
     *overflow: hidden;
 }
 
-.disable_btn {
-    margin: -20px -50px; 
-    position:relative;
-    top:50%; 
-    left:50%;
+.enable_acc {
+    display: inline;
+
+}
+
+.disable_acc {
+    display: inline;
+
+}
+
+.button_acc {
+        margin-left: auto;
+    margin-right: auto
 }
 
 .disabled_label {
     opacity: 0.5;
 }
+
+.active_avi {
+    opacity: 1.0;
+}
+

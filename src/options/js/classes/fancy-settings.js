@@ -3,22 +3,23 @@
 // https://github.com/frankkohlhepp/fancy-settings
 // License: LGPL v2.1
 //
-$.noConflict();
+//document.id.noConflict();
+
 (function() {
     var FancySettings = this.FancySettings = new Class({
         "tabs": {},
 
         "initialize": function(name, icon) {
             // Set title and icon
-            $("title").set("text", name);
-            $("favicon").set("href", icon);
-            $("icon").set("src", icon);
-            $("settings-label").set("text", (i18n.get("settings") || "Settings"));
-            $("search-label").set("text", (i18n.get("search") || "Search"));
-            $("search").set("placeholder", (i18n.get("search") || "Search") + "...");
+            document.id("title").set("text", name);
+            document.id("favicon").set("href", icon);
+            document.id("icon").set("src", icon);
+            document.id("settings-label").set("text", (i18n.get("settings") || "Settings"));
+            document.id("search-label").set("text", (i18n.get("search") || "Search"));
+            document.id("search").set("placeholder", (i18n.get("search") || "Search") + "...");
 
-            this.tab = new Tab($("tab-container"), $("content"));
-            this.search = new Search($("search"), $("search-result-container"));
+            this.tab = new Tab(document.id("tab-container"), document.id("content"));
+            this.search = new Search(document.id("search"), document.id("search-result-container"));
         },
 
         "create": function(params) {
