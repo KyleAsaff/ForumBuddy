@@ -38,13 +38,13 @@ this.manifest = {
         }, {
             "tab": "Accounts",
             "group": "Active Accounts",
-            "name": "active_avi",
+            "name": "notloggedin",
             "type": "description",
-            "text": "" /*"<td class='nodata'>Please make sure you are logged in</td>"*/
+            "text": "<div class='error_message'><div class='error_header'>Could Not Retreive Account Information</div><div class='error_body'>Please make sure you are logged in to forum.bodybuilding.com<br> and then press the Refresh button.</div></div>" /*"<td class='nodata'>Please make sure you are logged in</td>"*/
         }, {
             "tab": "Accounts",
             "group": "Update Accounts",
-            "name": "disable_acc",
+            "name": "refresh_acc",
             "type": "description",
             "text": "<div class='refresh_acc'><button type='button' class='refresh_btn'>Refresh</button></div>"
         },
@@ -58,10 +58,10 @@ this.manifest = {
         },*/
         {
             "tab": "News Feed Options",
-            "group": "Mentions",
-            "name": "mentionsdesc_opt",
-            "type": "checkbox",
-            "label": "Short Descriptions"
+            "group": "Active Accounts",
+            "name": "forum_label",
+            "type": "description",
+            "text": "<div class='mentions_options'><input class='accopt_checkbox' type='checkbox' id='mentions_longdesc' value='mentions_val'/> Display full post</label></div>"
         }, {
             "tab": "About",
             "group": "Version",
@@ -73,7 +73,7 @@ this.manifest = {
             "group": "Information",
             "name": "information_desc",
             "type": "description",
-            "text": "Forum Buddy is a web browser extension that notifies you whenever someone mentions your username on a forum. Right now this extension only works for http://forum.bodybuilding.com/ but will eventually work on all vBulletin forums."
+            "text": "Forum Buddy is a web browser extension that notifies you whenever someone mentions your username on a forum. In this release of this extension, notifications only works for http://forum.bodybuilding.com/ but in the future will support all vBulletin forums."
         }, {
             "tab": "About",
             "group": "Follow for Updates",

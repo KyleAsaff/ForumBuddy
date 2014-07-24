@@ -1,13 +1,35 @@
 // add fade class
 Handlebars.registerHelper("addClasses", function() {
     if (this.visible === true) {
-        console.log('true');
         return '';
     } else {
         console.log('dont fade');
         return 'fade';
     }
 });
+
+Handlebars.registerHelper("Desc", function(longDesc, shortDesc) {
+    if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
+        return longDesc;
+    else
+        return shortDesc;
+});
+
+Handlebars.registerHelper("avi", function() {
+    if (localStorage.getItem("fb_userinfo") === null)
+        return "/icons/profiledefault_thumb.jpg";
+    else
+        return localDataStore.get("fb_userinfo").avi;
+});
+
+Handlebars.registerHelper("user", function() {
+    if (localStorage.getItem("fb_userinfo") === null)
+        return "Not Logged In";
+    else
+        return localDataStore.get("fb_userinfo").username;
+});
+
+
 
 // create a variable for read posts switch if doesnt exist
 if (localStorage.getItem("fb_posts-switch") === null) {
@@ -19,6 +41,22 @@ $(document).ready(function() {
     var data = template(localDataStore.get("replies"));
     console.log(data);
     $('div.container').append(data);
+
+    // Hide timeline if user disables account or disables mentions *****FIX THIS*****
+    if (localDataStore.get("fb_userinfo").enabled === false)
+        $('.timeline').hide();
+    else
+        $('.timeline').show();
+
+    if (localDataStore.get("fb_userinfo").mentions === true && localDataStore.get("fb_userinfo").enabled === false)
+        $('.timeline').hide();
+    else
+        $('.timeline').show();
+
+    if (localDataStore.get("fb_userinfo").mentions === false)
+        $('.timeline').hide();
+    else
+        $('.timeline').show();
 
     // handles clicking the x button on the post
     $(".close").on('click', function() {

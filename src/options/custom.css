@@ -84,3 +84,6 @@ body {
     opacity: 1.0;
 }
 
+.error_header {
+    font-weight: bold;
+}

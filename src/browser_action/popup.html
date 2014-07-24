@@ -19,10 +19,10 @@
             </div>
             <div class="header">
                 <span class="avi">
-                    <img src="/icons/profiledefault_thumb.jpg">
+                    <img id="timeline_avi" src="{{avi}}">
                 </span>
                 <span class="personalinfo">
-                    <a class="username">Username</a>
+                    <a class="username">{{user}}</a>
                     <a class="usercp" href="http://forum.bodybuilding.com/usercp.php" target="_blank"><button type="button">User CP</button></a>
                     <a class="forumhome" href="http://forum.bodybuilding.com" target="_blank">Forum Homepage</a>
                 </span>
@@ -62,7 +62,7 @@
                             <span class="postinfo">
                                 <a class="author" href="{{postAuthorLink}}" target="_blank"><span class="icon">U</span>{{postAuthor}}</a>
                                 <a class="title" href="{{postLink}}" target="_blank">{{threadTitle}}</a>
-                                <a class="desc">{{postDescLong}}</a>
+                                <a class="desc">{{Desc postDescLong postDesc}}</a>
                             </span>
                         </div>
                     </div>

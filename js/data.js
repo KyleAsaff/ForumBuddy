@@ -64,7 +64,22 @@ function onStorage(data) {
         if (tempArray[i].visible === true)
             unreadmessages++;
     }
+
+
+
     if (unreadmessages === 0) {
+        chrome.browserAction.setBadgeText({
+            text: ""
+        });
+    } else if (localDataStore.get("fb_userinfo").enabled === false) {
+        chrome.browserAction.setBadgeText({
+            text: ""
+        });
+    } else if (localDataStore.get("fb_userinfo").mentions === false) {
+        chrome.browserAction.setBadgeText({
+            text: ""
+        });
+    } else if (localDataStore.get("fb_userinfo").mentions === true && localDataStore.get("fb_userinfo").enabled === false) {
         chrome.browserAction.setBadgeText({
             text: ""
         });
@@ -73,7 +88,7 @@ function onStorage(data) {
             text: unreadmessages.toString()
         });
     }
-};
+}
 
 // Function to change "yesterday" or "today" into real date
 function getToday() {
@@ -125,12 +140,13 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
 }
 
 // Object to hold the user information
-function userinfo(forum, username, avi, enabled, mentions) {
+function userinfo(forum, username, avi, enabled, mentions, mentions_longdesc) {
     this.forum = forum;
     this.username = username;
     this.avi = avi;
     this.enabled = enabled;
     this.mentions = mentions;
+    this.mentions_longdesc = mentions_longdesc;
     //this.offset = offset;
 }
 
@@ -157,7 +173,7 @@ function initalize() {
         var username = matchArray[1];
         var avi = url + $page.find(".primary img").attr("src");
 
-        var tempuserinfo = new userinfo(url, username, avi, true, true);
+        var tempuserinfo = new userinfo(url, username, avi, true, true, true);
 
         console.log(tempuserinfo);
 
@@ -229,7 +245,7 @@ function fetchPosts() {
             var threadViewsBuffer = $rawBuffer.find("dl.userstats dd:last").text();
             var postDescLongBuffer = $rawBuffer.find("blockquote.postcontent").text().trim().replace(/\n\s*\n/g, '\n');
 
-            // Create a post object with the buffer data
+            // Create a post object with the buffer data (true = long descriptions, false = short descriptions)
             var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
 
             // If you are the post author, dont add to localstore
