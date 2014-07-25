@@ -55,6 +55,13 @@ $(document).ready(function() {
 
     // function for when the refresh button is clicked
     $(".refresh_btn").click(function() {
+
+        if (localStorage.getItem("refresh") !== null) {
+            var refresh = localStorage.getItem("refresh", refresh);
+            refresh = parseInt(refresh) + 1;
+            var refresh = localStorage.setItem("refresh", refresh);
+        }
+
         initalize();
         localStorage.removeItem("replies");
         setTimeout(fetchPosts, 1000);

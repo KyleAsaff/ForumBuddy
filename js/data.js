@@ -208,10 +208,15 @@ function fetchPosts() {
     if (localStorage.getItem("offset") === null)
         localStorage.setItem("offset", 0);
 
+    if (localStorage.getItem("refresh") === null)
+        localStorage.setItem("refresh", 0);
+
     var offset = localStorage.getItem("offset");
+    var refresh = localStorage.getItem("refresh");
 
     // add 1 to the offset and store new offset
     offset = parseInt(offset) + 1;
+
     localStorage.setItem("offset", offset);
 
     // Reset offset after it reaches 99
@@ -220,12 +225,18 @@ function fetchPosts() {
         offset = 0;
     }
 
+    // Reset refresh after it reaches 99
+    if (parseInt(refresh) > 98) {
+        localStorage.setItem("refresh", 0);
+        refresh = 0;
+    }
+
     var user = localDataStore.get("fb_userinfo").username;
     var repliesBuffer = [];
     var url = "http://forum.bodybuilding.com/";
 
     // get data from search query
-    var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top";
+    var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "+" + refresh + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top";
     $.get(query, function(data) {
 
         var $page = $(data);
