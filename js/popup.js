@@ -18,6 +18,9 @@ Handlebars.registerHelper("Desc", function(longDesc, shortDesc) {
 Handlebars.registerHelper("avi", function() {
     if (localStorage.getItem("fb_userinfo") === null)
         return "/icons/profiledefault_thumb.jpg";
+
+    if (localDataStore.get("fb_userinfo").enabled === false)
+        return "/icons/profiledefault_thumb.jpg";
     else
         return localDataStore.get("fb_userinfo").avi;
 });
@@ -25,11 +28,26 @@ Handlebars.registerHelper("avi", function() {
 Handlebars.registerHelper("user", function() {
     if (localStorage.getItem("fb_userinfo") === null)
         return "Not Logged In";
+
+    if (localDataStore.get("fb_userinfo").enabled === false)
+        return "Not Logged In";
     else
         return localDataStore.get("fb_userinfo").username;
 });
 
+// get the state of the switch and apply it
+Handlebars.registerHelper("switch", function() {
+    if (localStorage.getItem("fb_posts-switch") === "show")
+        return "checked";
+    else
+        return "";
+});
 
+function disableforAnimation() {
+        if ($(':animated').length) {
+        return false;
+    }
+}
 
 // create a variable for read posts switch if doesnt exist
 if (localStorage.getItem("fb_posts-switch") === null) {
@@ -42,13 +60,8 @@ $(document).ready(function() {
     console.log(data);
     $('div.container').append(data);
 
-    // Hide timeline if user disables account or disables mentions *****FIX THIS*****
-    if (localDataStore.get("fb_userinfo").enabled === false)
-        $('.timeline').hide();
-    else
-        $('.timeline').show();
 
-    if (localDataStore.get("fb_userinfo").mentions === true && localDataStore.get("fb_userinfo").enabled === false)
+    if (localDataStore.get("fb_userinfo").enabled === false)
         $('.timeline').hide();
     else
         $('.timeline').show();
@@ -58,8 +71,18 @@ $(document).ready(function() {
     else
         $('.timeline').show();
 
+    if (localDataStore.get("fb_userinfo").mentions === true) {
+        if (localDataStore.get("fb_userinfo").enabled === false)
+            $('.timeline').hide();
+        else
+            $('.timeline').show();
+    }
+
     // handles clicking the x button on the post
     $(".close").on('click', function() {
+       if ($(':animated').length) {
+             return false;
+        }
         $('#myonoffswitch').prop('disabled', true);
         var postNode = this.parentNode.parentNode.parentNode;
         var id = $(postNode).attr('id');
@@ -104,6 +127,9 @@ $(document).ready(function() {
 
     // Handles clicking the "mark all read button"
     $("#read").on('click', function() {
+        if ($(':animated').length) {
+            return false;
+        }
         $('#myonoffswitch').prop('disabled', true);
         var tempArray = localDataStore.get("replies");
 
@@ -134,8 +160,12 @@ $(document).ready(function() {
 
     // Handles clicking the "mark all unread button"
     $("#unread").on('click', function() {
+        if ($(':animated').length) {
+            return false;
+        }
         $('#myonoffswitch').prop('disabled', true);
         var tempArray = localDataStore.get("replies");
+
 
         for (i = 0; i < tempArray.length; i++)
             tempArray[i].visible = true;
@@ -190,6 +220,9 @@ $(document).ready(function() {
 
     // store switch state in local storage on click
     $("#myonoffswitch").on('click', function() {
+        if ($(':animated').length) {
+            return false;
+        }
         if ($('#myonoffswitch').prop('checked')) {
             $(".fade").show();
             localStorage.setItem("fb_posts-switch", "show");

@@ -65,8 +65,6 @@ function onStorage(data) {
             unreadmessages++;
     }
 
-
-
     if (unreadmessages === 0) {
         chrome.browserAction.setBadgeText({
             text: ""
@@ -167,13 +165,23 @@ function initalize() {
         var avisrc = $page.find("div.image-fit img").attr('src');
 
         //quit statement, not logged in
-        if (matchArray[1] === "")
+        if (matchArray[1] === "") {
+            localStorage.removeItem("fb_userinfo");
             return false;
+        }
 
         var username = matchArray[1];
         var avi = url + $page.find(".primary img").attr("src");
 
-        var tempuserinfo = new userinfo(url, username, avi, true, true, true);
+        if(localStorage.getItem("fb_userinfo") === null)
+            var tempuserinfo = new userinfo(url, username, avi, true, true, true, true);
+        else {
+            var enabled = localDataStore.get("fb_userinfo").enabled;
+            var mentions = localDataStore.get("fb_userinfo").mentions;
+            var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
+
+            var tempuserinfo = new userinfo(url, username, avi, enabled, mentions, mentions_longdesc);
+        }
 
         console.log(tempuserinfo);
 

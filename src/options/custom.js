@@ -16,23 +16,24 @@ function accountEnabled() {
         $('.active_avi').show();
         $('.disable_acc').show();
         $('.error_message').hide();
-    }
 
+        $('#mentions_longdesc').prop('checked', mentions_longdesc);
+        $('#mentions').prop('checked', mentions);
 
-    if (enabled === false) {
-        $('.active_avi').css({
-            opacity: 0.7
-        });
-        $("#mentions").attr("disabled", true);
+        if (enabled === false) {
+            $('.active_avi').css({
+                opacity: 0.7
+            });
+            $("#mentions").attr("disabled", true);
 
-    } else {
-        $('.active_avi').css({
-            opacity: 1.0
-        });
-        $("#mentions").removeAttr("disabled");
+        } else {
+            $('.active_avi').css({
+                opacity: 1.0
+            });
+            $("#mentions").removeAttr("disabled");
+        }
     }
 }
-
 $(document).ready(function() {
     $('.error_message').hide();
 
@@ -56,8 +57,8 @@ $(document).ready(function() {
     $(".refresh_btn").click(function() {
         initalize();
         localStorage.removeItem("replies");
-        setTimeout(fetchPosts, 2000);
-
+        setTimeout(fetchPosts, 1000);
+        setTimeout(accountEnabled, 2000);
         if (localStorage.getItem("fb_userinfo") !== null) {
             var avi = localDataStore.get("fb_userinfo").avi;
             var user = localDataStore.get("fb_userinfo").username;
@@ -65,7 +66,6 @@ $(document).ready(function() {
             $('#useravi').attr("src", avi);
             $('.username').replaceWith(user);
         }
-        accountEnabled();
     });
 
     // function for when the disabled button is clicked

@@ -8,7 +8,7 @@ if (window.addEventListener) {
     window.addEventListener("storage", onStorage, false);
 } else {
     window.attachEvent("onstorage", onStorage);
-};
+}
 
 initalize();
 
