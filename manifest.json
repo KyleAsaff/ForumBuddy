@@ -1,6 +1,6 @@
 {
     "name": "Forum Buddy",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "manifest_version": 2,
     "description": "A buddy for forums",
     "icons": {
@@ -19,6 +19,11 @@
         "default_title": "Forum Buddy",
         "default_popup": "src/browser_action/popup.html"
     },
+    "content_scripts": [{
+        "js": ["js/jquery-1.11.1.js", "content_script.js", "js/data.js"],
+        "css": ["css/forumbuddy.css"],
+        "matches": ["http://forum.bodybuilding.com/*", "https://forum.bodybuilding.com/*"]
+    }],
     "permissions": [
         "cookies",
         "history",
@@ -30,6 +35,6 @@
         "<all_urls>",
         "clipboardWrite"
     ],
-    "devtools_page": "devtools/devtools.html",
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
+    "web_accessible_resources": ["icons/*"]
 }

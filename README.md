@@ -20,15 +20,16 @@ DONE:
 - Store all posts in localStorage
 - Change "yesterday" and "today" to the real date
 - Created basic UI for chrome extension
-
-TO DO:
 - Settings page
 - Popup page
 - Pull username for the search query from the forum website
-- Donation page
 - Display a badge by donaters usernames
+- disable x button
+
+TO DO:
+
+- Donation page
 - Improve scrape algorithm to get mention results almost instantaneously
 - Display subscriptions in popup page
 - Sort results by date field in memory instead of top query search
 - Scrape and display lastest reputation received data
-- disable x button

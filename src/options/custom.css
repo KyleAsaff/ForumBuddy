@@ -90,3 +90,12 @@ body {
 .error_header {
     font-weight: bold;
 }
+
+.error_header {
+    font-weight: bold;
+}
+
+.donate_btn {
+        width: 20%;
+    margin: 0 auto;
+}

@@ -1,0 +1,7 @@
+.forumbuddy {
+	display: inline-block;
+	position: relative;
+	vertical-align: bottom;
+	top: -2px;
+	margin-left: 2px;
+}

@@ -100,8 +100,9 @@ function getToday() {
     if (mm < 10) {
         mm = '0' + mm;
     }
-    var date = (mm + '/' + dd + '/' + yyyy);
-    return (date);
+    var date = (mm + '-' + dd + '-' + yyyy);
+    return date;
+
 }
 
 function getYesterday() {
@@ -117,7 +118,7 @@ function getYesterday() {
         mm = '0' + mm;
     }
     var date = (mm + '-' + dd + '-' + yyyy);
-    return (date);
+    return date;
 }
 // Object for storing post data
 function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, postDesc, postDescLong, postLink) {
@@ -173,7 +174,7 @@ function initalize() {
         var username = matchArray[1];
         var avi = url + $page.find(".primary img").attr("src");
 
-        if(localStorage.getItem("fb_userinfo") === null)
+        if (localStorage.getItem("fb_userinfo") === null)
             var tempuserinfo = new userinfo(url, username, avi, true, true, true, true);
         else {
             var enabled = localDataStore.get("fb_userinfo").enabled;
@@ -183,11 +184,8 @@ function initalize() {
             var tempuserinfo = new userinfo(url, username, avi, enabled, mentions, mentions_longdesc);
         }
 
-        console.log(tempuserinfo);
-
         localDataStore.set("fb_userinfo", tempuserinfo);
     });
-    // };
 }
 
 // function to query, store, and fetch posts
@@ -275,7 +273,7 @@ function fetchPosts() {
             if (postBuffer.postDate === "Yesterday")
                 postBuffer.postDate = getYesterday();
             if (postBuffer.postDate === "Today")
-                postBuffer.postDate = new getToday();
+                postBuffer.postDate = getToday();
 
             // fail safe if cant get post from page
             if (postBuffer.postAuthor === "")
@@ -297,10 +295,10 @@ function fetchPosts() {
         }
     });
 
-    //Logs for debugging
+    /* Logs for debugging
     console.log(offset);
     console.log(query);
-    console.log(localDataStore.get("replies"));
+    console.log(localDataStore.get("replies")); */
 
     onStorage("replies");
 }

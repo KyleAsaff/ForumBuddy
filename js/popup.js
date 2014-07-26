@@ -1,3 +1,17 @@
+// Google Analytics 
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-53208960-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+    var ga = document.createElement('script');
+    ga.type = 'text/javascript';
+    ga.async = true;
+    ga.src = 'https://ssl.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
+})();
+
 // add fade class
 Handlebars.registerHelper("addClasses", function() {
     if (this.visible === true) {
@@ -44,7 +58,7 @@ Handlebars.registerHelper("switch", function() {
 });
 
 function disableforAnimation() {
-        if ($(':animated').length) {
+    if ($(':animated').length) {
         return false;
     }
 }
@@ -80,8 +94,8 @@ $(document).ready(function() {
 
     // handles clicking the x button on the post
     $(".close").on('click', function() {
-       if ($(':animated').length) {
-             return false;
+        if ($(':animated').length) {
+            return false;
         }
         $('#myonoffswitch').prop('disabled', true);
         var postNode = this.parentNode.parentNode.parentNode;
