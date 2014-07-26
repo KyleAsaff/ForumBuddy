@@ -58,6 +58,8 @@ function accountEnabled() {
             $("#mentions").removeAttr("disabled");
         }
     }
+
+    $(".loading").hide();
 }
 $(document).ready(function() {
     $('.error_message').hide();
@@ -80,6 +82,8 @@ $(document).ready(function() {
 
     // function for when the refresh button is clicked
     $(".refresh_btn").click(function() {
+
+        $(".loading").show();
 
         if (localStorage.getItem("refresh") !== null) {
             var refresh = localStorage.getItem("refresh", refresh);

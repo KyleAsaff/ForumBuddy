@@ -61,7 +61,6 @@ body {
     vertical-align: bottom;
     position: relative;
     top: -1px;
-    *overflow: hidden;
 }
 
 .enable_acc {
@@ -98,4 +97,16 @@ body {
 .donate_btn {
         width: 20%;
     margin: 0 auto;
+}
+
+.refresh_acc {
+float: left;
+
+}
+
+.loading {
+float: right;
+margin-left: 10px;
+margin-top: 5px;
+display: none;
 }
