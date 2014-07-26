@@ -91,7 +91,7 @@ this.manifest = {
         "group": "Report Bug",
         "name": "bbthread_desc",
         "type": "description",
-        "text": "http://bodybuilding.com/ - Thread"
+        "text": "<a href='http://forum.bodybuilding.com/showthread.php?t=163235341' target='_blank'>http://forum.bodybuilding.com/showthread.php?t=163235341</a> - Official Thread"
     }, {
         "tab": "Donations",
         "group": "Donate",

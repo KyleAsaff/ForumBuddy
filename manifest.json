@@ -1,6 +1,6 @@
 {
     "name": "Forum Buddy",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "manifest_version": 2,
     "description": "A buddy for forums",
     "icons": {
@@ -25,14 +25,13 @@
         "matches": ["http://forum.bodybuilding.com/*", "https://forum.bodybuilding.com/*"]
     }],
     "permissions": [
-        "cookies",
-        "history",
         "http://forum.bodybuilding.com/*",
+        "http://kylesbox.com/*",
+        "cookies",
         "storage",
         "unlimitedStorage",
         "clipboardWrite",
         "notifications",
-        "<all_urls>",
         "clipboardWrite"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
