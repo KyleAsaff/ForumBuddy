@@ -25,11 +25,11 @@ DONE:
 - Pull username for the search query from the forum website
 - Display a badge by donaters usernames
 - disable x button
+- Donation page
 
 TO DO:
-
-- Donation page
 - Improve scrape algorithm to get mention results almost instantaneously
 - Display subscriptions in popup page
 - Sort results by date field in memory instead of top query search
 - Scrape and display lastest reputation received data
+- Hide posts from reds

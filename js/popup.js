@@ -17,7 +17,6 @@ Handlebars.registerHelper("addClasses", function() {
     if (this.visible === true) {
         return '';
     } else {
-        console.log('dont fade');
         return 'fade';
     }
 });
@@ -71,7 +70,6 @@ if (localStorage.getItem("fb_posts-switch") === null) {
 $(document).ready(function() {
     var template = Handlebars.compile($('#template').html());
     var data = template(localDataStore.get("replies"));
-    console.log(data);
     $('div.container').append(data);
 
 
@@ -205,7 +203,6 @@ $(document).ready(function() {
         var postNode = this.parentNode.parentNode.parentNode;
         var id = $(postNode).attr('id');
         var tempArray = localDataStore.get("replies");
-        console.log(tempArray[id].visible);
 
         $("#" + id).addClass("fade");
         tempArray[id].visible = false;
