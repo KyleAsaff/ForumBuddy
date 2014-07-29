@@ -27,7 +27,7 @@ if (window.addEventListener) {
     window.attachEvent("onstorage", onStorage);
 }
 
-// Initalize and fetch posts every minute
+// Initalize and fetch posts every hour
 initalize();
 setTimeout(fetchPosts, 3000);
-setInterval(fetchPosts, 60 * 800);
+setInterval(fetchPosts, 3600000);
