@@ -16,20 +16,16 @@ PROJECT STATUS
 
 DONE:
 - Basic scraping algorithm for querying the search results database.
-- Timer to scrape every minute
 - Store all posts in localStorage
 - Change "yesterday" and "today" to the real date
 - Created basic UI for chrome extension
 - Settings page
 - Popup page
 - Pull username for the search query from the forum website
-- Display a badge by donaters usernames
-- disable x button
-- Donation page
+- disable x button during animation
 
 TO DO:
 - Improve scrape algorithm to get mention results almost instantaneously
 - Display subscriptions in popup page
 - Sort results by date field in memory instead of top query search
 - Scrape and display lastest reputation received data
-- Hide posts from reds
