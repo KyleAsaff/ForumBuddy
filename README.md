@@ -12,6 +12,7 @@ Scrapes the search database of a forum with your username and records all fourm 
 uses background.js to get the latest posts when they become avaliable by the forum database.
 
 
+
 PROJECT STATUS
 
 DONE:
