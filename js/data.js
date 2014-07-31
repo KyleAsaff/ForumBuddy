@@ -48,6 +48,13 @@ var localDataStore = {
                 tmp.push(data);
                 localStorage.setItem(key, JSON.stringify(tmp));
                 break;
+
+            case thread:
+                tmp = localStorage.getItem(key);
+                tmp = (tmp === null) ? [] : JSON.parse(tmp);
+                tmp.push(data);
+                localStorage.setItem(key, JSON.stringify(tmp));
+                break;
         }
     }
 };
@@ -88,6 +95,19 @@ function onStorage(data) {
     }
 }
 
+// Function to sort replies by date
+function sortReplies() {
+    tempArray = localDataStore.get("replies");
+    tempArray.sort(function(a, b) {
+
+        var c = new Date(a.postDate + " " + a.postTime);
+        var d = new Date(b.postDate + " " + b.postTime);
+        return d - c;
+    });
+    localDataStore.set("replies", tempArray);
+}
+
+
 // Function to change "yesterday" or "today" into real date
 function getToday() {
     var today = new Date();
@@ -120,6 +140,7 @@ function getYesterday() {
     var date = (mm + '-' + dd + '-' + yyyy);
     return date;
 }
+
 // Object for storing post data
 function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, postDesc, postDescLong, postLink) {
     // this.raw = raw;
@@ -136,6 +157,11 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
     this.postLink = postLink;
     this.postDescLong = postDescLong;
     this.visible = true;
+}
+
+function thread(url) {
+    this.url = url;
+    this.offset = 0;
 }
 
 // Object to hold the user information
@@ -156,14 +182,14 @@ function initalize() {
 
     // if (localStorage.getItem("fb_userinfo") === null) {
     $.get(aviurl, function(data) {
-        var $page = $(data);
+        //var $page = $(data);
 
         // find username in the page source
         var myregex = /s\.prop42="([^"]*)"/;
         var matchArray = myregex.exec(data);
 
         // find avi in the page source
-        var avisrc = $page.find("div.image-fit img").attr('src');
+        var avisrc = $(data).find("div.image-fit img").attr('src');
 
         //quit statement, not logged in
         if (matchArray[1] === "") {
@@ -172,7 +198,7 @@ function initalize() {
         }
 
         var username = matchArray[1];
-        var avi = url + $page.find(".primary img").attr("src");
+        var avi = url + $(data).find(".primary img").attr("src");
 
         if (localStorage.getItem("fb_userinfo") === null)
             var tempuserinfo = new userinfo(url, username, avi, true, true, true, true);
@@ -187,6 +213,112 @@ function initalize() {
         localDataStore.set("fb_userinfo", tempuserinfo);
     });
 }
+
+// Function to check the threads the user recently posted in
+function minePosts() {
+    // if user is not logged in return quit fetchPosts
+    if (localStorage.getItem("fb_userinfo") === null)
+        return false;
+
+    // if user turned his account to disable quit fetchPosts
+    if (localDataStore.get("fb_userinfo").enabled === false)
+        return false;
+
+    // if user turned posts off quit fetchPosts
+    if (localDataStore.get("fb_userinfo").mentions === false)
+        return false;
+
+    var url = "http://forum.bodybuilding.com/";
+    var user = localDataStore.get("fb_userinfo").username;
+    var mineBuffer = [];
+
+    $.each(localDataStore.get("threads"), function(index) {
+
+        var offsetThread = parseInt((this).offset);
+        offsetThread = offsetThread + 1;
+
+        var mineURL = (this).url;
+
+        var tempStorage = localDataStore.get("threads");
+        tempStorage[index].offset = offsetThread;
+
+        localDataStore.set("threads", tempStorage);
+
+        $.get(mineURL, function(data) {
+
+            var myregex = /s\.prop39="([^"]*)"/;
+            var threadTitle = myregex.exec(data)[1];
+
+            var black = false;
+            if($(data).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
+                black = true;
+
+
+            $(data).find("#posts").children().each(function() {
+                var fullpost = $(this).find(".postcontent").text();
+                if (fullpost.indexOf(user) > 1) {
+                    var postDateBuffer = $(this).find("span.date").clone().children().remove().end().text();
+                    var dateLength = postDateBuffer.length;
+
+                    if(black === false)
+                        postDateBuffer = postDateBuffer.substring(0, dateLength - 2);
+                    if(black === true)
+                        postDateBuffer = postDateBuffer.substring(0, dateLength - 1);
+
+                    var postTimeBuffer = $(this).find("span.time").text();
+                    var threadTitleBuffer = threadTitle;
+                    var threadTitleLinkBuffer = url + $(this).find(".postcounter").attr("href");
+                    var postAuthorLinkBuffer = url + $(this).find(".username").attr("href");
+                    var postAuthorBuffer = $(this).find(".username").text();
+                    var postIDBuffer = $(this).attr("id");
+                    var postLinkBuffer = url + $(this).find(".postcounter").attr("href");
+                    var postDescLongBuffer = $(this).find(".postcontent").clone().children().remove().end().text();
+                    postDescLongBuffer = postDescLongBuffer.trim().replace(/\n\s*\n/g, '\n');
+
+                    var threadRepliesBuffer = 0;
+                    var threadViewsBuffer = 0;
+                    if (postDescLongBuffer.length > 48)
+                        var postDescBuffer = postDescLongBuffer.substring(0, 47) + " ...";
+                    else
+                        var postDescBuffer = postDescLongBuffer;
+
+                    var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
+                    
+                    // Convert date into real date
+                    if (postBuffer.postDate === "Yesterday")
+                        postBuffer.postDate = getYesterday();
+                    if (postBuffer.postDate === "Today")
+                        postBuffer.postDate = getToday();
+
+                    if (postBuffer.postAuthor !== user)
+                        mineBuffer.push(postBuffer);
+                }
+            });
+            for (var i = 0; i < mineBuffer.length; i++) {
+                var newPost = mineBuffer[i];
+                var filtered = $(localDataStore.get("replies")).filter(function() {
+                    return this.postID === mineBuffer[i].postID;
+                });
+                // if post not yet stored in replies, add it
+                if (filtered.length === 0)
+                    localDataStore.appendToFront("replies", newPost);
+            }
+        });
+    });
+
+    // Remove thread from storage after 6 hours
+    var updateThreads = localDataStore.get("threads");
+    var shallowCopy = $.extend({}, updateThreads);
+    $.each(shallowCopy, function(index) {
+        if ((this).offset > 720) {
+            updateThreads.splice(index);
+            localDataStore.set("threads", updateThreads);
+        }
+    });
+    sortReplies();
+    onStorage("replies");
+}
+
 
 // function to query, store, and fetch posts
 function fetchPosts() {
@@ -232,35 +364,36 @@ function fetchPosts() {
     var user = localDataStore.get("fb_userinfo").username;
     var repliesBuffer = [];
     var url = "http://forum.bodybuilding.com/";
+    var findVariable = ".blockbody";
 
     // get data from search query
     var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "+" + refresh + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top";
     $.get(query, function(data) {
 
-        var $page = $(data);
 
-        // Get the first 20 search results
-        var $block = $page.find(".blockbody").children().slice(0, 20);
+        // check if user is using default or black skin
+        if ($(data).find('#searchbits').length > 0) {
+            findVariable = "#searchbits";
+        }
 
-        $.each($block, function(index, rawBuffer) {
-            var $rawBuffer = $(rawBuffer);
+        $(data).find(findVariable).children().each(function() {
 
             // Put everything in the first result of search query in a buffer
-            var postDateBuffer = $rawBuffer.find("span.date").clone().children().remove().end().text();
+            var postDateBuffer = $(this).find("span.date").clone().children().remove().end().text();
             var dateLength = postDateBuffer.length;
             postDateBuffer = postDateBuffer.substring(0, dateLength - 1);
 
-            var postTimeBuffer = $rawBuffer.find("span.time").text();
-            var threadTitleBuffer = $rawBuffer.find("div.username_container h2 a:first").text();
-            var threadTitleLinkBuffer = url + $rawBuffer.find("div.username_container h2 a:first").attr("href");
-            var postAuthorLinkBuffer = url + $rawBuffer.find("div.username_container a:last").attr("href");
-            var postAuthorBuffer = $rawBuffer.find("div.username_container a:last").text();
-            var postIDBuffer = $rawBuffer.attr("id");
-            var postLinkBuffer = url + $rawBuffer.find("h3.posttitle a:first").attr("href");
-            var postDescBuffer = $rawBuffer.find("h3.posttitle a:first").text();
-            var threadRepliesBuffer = $rawBuffer.find("dl.userstats dd:first").text();
-            var threadViewsBuffer = $rawBuffer.find("dl.userstats dd:last").text();
-            var postDescLongBuffer = $rawBuffer.find("blockquote.postcontent").text().trim().replace(/\n\s*\n/g, '\n');
+            var postTimeBuffer = $(this).find("span.time").text();
+            var threadTitleBuffer = $(this).find("div.username_container h2 a:first").text();
+            var threadTitleLinkBuffer = url + $(this).find("div.username_container h2 a:first").attr("href");
+            var postAuthorLinkBuffer = url + $(this).find("div.username_container a:last").attr("href");
+            var postAuthorBuffer = $(this).find("div.username_container a:last").text();
+            var postIDBuffer = $(this).attr("id");
+            var postLinkBuffer = url + $(this).find("h3.posttitle a:first").attr("href");
+            var postDescBuffer = $(this).find("h3.posttitle a:first").text();
+            var threadRepliesBuffer = $(this).find("dl.userstats dd:first").text();
+            var threadViewsBuffer = $(this).find("dl.userstats dd:last").text();
+            var postDescLongBuffer = $(this).find("blockquote.postcontent").text().trim().replace(/\n\s*\n/g, '\n');
 
             // Create a post object with the buffer data (true = long descriptions, false = short descriptions)
             var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
@@ -280,25 +413,22 @@ function fetchPosts() {
                 return false;
 
             // fill new array of data to concat with data in localstore
-            if (postBuffer.postID === localDataStore.getIndexOf("replies", 0).postID) {
-                localDataStore.appendToFront("replies", repliesBuffer);
-                repliesBuffer = [];
-                return false;
-            } else
-                repliesBuffer.push(postBuffer);
-        });
 
-        // append replies buffer to local storage if there is
-        if (repliesBuffer !== null) {
-            localDataStore.appendToFront("replies", repliesBuffer);
-            repliesBuffer = [];
+            repliesBuffer.push(postBuffer);
+        });
+        for (var i = 0; i < repliesBuffer.length; i++) {
+            var newPost = repliesBuffer[i];
+
+            var filtered = $(localDataStore.get("replies")).filter(function() {
+                return this.postID === repliesBuffer[i].postID;
+            });
+
+            // if post not yet stored in replies, add it
+            if (filtered.length === 0)
+                localDataStore.appendToFront("replies", newPost);
         }
     });
 
-    /* Logs for debugging
-    console.log(offset);
-    console.log(query);
-    console.log(localDataStore.get("replies")); */
-
+    sortReplies();
     onStorage("replies");
 }

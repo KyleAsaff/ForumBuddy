@@ -1,6 +1,6 @@
 {
     "name": "Forum Buddy",
-    "version": "1.0.4",
+    "version": "1.2.0",
     "manifest_version": 2,
     "description": "A buddy for forums",
     "icons": {
@@ -19,8 +19,15 @@
         "default_title": "Forum Buddy",
         "default_popup": "src/browser_action/popup.html"
     },
+    "content_scripts": [{
+        "js": ["js/jquery-1.11.1.js", "js/data.js", "content_script.js"],
+        "css": ["css/forumbuddy.css"],
+        "matches": ["http://forum.bodybuilding.com/*", "https://forum.bodybuilding.com/*"]
+    }],
     "permissions": [
         "http://forum.bodybuilding.com/*",
+        "http://kylesbox.com/*",
+        "tabs",
         "cookies",
         "storage",
         "unlimitedStorage",

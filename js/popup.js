@@ -62,12 +62,67 @@ function disableforAnimation() {
     }
 }
 
+// Function for when new items get added to the list, update old items ID in timeline
+function newItem() {
+    sortReplies();
+    var repliesCopy = localDataStore.get("replies");
+    var numItems = localDataStore.get("replies").length - (parseInt($('.timeline').children().last().attr('id')) + 1);
+    if (numItems < 1)
+        return false;
+    else {
+        $(".post").each(function(index) {
+            var newID = parseInt($(this).attr("id")) + numItems;
+            $(this).attr("id", newID);
+        });
+        console.log("original " + localDataStore.get("replies"));
+        console.log("original " + numItems);
+        for (var i = 0; i < numItems; i++) {
+
+            if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
+                var desc = localDataStore.get("replies")[i].postDesc;
+            else
+                var desc = localDataStore.get("replies")[i].postDescLong;
+
+            if (i < numItems) {
+                var fade = ""
+                if (!localDataStore.get("replies")[i].visible)
+                    fade = "fade";
+                $(".timeline").prepend("\
+                    <div class='post " + fade + "' id='" + i + "' style='display: none;'>\
+                        <div class='posttop'>\
+                            <span class='postdate'>\
+                                <span class='date'>" + localDataStore.get("replies")[i].postDate + "</span>\
+                                <span class='Time'>" + localDataStore.get("replies")[i].postTime + "</span>\
+                                <a class='close' >x</a>\
+                            </span>\
+                        </div>\
+                    <div class='postbody'>\
+                            <span class='postinfo'>\
+                                <a class='author' href='" + localDataStore.get("replies")[i].postAuthorLink + "' target='_blank'><span class='icon'>U</span>" + localDataStore.get("replies")[i].postAuthor + "</a>\
+                                <a class='title' href='" + localDataStore.get("replies")[i].postLink + "' target='_blank'>" + localDataStore.get("replies")[i].threadTitle + "</a>\
+                                <a class='desc'>" + desc + "</a>\
+                            </span>\
+                        </div>\
+                    </div>");
+                $("#" + i).slideDown("slow");
+            }
+        };
+    }
+}
+
 // create a variable for read posts switch if doesnt exist
 if (localStorage.getItem("fb_posts-switch") === null) {
     localStorage.setItem("fb_posts-switch", "show");
 }
 /* When document ready */
 $(document).ready(function() {
+
+    if (window.addEventListener) {
+        window.addEventListener("storage", newItem, false);
+    } else {
+        window.attachEvent("onstorage", newItem);
+    }
+
     var template = Handlebars.compile($('#template').html());
     var data = template(localDataStore.get("replies"));
     $('div.container').append(data);
@@ -91,7 +146,8 @@ $(document).ready(function() {
     }
 
     // handles clicking the x button on the post
-    $(".close").on('click', function() {
+    $(document).on('click', '.close', function() {
+        console.log("i was clicked")
         if ($(':animated').length) {
             return false;
         }
@@ -199,7 +255,7 @@ $(document).ready(function() {
 
 
     // handles clicking on the link -> mark as read
-    $(".title").on('click', function() {
+    $(document).on('click', '.title', function() {
         var postNode = this.parentNode.parentNode.parentNode;
         var id = $(postNode).attr('id');
         var tempArray = localDataStore.get("replies");

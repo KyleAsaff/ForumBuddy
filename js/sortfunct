@@ -1,0 +1,5 @@
+    tempArray.sort(function(a, b) {
+        var c = new Date(a.postDate + " " + a.postTime);
+        var d = new Date(b.postDate + " " + a.postTime);
+        return c - d;
+    });

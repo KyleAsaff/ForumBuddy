@@ -20,6 +20,8 @@ _gaq.push(['_trackPageview']);
 })();
 /*******************************************************/
 
+var urlFormat = "http://forum.bodybuilding.com/showthread.php?t=163235341&page=500";
+
 // Update notifications
 if (window.addEventListener) {
     window.addEventListener("storage", onStorage, false);
@@ -27,7 +29,44 @@ if (window.addEventListener) {
     window.attachEvent("onstorage", onStorage);
 }
 
-// Initalize and fetch posts every hour
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+
+
+        if (request.greeting == "quickreply") {
+            if (request.threadid === "undefined")
+                return;
+            var url = "http://forum.bodybuilding.com/showthread.php?t=" + request.threadid + "&page=1000";
+            var newThread = new thread(url);
+            var currentThreads = localDataStore.get("threads");
+            var filtered = $(localDataStore.get("threads")).filter(function() {
+                return this.url === url;
+            });
+            // if thread not yet stored in localstorage, add it
+            if (filtered.length === 0)
+                localDataStore.appendToFront("threads", newThread);
+        }
+        if (request.greeting == "submitreply") {
+            if (request.threadid === "undefined")
+                return;
+            var url = "http://forum.bodybuilding.com/showthread.php?t=" + request.threadid + "&page=1000";
+            var newThread = new thread(url);
+            var filtered = $(localDataStore.get("threads")).filter(function() {
+                return this.url === url;
+            });
+            // if thread not yet stored in localstorage, add it
+            if (filtered.length === 0)
+                localDataStore.appendToFront("threads", newThread);
+
+        }
+        sendResponse({
+            received: "received"
+        });
+    }
+);
+
+// Initalize and fetch posts every minute
 initalize();
 setTimeout(fetchPosts, 3000);
-setInterval(fetchPosts, 3600000);
+setInterval(fetchPosts, 60000);
+setInterval(minePosts, 30000);

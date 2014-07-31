@@ -93,6 +93,7 @@ $(document).ready(function() {
 
         initalize();
         localStorage.removeItem("replies");
+        localStorage.removeItem("threads");
         setTimeout(fetchPosts, 1000);
         setTimeout(accountEnabled, 2000);
         if (localStorage.getItem("fb_userinfo") !== null) {
