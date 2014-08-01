@@ -1,6 +1,6 @@
 {
     "name": "Forum Buddy",
-    "version": "1.2.0",
+    "version": "1.2",
     "manifest_version": 2,
     "description": "A buddy for forums",
     "icons": {

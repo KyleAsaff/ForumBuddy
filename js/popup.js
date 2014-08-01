@@ -298,5 +298,15 @@ $(document).ready(function() {
             localStorage.setItem("fb_posts-switch", "hide");
         }
     });
+    // pop out window on click
+    $("#popout").on("click", function() {
+        chrome.windows.create({
+            url: "/src/browser_action/popup.html",
+            width: 396,
+            height: 573,
+            type: "popup"
+        });
+        window.close()
+    });
 
 });

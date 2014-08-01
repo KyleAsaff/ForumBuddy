@@ -34,6 +34,7 @@ chrome.runtime.onMessage.addListener(
 
 
         if (request.greeting == "quickreply") {
+            console.log("quickreply");
             if (request.threadid === "undefined")
                 return;
             var url = "http://forum.bodybuilding.com/showthread.php?t=" + request.threadid + "&page=1000";
@@ -45,6 +46,15 @@ chrome.runtime.onMessage.addListener(
             // if thread not yet stored in localstorage, add it
             if (filtered.length === 0)
                 localDataStore.appendToFront("threads", newThread);
+            else {
+                // reset offset back to 0 if thread exists
+                var index = currentThreads.map(function(e) {
+                    return e.url;
+                }).indexOf(url);
+                console.log(index);
+                currentThreads[index].offset = 0;
+                localDataStore.set("threads", currentThreads);
+            }
         }
         if (request.greeting == "submitreply") {
             if (request.threadid === "undefined")
@@ -57,7 +67,14 @@ chrome.runtime.onMessage.addListener(
             // if thread not yet stored in localstorage, add it
             if (filtered.length === 0)
                 localDataStore.appendToFront("threads", newThread);
-
+            // reset offset back to 0 if thread exists
+            else {
+                var index = currentThreads.map(function(e) {
+                    return e.url;
+                }).indexOf(url);
+                currentThreads[index].offset = 0;
+                localDataStore.set("threads", currentThreads);
+            }
         }
         sendResponse({
             received: "received"
@@ -69,4 +86,4 @@ chrome.runtime.onMessage.addListener(
 initalize();
 setTimeout(fetchPosts, 3000);
 setInterval(fetchPosts, 60000);
-setInterval(minePosts, 30000);
+setInterval(minePosts, 45000);

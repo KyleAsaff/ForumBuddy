@@ -9,6 +9,11 @@
     opacity: 0.4;
 }
 
+.container {
+    height: 100%;
+    width: 100%;
+}
+
 .hidden {
     display: none;
 }
@@ -28,7 +33,7 @@ body {
     font-family: "Helvetica Neue", Verdana, Helvetica, Arial;
     font-size: 10px;
     position: relative;
-    margin: 0px;
+    margin: 0;
 }
 
 div .banner {
@@ -208,13 +213,13 @@ div .footer {
 
     background: -webkit-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10+,Safari5.1+ */
 
-    .popout {
+    #popout {
         display: inline-block;
         font-family: WebSymbolsRegular;
         font-size: 20px;
         color: grey;
         text-decoration: none;
-        visibility: hidden; /* hide the popout */
+        //visibility: hidden; /* hide the popout */
     }
 
     .settings {
@@ -232,7 +237,7 @@ div .footer {
         text-align: center;
     }
 
-    .popout:hover{
+    #popout:hover{
         color: black;
     }
 
