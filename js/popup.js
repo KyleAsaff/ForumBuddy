@@ -74,14 +74,12 @@ function newItem() {
             var newID = parseInt($(this).attr("id")) + numItems;
             $(this).attr("id", newID);
         });
-        console.log("original " + localDataStore.get("replies"));
-        console.log("original " + numItems);
         for (var i = 0; i < numItems; i++) {
 
             if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
-                var desc = localDataStore.get("replies")[i].postDesc;
-            else
                 var desc = localDataStore.get("replies")[i].postDescLong;
+            else
+                var desc = localDataStore.get("replies")[i].postDesc;
 
             if (i < numItems) {
                 var fade = ""

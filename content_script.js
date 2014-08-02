@@ -129,9 +129,10 @@ $(document).ready(function() {
 
         chrome.runtime.sendMessage({
             greeting: "sumbitreply",
-            threadid: $("input[name=t]").val()
+            threadid: $("input[name=t]").val(),
+            threadtitle: $('body').text().match(/s\.prop39="([^"]*)"/)[1]
         }, function(response) {
-            console.log(response.received);
+           // console.log(response.received);
         });
     });
 
@@ -139,9 +140,10 @@ $(document).ready(function() {
 
         chrome.runtime.sendMessage({
             greeting: "quickreply",
-            threadid: $("#qr_threadid").val()
+            threadid: $("#qr_threadid").val(),
+            threadtitle: $('body').text().match(/s\.prop39="([^"]*)"/)[1]
         }, function(response) {
-            console.log(response.received);
+          //  console.log(response.received);
         });
     });
 

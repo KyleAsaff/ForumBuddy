@@ -34,11 +34,10 @@ chrome.runtime.onMessage.addListener(
 
 
         if (request.greeting == "quickreply") {
-            console.log("quickreply");
             if (request.threadid === "undefined")
                 return;
             var url = "http://forum.bodybuilding.com/showthread.php?t=" + request.threadid + "&page=1000";
-            var newThread = new thread(url);
+            var newThread = new thread(url, request.threadtitle);
             var currentThreads = localDataStore.get("threads");
             var filtered = $(localDataStore.get("threads")).filter(function() {
                 return this.url === url;
@@ -51,7 +50,6 @@ chrome.runtime.onMessage.addListener(
                 var index = currentThreads.map(function(e) {
                     return e.url;
                 }).indexOf(url);
-                console.log(index);
                 currentThreads[index].offset = 0;
                 localDataStore.set("threads", currentThreads);
             }
@@ -60,7 +58,7 @@ chrome.runtime.onMessage.addListener(
             if (request.threadid === "undefined")
                 return;
             var url = "http://forum.bodybuilding.com/showthread.php?t=" + request.threadid + "&page=1000";
-            var newThread = new thread(url);
+            var newThread = new thread(url, request.threadtitle);
             var filtered = $(localDataStore.get("threads")).filter(function() {
                 return this.url === url;
             });
@@ -86,4 +84,4 @@ chrome.runtime.onMessage.addListener(
 initalize();
 setTimeout(fetchPosts, 3000);
 setInterval(fetchPosts, 60000);
-setInterval(minePosts, 45000);
+setInterval(minePosts, 30000);

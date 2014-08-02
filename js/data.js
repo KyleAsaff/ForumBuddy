@@ -98,6 +98,8 @@ function onStorage(data) {
 // Function to sort replies by date
 function sortReplies() {
     tempArray = localDataStore.get("replies");
+    if (tempArray === false)
+        return false;
     tempArray.sort(function(a, b) {
 
         var c = new Date(a.postDate + " " + a.postTime);
@@ -159,8 +161,9 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
     this.visible = true;
 }
 
-function thread(url) {
+function thread(url, title) {
     this.url = url;
+    this.title = title;
     this.offset = 0;
 }
 
@@ -310,7 +313,7 @@ function minePosts() {
     var updateThreads = localDataStore.get("threads");
     var shallowCopy = $.extend({}, updateThreads);
     $.each(shallowCopy, function(index) {
-        if ((this).offset > 720) {
+        if ((this).offset > 1440) {
             updateThreads.splice(index);
             localDataStore.set("threads", updateThreads);
         }
