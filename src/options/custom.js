@@ -61,6 +61,7 @@ function accountEnabled() {
 
     $(".loading").hide();
 }
+
 $(document).ready(function() {
     $('.error_message').hide();
 
@@ -99,7 +100,6 @@ $(document).ready(function() {
         if (localStorage.getItem("fb_userinfo") !== null) {
             var avi = localDataStore.get("fb_userinfo").avi;
             var user = localDataStore.get("fb_userinfo").username;
-            console.log(avi);
             $('#useravi').attr("src", avi);
             $('.username').replaceWith(user);
         }

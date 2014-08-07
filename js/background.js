@@ -55,8 +55,8 @@ chrome.runtime.onMessage.addListener(
             }
         }
         if (request.greeting == "submitreply") {
-            if (request.threadid === "undefined")
-                return;
+            if (request.threadid === undefined)
+                return false;
             var url = "http://forum.bodybuilding.com/showthread.php?t=" + request.threadid + "&page=1000";
             var newThread = new thread(url, request.threadtitle);
             var filtered = $(localDataStore.get("threads")).filter(function() {

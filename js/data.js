@@ -59,6 +59,7 @@ var localDataStore = {
     }
 };
 
+// Update badge number when a new post is added to storage
 function onStorage(data) {
     badgeColor = "#646464";
     chrome.browserAction.setBadgeBackgroundColor({
@@ -110,7 +111,7 @@ function sortReplies() {
 }
 
 
-// Function to change "yesterday" or "today" into real date
+// Function to change "today" into real date
 function getToday() {
     var today = new Date();
     var dd = today.getDate();
@@ -127,6 +128,7 @@ function getToday() {
 
 }
 
+// Function to change "yesterday" into real date
 function getYesterday() {
     var yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -161,6 +163,7 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
     this.visible = true;
 }
 
+// Object to store thread info
 function thread(url, title) {
     this.url = url;
     this.title = title;
@@ -192,7 +195,7 @@ function initalize() {
         var matchArray = myregex.exec(data);
 
         // find avi in the page source
-        var avisrc = $(data).find("div.image-fit img").attr('src');
+        var avisrc = $(data).find(".primary img").attr('src');
 
         //quit statement, not logged in
         if (matchArray[1] === "") {
@@ -201,7 +204,11 @@ function initalize() {
         }
 
         var username = matchArray[1];
-        var avi = url + $(data).find(".primary img").attr("src");
+        if (avisrc === undefined) {
+            avisrc = "/icons/profiledefault_thumb.jpg";
+            var avi = avisrc;
+        } else
+            var avi = url + avisrc;
 
         if (localStorage.getItem("fb_userinfo") === null)
             var tempuserinfo = new userinfo(url, username, avi, true, true, true, true);
@@ -253,7 +260,7 @@ function minePosts() {
             var threadTitle = myregex.exec(data)[1];
 
             var black = false;
-            if($(data).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
+            if ($(data).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
                 black = true;
 
 
@@ -263,9 +270,9 @@ function minePosts() {
                     var postDateBuffer = $(this).find("span.date").clone().children().remove().end().text();
                     var dateLength = postDateBuffer.length;
 
-                    if(black === false)
+                    if (black === false)
                         postDateBuffer = postDateBuffer.substring(0, dateLength - 2);
-                    if(black === true)
+                    if (black === true)
                         postDateBuffer = postDateBuffer.substring(0, dateLength - 1);
 
                     var postTimeBuffer = $(this).find("span.time").text();
@@ -286,7 +293,7 @@ function minePosts() {
                         var postDescBuffer = postDescLongBuffer;
 
                     var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
-                    
+
                     // Convert date into real date
                     if (postBuffer.postDate === "Yesterday")
                         postBuffer.postDate = getYesterday();
@@ -313,7 +320,7 @@ function minePosts() {
     var updateThreads = localDataStore.get("threads");
     var shallowCopy = $.extend({}, updateThreads);
     $.each(shallowCopy, function(index) {
-        if ((this).offset > 1440) {
+        if ((this).offset > 2880) {
             updateThreads.splice(index);
             localDataStore.set("threads", updateThreads);
         }

@@ -23,6 +23,7 @@ html {
     //min-height: 500px;
     overflow: hidden;
     position: relative;
+    width: 100%;
 }
 
 body {
@@ -93,8 +94,14 @@ div .tabs {
     margin-bottom: 4px; 
     font-size: 11px;
 
+    .mentions {
+        margin-left: 3px;
+    }
+
     .markall {
-       margin-left: 138px;
+       //margin-left: 138px;
+       margin-right: 22px;
+       float: right;
     }
 
     .mark-btn {
@@ -107,8 +114,8 @@ div .tabs {
 div .scrollcontainer {
         display: block;
         overflow-y: scroll;
-        max-height: 400px;
-        min-height:400px;
+        //max-height: 400px;
+        height: 400px;
 }
 
 div .post {
@@ -204,16 +211,18 @@ div .postbody {
 }
 
 div .footer {
+    display: block;
     height: 30px;
     width: 100%;
-    display: block;
-    position: relative;
+    //position: fixed;
     bottom: 0;
     font-size: 11px;
+    //margin-bottom:-40px;
 
     background: -webkit-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10+,Safari5.1+ */
 
     #popout {
+        margin-left: 2px;
         display: inline-block;
         font-family: WebSymbolsRegular;
         font-size: 20px;
@@ -225,6 +234,8 @@ div .footer {
     .settings {
         display: inline-block;
         font-family: WebSymbolsRegular;
+        float: right;
+        margin-right: 5px;
         font-size: 20px;
         color: grey;
         //margin-right: 10px;
@@ -233,7 +244,8 @@ div .footer {
 
     .account-select {
         display: inline-block;
-        width: 85%;
+        position: absolute;
+        width: 90%;
         text-align: center;
     }
 

@@ -21,6 +21,7 @@ Handlebars.registerHelper("addClasses", function() {
     }
 });
 
+// Helper to display short or long description
 Handlebars.registerHelper("Desc", function(longDesc, shortDesc) {
     if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
         return longDesc;
@@ -28,6 +29,7 @@ Handlebars.registerHelper("Desc", function(longDesc, shortDesc) {
         return shortDesc;
 });
 
+// Helper to display default avi or user's avi
 Handlebars.registerHelper("avi", function() {
     if (localStorage.getItem("fb_userinfo") === null)
         return "/icons/profiledefault_thumb.jpg";
@@ -38,6 +40,7 @@ Handlebars.registerHelper("avi", function() {
         return localDataStore.get("fb_userinfo").avi;
 });
 
+// Helper to display username or "not logged in"
 Handlebars.registerHelper("user", function() {
     if (localStorage.getItem("fb_userinfo") === null)
         return "Not Logged In";
@@ -55,12 +58,6 @@ Handlebars.registerHelper("switch", function() {
     else
         return "";
 });
-
-function disableforAnimation() {
-    if ($(':animated').length) {
-        return false;
-    }
-}
 
 // Function for when new items get added to the list, update old items ID in timeline
 function newItem() {
@@ -108,34 +105,54 @@ function newItem() {
     }
 }
 
-// create a variable for read posts switch if doesnt exist
-if (localStorage.getItem("fb_posts-switch") === null) {
-    localStorage.setItem("fb_posts-switch", "show");
+// Function to dynamicly resize timeline
+function sizeContent() {
+    var newHeight = $(window).height() - $(".header").height() - $(".footer").height() - 23 + "px";
+
+    $(".scrollcontainer").css("height", newHeight);
 }
-/* When document ready */
+
+// create a variable for read posts switch if doesnt exist
+if (localStorage.getItem("fb_posts-switch") === null)
+    localStorage.setItem("fb_posts-switch", "show");
+
+if (localStorage.getItem("popout") === null)
+    localStorage.setItem("popout", false);
+
+// When document is ready
 $(document).ready(function() {
 
+    // Listen to dynamically add new posts if new post gets added to storage
     if (window.addEventListener) {
         window.addEventListener("storage", newItem, false);
     } else {
         window.attachEvent("onstorage", newItem);
     }
 
+    // If the user is running the popout, make the timeline dynamic
+    if (localDataStore.get("popout") === true) {
+        $(window).load('resize', sizeContent);
+        $(window).resize(sizeContent);
+    }
+
+    // Compile handlebars template and append data to template
     var template = Handlebars.compile($('#template').html());
     var data = template(localDataStore.get("replies"));
     $('div.container').append(data);
 
-
+    // If user is disabled, hide timeline
     if (localDataStore.get("fb_userinfo").enabled === false)
         $('.timeline').hide();
     else
         $('.timeline').show();
 
+    // If the user has mentions disabled, hide mentions
     if (localDataStore.get("fb_userinfo").mentions === false)
         $('.timeline').hide();
     else
         $('.timeline').show();
 
+    // If user has mentions enabled but account disabled, hid mentions
     if (localDataStore.get("fb_userinfo").mentions === true) {
         if (localDataStore.get("fb_userinfo").enabled === false)
             $('.timeline').hide();
@@ -143,9 +160,8 @@ $(document).ready(function() {
             $('.timeline').show();
     }
 
-    // handles clicking the x button on the post
+    // Handles clicking the x button on the post
     $(document).on('click', '.close', function() {
-        console.log("i was clicked")
         if ($(':animated').length) {
             return false;
         }
@@ -296,7 +312,8 @@ $(document).ready(function() {
             localStorage.setItem("fb_posts-switch", "hide");
         }
     });
-    // pop out window on click
+
+    // Pop out window on click
     $("#popout").on("click", function() {
         chrome.windows.create({
             url: "/src/browser_action/popup.html",
@@ -305,6 +322,26 @@ $(document).ready(function() {
             type: "popup"
         });
         window.close()
+        chrome.browserAction.disable();
     });
 
+    // Check for if user is refreshing or exiting popout
+    var refresh = false;
+    $(window).keydown(function(event) {
+        // User presses F5 to refresh
+        if (event.keyCode == 116) {
+            refresh = true;
+        }
+    });
+
+    // Disable/enable popup icon upon popout open or exit
+    $(window).bind("beforeunload", function() {
+        if (!refresh) {
+            chrome.browserAction.enable();
+            if (localDataStore.get("popout") === true)
+                localStorage.setItem("popout", false);
+            else
+                localStorage.setItem("popout", true);
+        }
+    })
 });
