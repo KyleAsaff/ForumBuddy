@@ -1,6 +1,6 @@
 {
     "name": "Forum Buddy",
-    "version": "1.2.2.1",
+    "version": "1.2.2.2",
     "manifest_version": 2,
     "description": "A buddy for forums",
     "icons": {
@@ -25,8 +25,7 @@
         "matches": ["http://forum.bodybuilding.com/*", "https://forum.bodybuilding.com/*"]
     }],
     "permissions": [
-        "http://forum.bodybuilding.com/*",
-        "http://kylesbox.com/*",
+        "<all_urls>",
         "cookies",
         "storage",
         "unlimitedStorage",

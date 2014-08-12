@@ -184,7 +184,7 @@ function userinfo(forum, username, avi, enabled, mentions, mentions_longdesc) {
 // Function to initalize getting user information
 function initalize() {
     var url = "http://forum.bodybuilding.com/";
-    var aviurl = "http://my.bodybuilding.com/photos/view/type/profile";
+    var aviurl = "http://forum.bodybuilding.com/profile.php?do=editavatar";
 
     // if (localStorage.getItem("fb_userinfo") === null) {
     $.get(aviurl, function(data) {
@@ -195,8 +195,7 @@ function initalize() {
         var matchArray = myregex.exec(data);
 
         // find avi in the page source
-        var avisrc = $(data).find('div.profile-imgbox:first .profile-imgbox-pic a img').attr('src');
-        console.log(avisrc);
+        var avisrc = $(data).find(".primary img").attr('src');
 
         //quit statement, not logged in
         if (matchArray[1] === "") {
@@ -209,7 +208,7 @@ function initalize() {
             avisrc = "/icons/profiledefault_thumb.jpg";
             var avi = avisrc;
         } else
-            var avi = avisrc;
+            var avi = url + avisrc;
 
         if (localStorage.getItem("fb_userinfo") === null)
             var tempuserinfo = new userinfo(url, username, avi, true, true, true, true);
@@ -225,37 +224,71 @@ function initalize() {
     });
 }
 
-function getAllCookies(callback) {
-    chrome.cookies.getAll({ 'domain': 'bodybuilding.com'}, function(cookies) {
-        console.log(cookies);
-        
-        if(cookies !== null) {
-        console.log("getting cookie1");
-        localDataStore.set("allcookies", cookies);
+function removeCookie(callback) {
+chrome.cookies.remove({"name":"v1guid","url":"http://bodybuilding.com"},function (cookie){
+    console.log("cookie1 removed");
+    console.log(cookie);
+    chrome.cookies.remove({"name":"bbsessionhash","url":"http://bodybuilding.com"},function (cookie){
+        console.log("cookie2 removed");
+        console.log(cookie);
         callback();
-     } 
+    });
 });
 }
 
-function removeAllCookies(callback) {
-    chrome.cookies.getAll({ 'domain': 'bodybuilding.com'}, function(cookies) {
-        for (var i = 0; i < cookies.length; i++) {
-            chrome.cookies.remove({ 'url': "http" + (cookies[i].secure ? "s" : "") + "://" + cookies[i].domain + cookies[i].path, 'name': cookies[i].name });
-            console.log("delete");
-        }
-        console.log("all Deleted");
-        callback();
+function getCookie(callback) {
+chrome.cookies.get({"url": "http://bodybuilding.com", "name": "v1guid"}, function(cookie) {
+    console.log(cookie);
+    if(cookie !== null) {
+        console.log("getting cookie1");
+        localDataStore.set("v1guid", cookie);
+        console.log(localDataStore.get("v1guid"));
+
+        chrome.cookies.get({"url": "http://bodybuilding.com", "name": "bbsessionhash"}, function(cookie) {
+            console.log(cookie);
+            if(cookie !== null) {
+                console.log("getting cookie2");
+                localDataStore.set("lgn", cookie);
+                console.log(localDataStore.get("lgn"));
+                callback();
+            }
+        });
+     }
     });
 }
 
-function setAllCookies() {
-    var cookies = localDataStore.get("allcookies");
-    for (var i = 0; i < cookies.length; i++) {
-        chrome.cookies.set({ 'url': "http" + (cookies[i].secure ? "s" : "") + "://" + cookies[i].domain + cookies[i].path, 'name': cookies[i].name, 'value': cookies[i].value, 'domain': cookies[i].domain, 'path': cookies[i].path, 'secure': cookies[i].secure, 'httpOnly': cookies[i].httpOnly, 'expirationDate': cookies[i].expirationDate, 'storeId': cookies[i].storeId });
-    }
-    console.log("all set");
-}
+function setCookie() {
+    var cookiedata = localDataStore.get("v1guid");
+    var cookiedata2 = localDataStore.get("lgn");
+    chrome.cookies.set({
+        "url": "http://bodybuilding.com", 
+        "name": cookiedata.name, 
+        "value": cookiedata.value,
+        "domain": cookiedata.domain,
+        "path": cookiedata.path,
+        "secure": cookiedata.secure,
+        "httpOnly": cookiedata.httpOnly,
+        "storeId": cookiedata.storeId
+    }, function(cookie) {
+        console.log("cookie set");
+        console.log(JSON.stringify(cookie));
+            chrome.cookies.set({
+        "url": "http://bodybuilding.com", 
+        "name": cookiedata2.name, 
+        "value": cookiedata2.value,
+        "domain": cookiedata2.domain,
+        "path": cookiedata2.path,
+        "secure": cookiedata2.secure,
+        "httpOnly": cookiedata2.httpOnly,
+        "storeId": cookiedata2.storeId
+    }, function(cookie) {
+        console.log("cookie2 set");
+        console.log(JSON.stringify(cookie));
 
+    });
+
+    });
+}
 
 // Function to check the threads the user recently posted in
 function minePosts(callback) {
@@ -263,19 +296,19 @@ console.log("mining...");
 
     // if user is not logged in return quit fetchPosts
     if (localStorage.getItem("fb_userinfo") === null) {
-        setAllCookies();
+        setCookie();
         return false;
     }
 
     // if user turned his account to disable quit fetchPosts
     if (localDataStore.get("fb_userinfo").enabled === false) {
-        setAllCookies();
+        setCookie();
         return false;
     }
 
     // if user turned posts off quit fetchPosts
     if (localDataStore.get("fb_userinfo").mentions === false) {
-        setAllCookies();
+        setCookie();
         return false;
     }
 

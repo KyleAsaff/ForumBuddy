@@ -77,7 +77,7 @@ function insertBadge() {
     var iconURL = chrome.extension.getURL("icons/icon2_128.png");
 
     var data = localDataStore.get("fb_donators");
-    var data = $.parseJSON(data);
+    data = $.parseJSON(data);
 
     $("img.onlinestatus").each(function(index) {
         var match = $(this).attr('title');
@@ -101,7 +101,7 @@ function insertBlackBadge() {
     var iconURL = chrome.extension.getURL("icons/icon2_128.png");
 
     var data = localDataStore.get("fb_donators");
-    var data = $.parseJSON(data);
+    data = $.parseJSON(data);
 
     $("a.postuseravatar").each(function(index) {
         var match = $(this).attr('title');
@@ -120,8 +120,10 @@ function insertBlackBadge() {
 
 // run injection on ready
 $(document).ready(function() {
-    insertBadge();
-    insertBlackBadge();
+    if ($(this).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
+        insertBlackBadge();
+    else
+        insertBadge();
     var pathname = $(location).attr('href');
 
     //watch put a watch on threads replied to
