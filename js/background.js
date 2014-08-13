@@ -78,5 +78,5 @@ function instantReplies() {
 initalize();
 
 setTimeout(fetchPosts, 3000);
-setInterval(fetchPosts, 61000);
+setInterval(fetchPosts, 61137);
 setInterval(instantReplies, 30000);

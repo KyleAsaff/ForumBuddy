@@ -103,8 +103,11 @@ function sortReplies() {
         return false;
     tempArray.sort(function(a, b) {
 
+        var c = new Date(a.fullDate);
+        var d = new Date(b.fullDate);
+        /*
         var c = new Date(a.postDate + " " + a.postTime);
-        var d = new Date(b.postDate + " " + b.postTime);
+        var d = new Date(b.postDate + " " + b.postTime);*/
         return d - c;
     });
     localDataStore.set("replies", tempArray);
@@ -145,8 +148,55 @@ function getYesterday() {
     return date;
 }
 
+// Function to convert GMT time to minute.js GMT time
+function formatGMT(zone) {
+    timezone = String(zone);
+    if(timezone === "-12") return "-12:00";
+    if(timezone === "-11") return "-11:00";
+    if(timezone === "-10") return "-10:00";
+    if(timezone === "-9.5") return "-09:30";
+    if(timezone === "-9") return "-09:00";
+    if(timezone === "-8") return "-08:00";
+    if(timezone === "-7") return "-07:00";
+    if(timezone === "-6") return "-06:00";
+    if(timezone === "-5") return "-05:00";
+    if(timezone === "-4.5") return "-04:30";
+    if(timezone === "-4") return "-04:00";
+    if(timezone === "-3.5") return "-03:30";
+    if(timezone === "-3") return "-03:00";
+    if(timezone === "-2") return "-02:00";
+    if(timezone === "-1") return "-01:00";
+    if(timezone === "-0") return "00:00";
+    if(timezone === "+0") return "00:00";
+    if(timezone === "+1") return "+01:00";
+    if(timezone === "+2") return "+02:00";
+    if(timezone === "+3") return "+03:00";
+    if(timezone === "+3.5") return "+03:30";
+    if(timezone === "+4") return "+04:00";
+    if(timezone === "+4.5") return "+04:30";
+    if(timezone === "+5") return "+05:00";
+    if(timezone === "+5.5") return "+05:30";
+    if(timezone === "+5.75") return "+05:45";
+    if(timezone === "+6") return "+06:00";
+    if(timezone === "+6.5") return "+06:30";
+    if(timezone === "+6.75") return "+06:45";
+    if(timezone === "+7") return "+07:00";
+    if(timezone === "+8") return "+08:00";
+    if(timezone === "+8.75") return "+08:45";
+    if(timezone === "+9") return "+09:00";
+    if(timezone === "+9.5") return "+09:30";
+    if(timezone === "+10") return "+10:00";
+    if(timezone === "+10.5") return "+10:30";
+    if(timezone === "+11") return "+11:00";
+    if(timezone === "+11.5") return "+11:30";
+    if(timezone === "+12") return "+12:00";
+    if(timezone === "+12.45") return "+12:45";
+    if(timezone === "+13") return "+13:00";
+    if(timezone === "+14") return "+14:00";
+}
+
 // Object for storing post data
-function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, postDesc, postDescLong, postLink) {
+function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, fullDate, postDesc, postDescLong, postLink) {
     // this.raw = raw;
     this.postID = postID;
     this.threadTitle = threadTitle;
@@ -157,6 +207,7 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
     this.postAuthorLink = postAuthorLink;
     this.postDate = postDate;
     this.postTime = postTime;
+    this.fullDate = fullDate;
     this.postDesc = postDesc;
     this.postLink = postLink;
     this.postDescLong = postDescLong;
@@ -171,10 +222,12 @@ function thread(url, title) {
 }
 
 // Object to hold the user information
-function userinfo(forum, username, avi, enabled, mentions, mentions_longdesc) {
+function userinfo(forum, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc) {
     this.forum = forum;
     this.username = username;
     this.avi = avi;
+    this.defaultGMT = defaultGMT;
+    this.userGMT = userGMT;
     this.enabled = enabled;
     this.mentions = mentions;
     this.mentions_longdesc = mentions_longdesc;
@@ -185,10 +238,9 @@ function userinfo(forum, username, avi, enabled, mentions, mentions_longdesc) {
 function initalize() {
     var url = "http://forum.bodybuilding.com/";
     var aviurl = "http://my.bodybuilding.com/photos/view/type/profile";
+    var defaultGMT = formatGMT(-7);
 
-    // if (localStorage.getItem("fb_userinfo") === null) {
     $.get(aviurl, function(data) {
-        //var $page = $(data);
 
         // find username in the page source
         var myregex = /s\.prop42="([^"]*)"/;
@@ -196,7 +248,6 @@ function initalize() {
 
         // find avi in the page source
         var avisrc = $(data).find('div.profile-imgbox:first .profile-imgbox-pic a img').attr('src');
-        console.log(avisrc);
 
         //quit statement, not logged in
         if (matchArray[1] === "") {
@@ -211,56 +262,60 @@ function initalize() {
         } else
             var avi = avisrc;
 
-        if (localStorage.getItem("fb_userinfo") === null)
-            var tempuserinfo = new userinfo(url, username, avi, true, true, true, true);
-        else {
-            var enabled = localDataStore.get("fb_userinfo").enabled;
-            var mentions = localDataStore.get("fb_userinfo").mentions;
-            var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
+        // Get the time difference for when cookies removed
+        $.get(url, function(data) {
+            var matchArray = /\bGMT +(.+?)(?=\. )/.exec(data);;
+            if (matchArray) {
+                var userGMT = formatGMT(matchArray[1]);
+            }
+            else
+                var userGMT = formatGMT(defaultGMT);
 
-            var tempuserinfo = new userinfo(url, username, avi, enabled, mentions, mentions_longdesc);
-        }
+            if (localStorage.getItem("fb_userinfo") === null)
+                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, true, true, true, true);
+            else {
+                var enabled = localDataStore.get("fb_userinfo").enabled;
+                var mentions = localDataStore.get("fb_userinfo").mentions;
+                var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
 
-        localDataStore.set("fb_userinfo", tempuserinfo);
+                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc);
+            }
+            localDataStore.set("fb_userinfo", tempuserinfo);
+        });
     });
 }
 
+// Stores all cookies in localstorage
 function getAllCookies(callback) {
-    chrome.cookies.getAll({ 'domain': 'bodybuilding.com'}, function(cookies) {
-        console.log(cookies);
-        
+    chrome.cookies.getAll({ 'domain': 'bodybuilding.com'}, function(cookies) {      
         if(cookies !== null) {
-        console.log("getting cookie1");
         localDataStore.set("allcookies", cookies);
         callback();
      } 
 });
 }
 
+// removes all cookies at a specified domain
 function removeAllCookies(callback) {
     chrome.cookies.getAll({ 'domain': 'bodybuilding.com'}, function(cookies) {
         for (var i = 0; i < cookies.length; i++) {
             chrome.cookies.remove({ 'url': "http" + (cookies[i].secure ? "s" : "") + "://" + cookies[i].domain + cookies[i].path, 'name': cookies[i].name });
-            console.log("delete");
         }
-        console.log("all Deleted");
         callback();
     });
 }
 
+// sets all cookies stored from getAllCookies
 function setAllCookies() {
     var cookies = localDataStore.get("allcookies");
     for (var i = 0; i < cookies.length; i++) {
         chrome.cookies.set({ 'url': "http" + (cookies[i].secure ? "s" : "") + "://" + cookies[i].domain + cookies[i].path, 'name': cookies[i].name, 'value': cookies[i].value, 'domain': cookies[i].domain, 'path': cookies[i].path, 'secure': cookies[i].secure, 'httpOnly': cookies[i].httpOnly, 'expirationDate': cookies[i].expirationDate, 'storeId': cookies[i].storeId });
     }
-    console.log("all set");
 }
 
 
 // Function to check the threads the user recently posted in
 function minePosts(callback) {
-console.log("mining...");
-
     // if user is not logged in return quit fetchPosts
     if (localStorage.getItem("fb_userinfo") === null) {
         setAllCookies();
@@ -333,13 +388,30 @@ console.log("mining...");
                     else
                         var postDescBuffer = postDescLongBuffer;
 
-                    var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
-
                     // Convert date into real date
-                    if (postBuffer.postDate === "Yesterday")
-                        postBuffer.postDate = getYesterday();
-                    if (postBuffer.postDate === "Today")
-                        postBuffer.postDate = getToday();
+                    if (postDateBuffer === "Yesterday")
+                        postDateBuffer = getYesterday();
+                    if (postDateBuffer === "Today")
+                        postDateBuffer = getToday();
+
+                    if(localDataStore.get("fb_userinfo") !== false) { 
+                        var userGMT = localDataStore.get("fb_userinfo").userGMT;
+                        var defaultGMT = localDataStore.get("fb_userinfo").defaultGMT;
+                    }
+                    else{ 
+                        var userGMT = "00:00";
+                        var defaultGMT = "00:00";
+                    }
+
+                    // fail safe if cant get post from page
+                    if (postAuthorBuffer === "")
+                        return false;
+
+                    var fullDate = postDateBuffer + " " + postTimeBuffer + " " + defaultGMT;
+
+                    var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A Z").zone(userGMT).format("MM-DD-YYYY hh:mm A");
+
+                    var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, fullDateBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
 
                     if (postBuffer.postAuthor !== user)
                         mineBuffer.push(postBuffer);
@@ -447,22 +519,26 @@ function fetchPosts() {
             var threadViewsBuffer = $(this).find("dl.userstats dd:last").text();
             var postDescLongBuffer = $(this).find("blockquote.postcontent").text().trim().replace(/\n\s*\n/g, '\n');
 
-            // Create a post object with the buffer data (true = long descriptions, false = short descriptions)
-            var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
-
             // If you are the post author, dont add to localstore
-            if (postBuffer.postAuthor === user)
+            if (postAuthorBuffer === user)
                 return true;
 
             // Convert date into real date
-            if (postBuffer.postDate === "Yesterday")
-                postBuffer.postDate = getYesterday();
-            if (postBuffer.postDate === "Today")
-                postBuffer.postDate = getToday();
+            if (postDateBuffer === "Yesterday")
+                postDateBuffer = getYesterday();
+            if (postDateBuffer === "Today")
+                postDateBuffer = getToday();
 
             // fail safe if cant get post from page
-            if (postBuffer.postAuthor === "")
+            if (postAuthorBuffer === "")
                 return false;
+
+            var fullDate = postDateBuffer + " " + postTimeBuffer;
+
+            var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A").format("MM-DD-YYYY hh:mm A");
+
+            // Create a post object with the buffer data (true = long descriptions, false = short descriptions)
+            var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, fullDateBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
 
             // fill new array of data to concat with data in localstore
 

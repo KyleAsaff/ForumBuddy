@@ -72,8 +72,7 @@ function newItem() {
                     <div class='post " + fade + "' id='" + i + "' style='display: none;'>\
                         <div class='posttop'>\
                             <span class='postdate'>\
-                                <span class='date'>" + localDataStore.get("replies")[i].postDate + "</span>\
-                                <span class='Time'>" + localDataStore.get("replies")[i].postTime + "</span>\
+                                <span class='date'>" + localDataStore.get("replies")[i].fullDate + "</span>\
                                 <a class='close' >x</a>\
                             </span>\
                         </div>\
