@@ -59,12 +59,18 @@ function accountEnabled() {
         }
     }
 
-    $(".loading").hide();
+    setTimeout(hideLoading, 3500);
 }
 
 function refreshPost(callback) {
+    localStorage.removeItem("replies");
+    localStorage.removeItem("threads");
     fetchPosts();
     callback();
+}
+
+function hideLoading() {
+    $(".loading").hide();
 }
 
 function refreshAccount() {
@@ -108,16 +114,10 @@ $(document).ready(function() {
         }
 
         initalize();
-        localStorage.removeItem("replies");
-        localStorage.removeItem("threads");
-        setTimeout(fetchPosts, 1000);
-        setTimeout(accountEnabled, 2000);
-        if (localStorage.getItem("fb_userinfo") !== null) {
-            var avi = localDataStore.get("fb_userinfo").avi;
-            var user = localDataStore.get("fb_userinfo").username;
-            $('#useravi').attr("src", avi);
-            $('.username').replaceWith(user);
-        }
+
+        refreshPost(function(){
+            refreshAccount();
+        });
     });
 
     // function for when the disabled button is clicked
