@@ -43,7 +43,7 @@ this.manifest = {
             "group": "Version",
             "name": "version_desc",
             "type": "description",
-            "text": "1.2.2"
+            "text": "1.3.0"
         }, {
             "tab": "About",
             "group": "Information",

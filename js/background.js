@@ -66,13 +66,13 @@ chrome.runtime.onMessage.addListener(
 
 function instantReplies() {
     getAllCookies(function(){
-    removeAllCookies(function(){
-        minePosts(function(){
+        removeAllCookies(function(){
+            minePosts(function(){
                 setAllCookies();
+            });
         });
     });
-});
-};
+}
 
 // Initalize and fetch posts every minute
 initalize();
