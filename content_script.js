@@ -54,7 +54,7 @@ var localDataStore = {
     }
 };
 
-// Function to get donators from external json
+// Function to get donators from external JSON
 function donators() {
     var jsonURL = "http://kylesbox.com/donators.json";
 
