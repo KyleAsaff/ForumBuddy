@@ -286,7 +286,7 @@ function initalize(callback) {
 }
 
 // Function to check server status of fetch server
-function checkServerStatus()
+function checkServerStatus(callback)
 {
     var img = document.body.appendChild(document.createElement("img"));
     img.src = "http://kylesbox.com/forumbuddy/fetch/ping.gif?" + (new Date());
@@ -298,6 +298,7 @@ function checkServerStatus()
     {
         localStorage.setItem("serverStatus", "offline");
     };
+    if(callback) callback();
 }
 
 
