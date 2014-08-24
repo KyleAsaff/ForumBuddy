@@ -65,18 +65,16 @@ chrome.runtime.onMessage.addListener(
 );
 
 function instantReplies() {
-    getAllCookies(function(){
-        removeAllCookies(function(){
-            minePosts(function(){
-                setAllCookies();
-            });
-        });
+    checkServerStatus(function() {
+        minePosts();
     });
 }
 
 // Initalize and fetch posts every minute
-initalize();
+initalize(function() {
+    fetchPosts();
+});
 
-setTimeout(fetchPosts, 3000);
-setInterval(fetchPosts, 61137);
+//setTimeout(fetchPosts, 3000);
+setInterval(fetchPosts, 60000);
 setInterval(instantReplies, 30000);

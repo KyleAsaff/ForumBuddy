@@ -23,8 +23,7 @@ for (var i = 0; i < buttons.length; i++) {
 ///////////////////////////////////////////////
 
 // Runs checks on if the user disables their account or not
-function accountEnabled() {
-
+function accountEnabled(callback) {
     if (localStorage.getItem("fb_userinfo") === null) {
         $('.active_avi').hide();
         $('.disable_acc').hide();
@@ -58,29 +57,12 @@ function accountEnabled() {
             $("#mentions").removeAttr("disabled");
         }
     }
-
-    setTimeout(hideLoading, 3500);
-}
-
-function refreshPost(callback) {
-    localStorage.removeItem("replies");
-    localStorage.removeItem("threads");
-    fetchPosts();
-    callback();
+    hideLoading();
+    if(callback) callback();
 }
 
 function hideLoading() {
     $(".loading").hide();
-}
-
-function refreshAccount() {
-    accountEnabled();
-        if (localStorage.getItem("fb_userinfo") !== null) {
-            var avi = localDataStore.get("fb_userinfo").avi;
-            var user = localDataStore.get("fb_userinfo").username;
-            $('#useravi').attr("src", avi);
-            $('.username').replaceWith(user);
-    }
 }
 
 $(document).ready(function() {
@@ -113,10 +95,13 @@ $(document).ready(function() {
             var refresh = localStorage.setItem("refresh", refresh);
         }
 
-        initalize();
-
-        refreshPost(function(){
-            refreshAccount();
+        // Function for refreshing account
+        initalize(function() {
+                localStorage.removeItem("replies");
+                localStorage.removeItem("threads");
+                accountEnabled(function() {
+                fetchPosts();
+            });
         });
     });
 

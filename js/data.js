@@ -97,7 +97,7 @@ function onStorage(data) {
 }
 
 // Function to sort replies by date
-function sortReplies() {
+function sortReplies(callback) {
     tempArray = localDataStore.get("replies");
     if (tempArray === false)
         return false;
@@ -105,12 +105,10 @@ function sortReplies() {
 
         var c = new Date(a.fullDate);
         var d = new Date(b.fullDate);
-        /*
-        var c = new Date(a.postDate + " " + a.postTime);
-        var d = new Date(b.postDate + " " + b.postTime);*/
         return d - c;
     });
     localDataStore.set("replies", tempArray);
+    if (callback) callback();
 }
 
 
@@ -235,7 +233,7 @@ function userinfo(forum, username, avi, defaultGMT, userGMT, enabled, mentions, 
 }
 
 // Function to initalize getting user information
-function initalize() {
+function initalize(callback) {
     var url = "http://forum.bodybuilding.com/";
     var aviurl = "http://my.bodybuilding.com/photos/view/type/profile";
     var defaultGMT = formatGMT(-7);
@@ -250,8 +248,9 @@ function initalize() {
         var avisrc = $(data).find('div.profile-imgbox:first .profile-imgbox-pic a img').attr('src');
 
         //quit statement, not logged in
-        if (matchArray[1] === "") {
+        if (matchArray === null) {
             localStorage.removeItem("fb_userinfo");
+            if(callback) callback();
             return false;
         }
 
@@ -281,36 +280,24 @@ function initalize() {
                 var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc);
             }
             localDataStore.set("fb_userinfo", tempuserinfo);
+            if(callback) callback();
         });
     });
 }
 
-// Stores all cookies in localstorage
-function getAllCookies(callback) {
-    chrome.cookies.getAll({ 'domain': 'bodybuilding.com'}, function(cookies) {      
-        if(cookies !== null) {
-        localDataStore.set("allcookies", cookies);
-        callback();
-     } 
-});
-}
-
-// removes all cookies at a specified domain
-function removeAllCookies(callback) {
-    chrome.cookies.getAll({ 'domain': 'bodybuilding.com'}, function(cookies) {
-        for (var i = 0; i < cookies.length; i++) {
-            chrome.cookies.remove({ 'url': "http" + (cookies[i].secure ? "s" : "") + "://" + cookies[i].domain + cookies[i].path, 'name': cookies[i].name });
-        }
-        callback();
-    });
-}
-
-// sets all cookies stored from getAllCookies
-function setAllCookies() {
-    var cookies = localDataStore.get("allcookies");
-    for (var i = 0; i < cookies.length; i++) {
-        chrome.cookies.set({ 'url': "http" + (cookies[i].secure ? "s" : "") + "://" + cookies[i].domain + cookies[i].path, 'name': cookies[i].name, 'value': cookies[i].value, 'domain': cookies[i].domain, 'path': cookies[i].path, 'secure': cookies[i].secure, 'httpOnly': cookies[i].httpOnly, 'expirationDate': cookies[i].expirationDate, 'storeId': cookies[i].storeId });
-    }
+// Function to check server status of fetch server
+function checkServerStatus()
+{
+    var img = document.body.appendChild(document.createElement("img"));
+    img.src = "http://kylesbox.com/forumbuddy/fetch/ping.gif?" + (new Date());
+        img.onload = function()
+    {
+        localStorage.setItem("serverStatus", "online");
+    };
+        img.onerror = function()
+    {
+        localStorage.setItem("serverStatus", "offline");
+    };
 }
 
 
@@ -318,19 +305,16 @@ function setAllCookies() {
 function minePosts(callback) {
     // if user is not logged in return quit fetchPosts
     if (localStorage.getItem("fb_userinfo") === null) {
-        setAllCookies();
         return false;
     }
 
     // if user turned his account to disable quit fetchPosts
     if (localDataStore.get("fb_userinfo").enabled === false) {
-        setAllCookies();
         return false;
     }
 
     // if user turned posts off quit fetchPosts
     if (localDataStore.get("fb_userinfo").mentions === false) {
-        setAllCookies();
         return false;
     }
 
@@ -343,7 +327,12 @@ function minePosts(callback) {
         var offsetThread = parseInt((this).offset);
         offsetThread = offsetThread + 1;
 
-        var mineURL = (this).url;
+        if(localStorage.getItem("serverStatus") === "online")
+            var mineURL = "http://www.kylesbox.com/forumbuddy/fetch/fetch.php?url=" + (this).url;
+        else {
+            var mineURL = "http://" + (this).url;
+            return false;
+        }
 
         var tempStorage = localDataStore.get("threads");
         tempStorage[index].offset = offsetThread;
@@ -440,12 +429,12 @@ function minePosts(callback) {
     });
     sortReplies();
     onStorage("replies");
-    callback();
+    if (callback) callback();
 }
 
 
 // function to query, store, and fetch posts
-function fetchPosts() {
+function fetchPosts(callback) {
 
     // if user is not logged in return quit fetchPosts
     if (localStorage.getItem("fb_userinfo") === null)
@@ -493,7 +482,6 @@ function fetchPosts() {
     // get data from search query
     var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "+" + refresh + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top";
     $.get(query, function(data) {
-
 
         // check if user is using default or black skin
         if ($(data).find('#searchbits').length > 0) {
@@ -559,4 +547,5 @@ function fetchPosts() {
 
     sortReplies();
     onStorage("replies");
+    if (callback) callback();
 }

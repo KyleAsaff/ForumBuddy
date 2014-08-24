@@ -90,6 +90,14 @@ function newItem() {
     }
 }
 
+// Sort items before inserting them
+function sortNewItem() {
+    sortReplies(function(){
+        newItem();
+    });
+}
+
+
 // Function to dynamicly resize timeline
 function sizeContent() {
     var newHeight = $(window).height() - $(".header").height() - $(".footer").height() - 23 + "px";
@@ -109,9 +117,9 @@ $(document).ready(function() {
 
     // Listen to dynamically add new posts if new post gets added to storage
     if (window.addEventListener) {
-        window.addEventListener("storage", newItem, false);
+        window.addEventListener("storage", sortNewItem, false);
     } else {
-        window.attachEvent("onstorage", newItem);
+        window.attachEvent("onstorage", sortNewItem);
     }
 
     // If the user is running the popout, make the timeline dynamic

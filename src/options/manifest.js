@@ -43,7 +43,7 @@ this.manifest = {
             "group": "Version",
             "name": "version_desc",
             "type": "description",
-            "text": "1.3.0"
+            "text": "1.3.1"
         }, {
             "tab": "About",
             "group": "Information",
@@ -94,6 +94,42 @@ this.manifest = {
             "name": "bbthread_desc",
             "type": "description",
             "text": "<a href='http://forum.bodybuilding.com/showthread.php?t=163352861' target='_blank'>http://forum.bodybuilding.com/showthread.php?t=163352861</a> - Official Thread"
+        },  {
+            "tab": "Changelog",
+            "group": "Version 1.3.1",
+            "name": "changelog_131",
+            "type": "description",
+            "text": "- 'Go to first new post' button on all threads now works correctly<br>- Fixed 'Refresh Account' button having to be clicked twice to refresh<br>- Multiquote bug fixed<br>- Added Changelog"
+        },  {
+            "tab": "Changelog",
+            "group": "Version 1.3.0",
+            "name": "changelog_130",
+            "type": "description",
+            "text": "- Unread subscriptions and threads are no longer marked as read<br>- User avatar now pulls from bodyspace"
+        },  {
+            "tab": "Changelog",
+            "group": "Version 1.2.2",
+            "name": "changelog_1222",
+            "type": "description",
+            "text": "- Dynamic resizing in pop out<br>- Undefined threads no longer cache<br>- Avatar image no longer shows as a broken image"
+        },  {
+            "tab": "Changelog",
+            "group": "Version 1.2.1",
+            "name": "changelog_121",
+            "type": "description",
+            "text": "- Added pop out button<br>- Offset of threads now gets reset<br>- Faster notifications<br>- Threads now save thread titles"
+        },  {
+            "tab": "Changelog",
+            "group": "Version 1.2.0",
+            "name": "changelog_120",
+            "type": "description",
+            "text": "- Instant quote notifications<br>- Bodybuilding.com black skin now supported<br>- Dynamicly adds new notifications to newsfeed"
+        },  {
+            "tab": "Changelog",
+            "group": "Version 1.0.0",
+            "name": "changelog_100",
+            "type": "description",
+            "text": "- Inital Release"
         }, {
             "tab": "Donations",
             "group": "Donate",
