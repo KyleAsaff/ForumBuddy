@@ -65,8 +65,12 @@ chrome.runtime.onMessage.addListener(
 );
 
 function instantReplies() {
-    checkServerStatus(function() {
-        minePosts();
+    getCookie(function(){
+        minePosts(function(){
+            removeCookie(function(){
+                setCookie();
+            });
+        })
     });
 }
 

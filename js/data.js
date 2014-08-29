@@ -193,6 +193,28 @@ function formatGMT(zone) {
     if(timezone === "+14") return "+14:00";
 }
 
+// Stores all cookies in localstorage
+function getCookie(callback) {
+    chrome.cookies.get({ 'url': 'http://bodybuilding.com', 'name': 'bbthread_lastview'}, function(cookie) {
+    if(cookie !== null)      
+        localDataStore.set("lastview", cookie);
+        if (callback) callback();
+    });
+}
+
+function removeCookie(callback) {
+        chrome.cookies.remove({ 'url': 'http://bodybuilding.com', 'name': 'bbthread_lastview'}, function(cookie) {
+            if (callback) callback();
+        });
+}
+
+// sets all cookies stored from getAllCookies
+function setCookie(callback) {
+    var cookie = localDataStore.get("lastview");
+        chrome.cookies.set({ 'url': "http" + (cookie.secure ? "s" : "") + "://" + cookie.domain + cookie.path, 'name': cookie.name, 'value': cookie.value, 'domain': cookie.domain, 'path': cookie.path, 'secure': cookie.secure, 'httpOnly': cookie.httpOnly, 'expirationDate': cookie.expirationDate, 'storeId': cookie.storeId });
+    if (callback) callback();
+}
+
 // Object for storing post data
 function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, postAuthor, postAuthorLink, postDate, postTime, fullDate, postDesc, postDescLong, postLink) {
     // this.raw = raw;
@@ -285,88 +307,64 @@ function initalize(callback) {
     });
 }
 
-// Function to check server status of fetch server
-function checkServerStatus(callback)
-{
-    var img = document.body.appendChild(document.createElement("img"));
-    img.src = "http://kylesbox.com/forumbuddy/fetch/ping.gif?" + (new Date());
-        img.onload = function()
-    {
-        localStorage.setItem("serverStatus", "online");
-        //console.log("online");
-    };
-        img.onerror = function()
-    {
-        localStorage.setItem("serverStatus", "offline");
-        //console.log("offline");
-    };
-    $("img").remove();
-    if(callback) callback();
-}
-
-
 // Function to check the threads the user recently posted in
 function minePosts(callback) {
+
+    var cbGenerator = callback.multiCb();
+    
     // if user is not logged in return quit fetchPosts
     if (localStorage.getItem("fb_userinfo") === null) {
         return false;
     }
-
+    
     // if user turned his account to disable quit fetchPosts
     if (localDataStore.get("fb_userinfo").enabled === false) {
         return false;
     }
-
+    
     // if user turned posts off quit fetchPosts
     if (localDataStore.get("fb_userinfo").mentions === false) {
         return false;
     }
-
+    
     var url = "http://forum.bodybuilding.com/";
     var user = localDataStore.get("fb_userinfo").username;
     var mineBuffer = [];
-
+    
     $.each(localDataStore.get("threads"), function(index) {
-
+        
         var offsetThread = parseInt((this).offset);
         offsetThread = offsetThread + 1;
-/*
-        if(localStorage.getItem("serverStatus") === "online")
-        var mineURL = "http://www.kylesbox.com/forumbuddy/fetch/fetch.php?url=" + (this).url;
-        // var mineURL = "http://translate.google.com/translate?hl=en&sl=fr&tl=en&u=" + encodeURIComponent((this).url);
-        // https://translate.googleusercontent.com/translate_c?depth=1&hl=en&rurl=translate.google.com&sl=fr&tl=en&u=http%3A%2F%2Fforum.bodybuilding.com%2Fshowthread.php%3Ft%3D161918853%26page%3D100000
-        else {
-            var mineURL = "http://" + (this).url;
-            return false;
-        } */
-
+        
         var mineURL = (this).url;
-
+        
         var tempStorage = localDataStore.get("threads");
         tempStorage[index].offset = offsetThread;
-
+        
         localDataStore.set("threads", tempStorage);
 
+        var whenDone = cbGenerator();
+        
         $.get(mineURL, function(data) {
             var myregex = /s\.prop39="([^"]*)"/;
             var threadTitle = myregex.exec(data)[1];
-
+            
             var black = false;
             if ($(data).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
                 black = true;
-
-
+            
+            
             $(data).find("#posts").children().each(function() {
                 var fullpost = $(this).find(".postcontent").text();
                 if (fullpost.indexOf(user) > 1) {
                     var postDateBuffer = $(this).find("span.date").clone().children().remove().end().text();
                     var dateLength = postDateBuffer.length;
-
+                    
                     if (black === false)
                         postDateBuffer = postDateBuffer.substring(0, dateLength - 2);
                     if (black === true)
                         postDateBuffer = postDateBuffer.substring(0, dateLength - 1);
-
+                    
                     var postTimeBuffer = $(this).find("span.time").text();
                     var threadTitleBuffer = threadTitle;
                     var threadTitleLinkBuffer = url + $(this).find(".postcounter").attr("href");
@@ -376,48 +374,49 @@ function minePosts(callback) {
                     var postLinkBuffer = url + $(this).find(".postcounter").attr("href");
                     var postDescLongBuffer = $(this).find(".postcontent").clone().children().remove().end().text();
                     postDescLongBuffer = postDescLongBuffer.trim().replace(/\n\s*\n/g, '\n');
-
+                    
                     var threadRepliesBuffer = 0;
                     var threadViewsBuffer = 0;
                     if (postDescLongBuffer.length > 48)
                         var postDescBuffer = postDescLongBuffer.substring(0, 47) + " ...";
                     else
                         var postDescBuffer = postDescLongBuffer;
-
+                    
                     // Convert date into real date
                     if (postDateBuffer === "Yesterday")
                         postDateBuffer = getYesterday();
                     if (postDateBuffer === "Today")
                         postDateBuffer = getToday();
-
-                    if(localDataStore.get("fb_userinfo") !== false) { 
+                    
+                    if(localDataStore.get("fb_userinfo") !== false) {
                         var userGMT = localDataStore.get("fb_userinfo").userGMT;
                         var defaultGMT = localDataStore.get("fb_userinfo").defaultGMT;
                     }
-                    else{ 
+                    else{
                         var userGMT = "00:00";
                         var defaultGMT = "00:00";
                     }
-
+                    
                     // fail safe if cant get post from page
                     if (postAuthorBuffer === "")
                         return false;
-
+                    
                     /* uncomment this and erase next 2 lines when proxy issue is resolved
-                    var fullDate = postDateBuffer + " " + postTimeBuffer + " " + defaultGMT;
-
-                    var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A Z").zone(userGMT).format("MM-DD-YYYY hh:mm A"); */
-
+                     var fullDate = postDateBuffer + " " + postTimeBuffer + " " + defaultGMT;
+                     
+                     var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A Z").zone(userGMT).format("MM-DD-YYYY hh:mm A"); */
+                    
                     var fullDate = postDateBuffer + " " + postTimeBuffer;
-
+                    
                     var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A").format("MM-DD-YYYY hh:mm A");
-
+                    
                     var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, fullDateBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
-
+                    
                     if (postBuffer.postAuthor !== user)
                         mineBuffer.push(postBuffer);
                 }
             });
+            
             for (var i = 0; i < mineBuffer.length; i++) {
                 var newPost = mineBuffer[i];
                 var filtered = $(localDataStore.get("replies")).filter(function() {
@@ -427,9 +426,12 @@ function minePosts(callback) {
                 if (filtered.length === 0)
                     localDataStore.appendToFront("replies", newPost);
             }
-        });
-    });
 
+            whenDone();
+            
+        }); // end .get
+    });// end outer .each
+    
     // Remove thread from storage after 6 hours
     var updateThreads = localDataStore.get("threads");
     var shallowCopy = $.extend({}, updateThreads);
@@ -441,7 +443,6 @@ function minePosts(callback) {
     });
     sortReplies();
     onStorage("replies");
-    if (callback) callback();
 }
 
 
