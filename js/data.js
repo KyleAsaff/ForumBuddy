@@ -293,11 +293,14 @@ function checkServerStatus(callback)
         img.onload = function()
     {
         localStorage.setItem("serverStatus", "online");
+        //console.log("online");
     };
         img.onerror = function()
     {
         localStorage.setItem("serverStatus", "offline");
+        //console.log("offline");
     };
+    $("img").remove();
     if(callback) callback();
 }
 
@@ -327,13 +330,17 @@ function minePosts(callback) {
 
         var offsetThread = parseInt((this).offset);
         offsetThread = offsetThread + 1;
-
+/*
         if(localStorage.getItem("serverStatus") === "online")
-            var mineURL = "http://www.kylesbox.com/forumbuddy/fetch/fetch.php?url=" + (this).url;
+        var mineURL = "http://www.kylesbox.com/forumbuddy/fetch/fetch.php?url=" + (this).url;
+        // var mineURL = "http://translate.google.com/translate?hl=en&sl=fr&tl=en&u=" + encodeURIComponent((this).url);
+        // https://translate.googleusercontent.com/translate_c?depth=1&hl=en&rurl=translate.google.com&sl=fr&tl=en&u=http%3A%2F%2Fforum.bodybuilding.com%2Fshowthread.php%3Ft%3D161918853%26page%3D100000
         else {
             var mineURL = "http://" + (this).url;
             return false;
-        }
+        } */
+
+        var mineURL = (this).url;
 
         var tempStorage = localDataStore.get("threads");
         tempStorage[index].offset = offsetThread;
@@ -341,7 +348,6 @@ function minePosts(callback) {
         localDataStore.set("threads", tempStorage);
 
         $.get(mineURL, function(data) {
-
             var myregex = /s\.prop39="([^"]*)"/;
             var threadTitle = myregex.exec(data)[1];
 
@@ -397,9 +403,14 @@ function minePosts(callback) {
                     if (postAuthorBuffer === "")
                         return false;
 
+                    /* uncomment this and erase next 2 lines when proxy issue is resolved
                     var fullDate = postDateBuffer + " " + postTimeBuffer + " " + defaultGMT;
 
-                    var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A Z").zone(userGMT).format("MM-DD-YYYY hh:mm A");
+                    var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A Z").zone(userGMT).format("MM-DD-YYYY hh:mm A"); */
+
+                    var fullDate = postDateBuffer + " " + postTimeBuffer;
+
+                    var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A").format("MM-DD-YYYY hh:mm A");
 
                     var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, fullDateBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
 
