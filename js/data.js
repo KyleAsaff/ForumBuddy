@@ -45,7 +45,7 @@ var localDataStore = {
             case post:
                 tmp = localStorage.getItem(key);
                 tmp = (tmp === null) ? [] : JSON.parse(tmp);
-                tmp.push(data);
+                tmp.unshift(data);
                 localStorage.setItem(key, JSON.stringify(tmp));
                 break;
 
@@ -59,8 +59,55 @@ var localDataStore = {
     }
 };
 
+// Function to remove focus when opening a notification from tray
+function openTemporaryWindowToRemoveFocus() {
+   var win = window.open("about:blank", "emptyWindow", "width=1, height=1, top=-500, left=-500");
+   win.close();
+}
+
+//Creates basic notification when a new post comes in 
+function createNotification(postID, postAuthor, threadTitle, postDesc, postLink, callback) {
+    var opt = {
+        type: "basic",
+        title: postAuthor,
+        message: postDesc,
+        contextMessage: threadTitle,
+        iconUrl: "/icons/notification_mention.png",
+    };
+
+    // Create notification
+    chrome.notifications.create(postLink, opt, function(notificationId) {
+    });
+
+    // Clear notification after 1 minute
+    setTimeout(function() {
+        chrome.notifications.clear(postLink, function(){
+    });
+    }, 60000);
+    if(callback) callback();
+}
+
+//Adds the listener for all notifications
+function listenNotification() {
+    chrome.notifications.onClicked.addListener(function(notificationId) {
+        chrome.tabs.create({url: notificationId});
+        chrome.notifications.clear(notificationId, function(){
+            openTemporaryWindowToRemoveFocus();
+        });
+        var repliesCopy = localDataStore.get("replies");
+        for(i = 0; i<repliesCopy.length; i++) {
+            if(repliesCopy[i].postLink === notificationId) {
+                repliesCopy[i].visible = false;
+                break;
+            }
+        }
+        localDataStore.set("replies", repliesCopy);
+        onStorage();
+    });
+}
+
 // Update badge number when a new post is added to storage
-function onStorage(data) {
+function onStorage() {
     badgeColor = "#646464";
     chrome.browserAction.setBadgeBackgroundColor({
         color: badgeColor
@@ -232,6 +279,7 @@ function post(postID, threadTitle, threadTitleLink, threadReplies, threadViews, 
     this.postLink = postLink;
     this.postDescLong = postDescLong;
     this.visible = true;
+    this.notify = false;
 }
 
 // Object to store thread info
@@ -242,7 +290,7 @@ function thread(url, title) {
 }
 
 // Object to hold the user information
-function userinfo(forum, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc) {
+function userinfo(forum, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc) {
     this.forum = forum;
     this.username = username;
     this.avi = avi;
@@ -250,6 +298,7 @@ function userinfo(forum, username, avi, defaultGMT, userGMT, enabled, mentions, 
     this.userGMT = userGMT;
     this.enabled = enabled;
     this.mentions = mentions;
+    this.popup_notification = popup_notification;
     this.mentions_longdesc = mentions_longdesc;
     //this.offset = offset;
 }
@@ -259,6 +308,10 @@ function initalize(callback) {
     var url = "http://forum.bodybuilding.com/";
     var aviurl = "http://my.bodybuilding.com/photos/view/type/profile";
     var defaultGMT = formatGMT(-7);
+
+    if (localStorage.getItem("popout") === null)
+        localStorage.setItem("popout", false);
+
 
     $.get(aviurl, function(data) {
 
@@ -298,8 +351,9 @@ function initalize(callback) {
                 var enabled = localDataStore.get("fb_userinfo").enabled;
                 var mentions = localDataStore.get("fb_userinfo").mentions;
                 var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
+                var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
 
-                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc);
+                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
             }
             localDataStore.set("fb_userinfo", tempuserinfo);
             if(callback) callback();
@@ -423,8 +477,14 @@ function minePosts(callback) {
                     return this.postID === mineBuffer[i].postID;
                 });
                 // if post not yet stored in replies, add it
-                if (filtered.length === 0)
+                if (filtered.length === 0) {
                     localDataStore.appendToFront("replies", newPost);
+                //create a popup notification if no popout and if user has popup notifications enabled
+                if (localDataStore.get("popout") === false && localDataStore.get("fb_userinfo").popup_notification === true)
+                    createNotification(newPost.postID, newPost.postAuthor, newPost.threadTitle, newPost.postDesc, newPost.postLink);
+                sortReplies();
+                onStorage();
+                }
             }
 
             whenDone();
@@ -441,8 +501,8 @@ function minePosts(callback) {
             localDataStore.set("threads", updateThreads);
         }
     });
+    //listenNot();
     sortReplies();
-    onStorage("replies");
 }
 
 
@@ -553,12 +613,16 @@ function fetchPosts(callback) {
             });
 
             // if post not yet stored in replies, add it
-            if (filtered.length === 0)
+            if (filtered.length === 0) {
                 localDataStore.appendToFront("replies", newPost);
+                //create a popup notification if no popout and if user has popup notifications enabled
+                if (localDataStore.get("popout") === false && localDataStore.get("fb_userinfo").popup_notification === true)
+                    createNotification(newPost.postID, newPost.postAuthor, newPost.threadTitle, newPost.postDesc, newPost.postLink);
+                sortReplies();
+                onStorage();
+            }
         }
     });
-
     sortReplies();
-    onStorage("replies");
     if (callback) callback();
 }

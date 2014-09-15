@@ -45,9 +45,10 @@ Handlebars.registerHelper("switch", function() {
         return "";
 });
 
+
 // Function for when new items get added to the list, update old items ID in timeline
 function newItem() {
-    sortReplies();
+    //sortReplies();
     var repliesCopy = localDataStore.get("replies");
     var numItems = localDataStore.get("replies").length - (parseInt($('.timeline').children().last().attr('id')) + 1);
     if (numItems < 1)

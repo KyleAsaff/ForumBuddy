@@ -70,13 +70,14 @@ function instantReplies() {
             removeCookie(function(){
                 setCookie();
             });
-        })
+        });
     });
 }
 
 // Initalize and fetch posts every minute
 initalize(function() {
     fetchPosts();
+    listenNotification();
 });
 
 //setTimeout(fetchPosts, 3000);

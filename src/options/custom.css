@@ -28,13 +28,15 @@ body {
 }
 
 .notifyfor {
-        margin-top: 10px;
+    margin-top: 10px;
+    display: inline-block;
 }
 
 .userinfo_container {
 	display: inline-block;
 	vertical-align: top;
 	margin-left: 5px;
+    width: 77%;
 }
 
 .options {
@@ -43,8 +45,7 @@ body {
 }
 
 .username {
-	display: inline-block;
-    font-weight: bold;
+	display: block;
 }
 
 .accopt_label {
@@ -61,6 +62,26 @@ body {
     vertical-align: bottom;
     position: relative;
     top: -1px;
+}
+
+.popup_notification {
+    margin-top: 10px;
+    display: inline-block;
+    float: right;
+}
+
+.popup_notification_options {
+    display: inline-block;
+}
+
+.popup_notification_checkbox {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -2px;
 }
 
 .enable_acc {
@@ -110,3 +131,4 @@ margin-left: 10px;
 margin-top: 5px;
 display: none;
 }
+

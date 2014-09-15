@@ -34,6 +34,7 @@ function accountEnabled(callback) {
         var avi = localDataStore.get("fb_userinfo").avi;
         var user = localDataStore.get("fb_userinfo").username;
         var mentions = localDataStore.get("fb_userinfo").mentions;
+        var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
         var enabled = localDataStore.get("fb_userinfo").enabled;
         var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
 
@@ -43,18 +44,21 @@ function accountEnabled(callback) {
 
         $('#mentions_longdesc').prop('checked', mentions_longdesc);
         $('#mentions').prop('checked', mentions);
+        $('#popup_notification').prop('checked', popup_notification);
 
         if (enabled === false) {
             $('.active_avi').css({
                 opacity: 0.7
             });
             $("#mentions").attr("disabled", true);
+            $("#popup_notification").attr("disabled", true);
 
         } else {
             $('.active_avi').css({
                 opacity: 1.0
             });
             $("#mentions").removeAttr("disabled");
+            $("#popup_notification").removeAttr("disabled");
         }
     }
     hideLoading();
@@ -74,12 +78,14 @@ $(document).ready(function() {
         var user = localDataStore.get("fb_userinfo").username;
         var mentions = localDataStore.get("fb_userinfo").mentions;
         var enabled = localDataStore.get("fb_userinfo").enabled;
+        var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
         var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
     }
 
     $('#useravi').attr("src", avi);
-    $('.username').replaceWith(user);
+    $('.username').append(user);
     $('#mentions').prop('checked', mentions);
+    $('#popup_notification').prop('checked', popup_notification);
     $('#mentions_longdesc').prop('checked', mentions_longdesc);
 
     accountEnabled();
@@ -112,13 +118,14 @@ $(document).ready(function() {
             var username = localDataStore.get("fb_userinfo").username;
             var mentions = localDataStore.get("fb_userinfo").mentions;
             var url = localDataStore.get("fb_userinfo").url;
+            var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
             var userGMT = parseInt(localDataStore.get("fb_userinfo").userGMT);
             var defaultGMT = parseInt(localDataStore.get("fb_userinfo").defaultGMT);
             var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
             var enabled = false;
         }
 
-        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc);
+        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
 
         localDataStore.set("fb_userinfo", tempuserinfo);
 
@@ -132,13 +139,14 @@ $(document).ready(function() {
             var username = localDataStore.get("fb_userinfo").username;
             var mentions = localDataStore.get("fb_userinfo").mentions;
             var url = localDataStore.get("fb_userinfo").url;
+            var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
             var userGMT = parseInt(localDataStore.get("fb_userinfo").userGMT);
             var defaultGMT = parseInt(localDataStore.get("fb_userinfo").defaultGMT);
             var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
             var enabled = true;
         }
 
-        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc);
+        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
 
         localDataStore.set("fb_userinfo", tempuserinfo, mentions_longdesc);
 
@@ -152,16 +160,37 @@ $(document).ready(function() {
             var username = localDataStore.get("fb_userinfo").username;
             var enabled = localDataStore.get("fb_userinfo").enabled;
             var url = localDataStore.get("fb_userinfo").url;
+            var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
             var userGMT = parseInt(localDataStore.get("fb_userinfo").userGMT);
             var defaultGMT = parseInt(localDataStore.get("fb_userinfo").defaultGMT);
             var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
             mentions = !(localDataStore.get("fb_userinfo").mentions);
         }
-        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc);
+        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
 
         localDataStore.set("fb_userinfo", tempuserinfo);
 
         $('#mentions').prop('checked', mentions);
+    });
+
+    // function for when popup notifications is checked
+    $("#popup_notification").click(function() {
+        if (localStorage.getItem("fb_userinfo") !== null) {
+            var avi = localDataStore.get("fb_userinfo").avi;
+            var username = localDataStore.get("fb_userinfo").username;
+            var enabled = localDataStore.get("fb_userinfo").enabled;
+            var url = localDataStore.get("fb_userinfo").url;
+            var mentions = localDataStore.get("fb_userinfo").mentions;
+            var userGMT = parseInt(localDataStore.get("fb_userinfo").userGMT);
+            var defaultGMT = parseInt(localDataStore.get("fb_userinfo").defaultGMT);
+            var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
+            var popup_notification = !(localDataStore.get("fb_userinfo").popup_notification);
+        }
+        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
+
+        localDataStore.set("fb_userinfo", tempuserinfo);
+
+        $('#popup_notification').prop('checked', popup_notification);
     });
 
     // function for mentions long descriptions checkbox
@@ -172,12 +201,13 @@ $(document).ready(function() {
             var enabled = localDataStore.get("fb_userinfo").enabled;
             var url = localDataStore.get("fb_userinfo").url;
             var mentions = localDataStore.get("fb_userinfo").mentions;
+            var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
             var userGMT = parseInt(localDataStore.get("fb_userinfo").userGMT);
             var defaultGMT = parseInt(localDataStore.get("fb_userinfo").defaultGMT);
             mentions_longdesc = !(localDataStore.get("fb_userinfo").mentions_longdesc);
         }
 
-        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, mentions_longdesc);
+        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
 
         localDataStore.set("fb_userinfo", tempuserinfo);
 

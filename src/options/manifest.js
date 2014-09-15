@@ -13,7 +13,7 @@ this.manifest = {
             "group": "Active Accounts",
             "name": "active_avi",
             "type": "description",
-            "text": "<div class='avi_div'><img class='avi' id='useravi' src=''></div><div class='userinfo_container'><div class='username' id='username'></div><div class='notifyfor'><span>Notify For: </span><div class='options'><label class='accopt_label'><input class='accopt_checkbox' type='checkbox' id='mentions' value='mentions_val'/>Mentions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='subs' value='subs_val' disabled/>Subscriptions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='pm' value='pm_val' disabled/>Personal Messages</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='reps' value='reps_val' disabled/>Recent Reputation</label></div></div></div>"
+            "text": "<div class='avi_div'><img class='avi' id='useravi' src=''></div><div class='userinfo_container'><div class='username' id='username'></div><div class='notifyfor'><span>Notify For: </span><div class='options'><label class='accopt_label'><input class='accopt_checkbox' type='checkbox' id='mentions' value='mentions_val'/>Mentions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='subs' value='subs_val' disabled/>Subscriptions</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='pm' value='pm_val' disabled/>Personal Messages</label><label class='accopt_label disabled_label'><input class='accopt_checkbox' type='checkbox' id='reps' value='reps_val' disabled/>Recent Reputation</label></div></div><div class=popup_notification><span>Popup Notifications  </span><div class='popup_notification_options'><label class='not_label'><input class='popup_notification_checkbox' type='checkbox' id='popup_notification' value='popup_notification_val'/></label></div></div></div>"
         }, {
             "tab": "Accounts",
             "group": "Active Accounts",
@@ -43,7 +43,7 @@ this.manifest = {
             "group": "Version",
             "name": "version_desc",
             "type": "description",
-            "text": "1.3.1"
+            "text": "1.4.0"
         }, {
             "tab": "About",
             "group": "Information",
@@ -96,6 +96,12 @@ this.manifest = {
             "text": "<a href='http://forum.bodybuilding.com/showthread.php?t=163352861' target='_blank'>http://forum.bodybuilding.com/showthread.php?t=163352861</a> - Official Thread"
         },  {
             "tab": "Changelog",
+            "group": "Version 1.4.0",
+            "name": "changelog_131",
+            "type": "description",
+            "text": "- Added popup notification feature<br>- Quicker initial quote retrieval"
+        },    {
+            "tab": "Changelog",
             "group": "Version 1.3.1",
             "name": "changelog_131",
             "type": "description",
@@ -123,13 +129,13 @@ this.manifest = {
             "group": "Version 1.2.0",
             "name": "changelog_120",
             "type": "description",
-            "text": "- Instant quote notifications<br>- Bodybuilding.com black skin now supported<br>- Dynamicly adds new notifications to newsfeed"
+            "text": "- Instant quote notifications<br>- Bodybuilding.com black skin now supported<br>- Dynamically adds new notifications to newsfeed"
         },  {
             "tab": "Changelog",
             "group": "Version 1.0.0",
             "name": "changelog_100",
             "type": "description",
-            "text": "- Inital Release"
+            "text": "- Initial Release"
         }, {
             "tab": "Donations",
             "group": "Donate",
@@ -141,7 +147,7 @@ this.manifest = {
             "group": "Supporter Badge",
             "name": "forumbuddy_badge",
             "type": "description",
-            "text": "<div class ='badge_ex'><img src='images/badge_example.png' alt='badge'></div>"
+            "text": "<div class ='badge_ex'><img src='images/badge_example_2.png' alt='badge'></div>"
 
         }
 
