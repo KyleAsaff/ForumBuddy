@@ -60,10 +60,8 @@ function donators() {
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", jsonURL, true);
-    //xhr.responseType = 'json';
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
-
             localDataStore.set("fb_donators", xhr.responseText);
         }
     };
@@ -73,6 +71,11 @@ function donators() {
 // Inject icon by donators names
 function insertBadge() {
     donators();
+
+    // If URL cannot be reached, nothing is stored, quit function
+    if(localDataStore.get("fb_donators") === "")
+        return false;
+
     var x = $('#options option:selected').text();
     var iconURL = chrome.extension.getURL("icons/icon2_128.png");
 
@@ -97,6 +100,11 @@ function insertBadge() {
 // Inject icon by donators names
 function insertBlackBadge() {
     donators();
+
+    // If URL cannot be reached, nothing is stored, quit function
+    if(localDataStore.get("fb_donators") === "")
+        return false;
+
     var x = $('#options option:selected').text();
     var iconURL = chrome.extension.getURL("icons/icon2_128.png");
 
@@ -120,6 +128,7 @@ function insertBlackBadge() {
 
 // run injection on ready
 $(document).ready(function() {
+
     if ($(this).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
         insertBlackBadge();
     else
@@ -148,5 +157,4 @@ $(document).ready(function() {
           //  console.log(response.received);
         });
     });
-
 });

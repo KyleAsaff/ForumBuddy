@@ -104,6 +104,7 @@ function sizeContent() {
     var newHeight = $(window).height() - $(".header").height() - $(".footer").height() - 23 + "px";
 
     $(".scrollcontainer").css("height", newHeight);
+    $(".scrollcontainer").css("max-width", "100%");
 }
 
 // create a variable for read posts switch if doesnt exist
@@ -125,8 +126,8 @@ $(document).ready(function() {
 
     // If the user is running the popout, make the timeline dynamic
     if (localDataStore.get("popout") === true) {
-        $(window).load('resize', sizeContent);
-        $(window).resize(sizeContent);
+        $(window).load(sizeContent);
+      $(window).resize(sizeContent);
     }
 
     // Compile handlebars template and append data to template

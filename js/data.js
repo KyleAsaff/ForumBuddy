@@ -249,6 +249,7 @@ function getCookie(callback) {
     });
 }
 
+// Remove bbthread_lastview cookie
 function removeCookie(callback) {
         chrome.cookies.remove({ 'url': 'http://bodybuilding.com', 'name': 'bbthread_lastview'}, function(cookie) {
             if (callback) callback();
@@ -303,6 +304,25 @@ function userinfo(forum, username, avi, defaultGMT, userGMT, enabled, mentions, 
     //this.offset = offset;
 }
 
+// Function to disable popup notifications on inital quote retreival
+function initalizePopupNotifications(callback) {
+        // Set popup notifications to TRUE after inital quote retreival
+        var url = localDataStore.get("fb_userinfo").url;
+        var username = localDataStore.get("fb_userinfo").username;
+        var avi = localDataStore.get("fb_userinfo").avi;
+        var defaultGMT = localDataStore.get("fb_userinfo").defaultGMT;
+        var userGMT = localDataStore.get("fb_userinfo").userGMT;
+        var enabled = localDataStore.get("fb_userinfo").enabled;
+        var mentions = localDataStore.get("fb_userinfo").mentions;
+        var popup_notification = true;
+        var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
+
+        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
+        localDataStore.set("fb_userinfo", tempuserinfo);
+
+        if (callback) callback();
+}
+
 // Function to initalize getting user information
 function initalize(callback) {
     var url = "http://forum.bodybuilding.com/";
@@ -346,7 +366,7 @@ function initalize(callback) {
                 var userGMT = formatGMT(defaultGMT);
 
             if (localStorage.getItem("fb_userinfo") === null)
-                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, true, true, true, true);
+                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, true, true, false, true);
             else {
                 var enabled = localDataStore.get("fb_userinfo").enabled;
                 var mentions = localDataStore.get("fb_userinfo").mentions;
@@ -366,8 +386,10 @@ function minePosts(callback) {
 
     var cbGenerator = callback.multiCb();
     
-    // if user is not logged in return quit fetchPosts
+    // if user is not logged in return quit fetchPosts & delete quotes
     if (localStorage.getItem("fb_userinfo") === null) {
+        if(localStorage.getItem("replies") !== null)
+            localStorage.removeItem("replies");
         return false;
     }
     
@@ -509,9 +531,15 @@ function minePosts(callback) {
 // function to query, store, and fetch posts
 function fetchPosts(callback) {
 
+    if(callback)
+        var cbGenerator = callback.multiCb();
+
     // if user is not logged in return quit fetchPosts
-    if (localStorage.getItem("fb_userinfo") === null)
+    if (localStorage.getItem("fb_userinfo") === null) {
+        if(localStorage.getItem("replies") !== null)
+            localStorage.removeItem("replies");
         return false;
+    }
 
     // if user turned his account to disable quit fetchPosts
     if (localDataStore.get("fb_userinfo").enabled === false)
@@ -560,6 +588,9 @@ function fetchPosts(callback) {
         if ($(data).find('#searchbits').length > 0) {
             findVariable = "#searchbits";
         }
+
+        if(callback)
+            var whenDone = cbGenerator();
 
         $(data).find(findVariable).children().each(function() {
 
@@ -621,8 +652,10 @@ function fetchPosts(callback) {
                 sortReplies();
                 onStorage();
             }
+            if(callback)
+                whenDone();
         }
     });
     sortReplies();
-    if (callback) callback();
+    //if (callback) callback();
 }

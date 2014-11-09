@@ -76,7 +76,9 @@ function instantReplies() {
 
 // Initalize and fetch posts every minute
 initalize(function() {
-    fetchPosts();
+    fetchPosts(function() {
+        initalizePopupNotifications();
+    });
     listenNotification();
 });
 
