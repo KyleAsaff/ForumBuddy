@@ -1,3 +1,9 @@
+/*!
+ * cbhelper.js
+ * Call back helper to wait to run a callback after multiple asynchronous functions
+ * 
+ */
+
 var idd = 0;
 Function.prototype.multiCb = function() {
     var count = 0;

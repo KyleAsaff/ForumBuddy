@@ -1,4 +1,9 @@
-// SAMPLE
+/*!
+ * manifest.js
+ * Responsible for the tab creation in the options menu
+ * 
+ */
+
 this.manifest = {
     "name": "Forum Buddy",
     "icon": "/icons/icon2_48.png",
@@ -80,21 +85,19 @@ this.manifest = {
             "name": "website_desc",
             "type": "description",
             "text": " <a href='http://kylesbox.com' target='_blank'>http://kylesbox.com</a> - Website"
-        },
-        /*{
-        "tab": "About",
-        "group": "Report Bug",
-        "name": "bugemail_desc",
-        "type": "description",
-        "text": "<a href='mailto:forumbuddyextension@gmail.com?Subject=Forum%20Buddy%20Bug%20Report' target='_top'>ForumBuddyExtension@gmail.com</a>"
-    },*/
-        {
+        }, {
             "tab": "About",
             "group": "Report Bug",
             "name": "bbthread_desc",
             "type": "description",
             "text": "<a href='http://forum.bodybuilding.com/showthread.php?t=163352861' target='_blank'>http://forum.bodybuilding.com/showthread.php?t=163352861</a> - Official Thread"
         },  {
+            "tab": "Changelog",
+            "group": "Version 1.4.1",
+            "name": "changelog_131",
+            "type": "description",
+            "text": "- Popup notifications are now disabled on initialization<br>- The extension now continues to work when the Forum Buddy server goes down<br>- Fixed issue of popup window growing in width due to not breaking long words and URLs<br>- Fixed avatar not displaying on Account Refresh<br>- Overall performance enhancement"
+        },      {
             "tab": "Changelog",
             "group": "Version 1.4.0",
             "name": "changelog_131",
@@ -105,7 +108,7 @@ this.manifest = {
             "group": "Version 1.3.1",
             "name": "changelog_131",
             "type": "description",
-            "text": "- 'Go to first new post' button on all threads now works correctly<br>- Fixed 'Refresh Account' button having to be clicked twice to refresh<br>- Multiquote bug fixed<br>- Added Changelog"
+            "text": "- 'Go to first new post' button on all threads now works correctly<br>- Fixed 'Refresh Account' button having to be clicked twice to refresh<br>- Multi-quote bug fixed<br>- Added Changelog"
         },  {
             "tab": "Changelog",
             "group": "Version 1.3.0",
@@ -129,7 +132,7 @@ this.manifest = {
             "group": "Version 1.2.0",
             "name": "changelog_120",
             "type": "description",
-            "text": "- Instant quote notifications<br>- Bodybuilding.com black skin now supported<br>- Dynamically adds new notifications to newsfeed"
+            "text": "- Instant quote notifications<br>- Bodybuilding.com black skin now supported<br>- Dynamically adds new notifications to news feed"
         },  {
             "tab": "Changelog",
             "group": "Version 1.0.0",

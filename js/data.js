@@ -1,11 +1,11 @@
 /*!
  * data.js
- * contains methods for retreiving object data from localStorage
+ * contains methods for retrieving object data from localStorage
  */
 
 var localDataStore = {
     // Get item
-    get: function(key) {
+    get: function (key) {
         if (localStorage.getItem(key) === null)
             return false;
         return (JSON.parse(localStorage.getItem(key)));
@@ -243,7 +243,7 @@ function formatGMT(zone) {
 // Stores all cookies in localstorage
 function getCookie(callback) {
     chrome.cookies.get({ 'url': 'http://bodybuilding.com', 'name': 'bbthread_lastview'}, function(cookie) {
-    if(cookie !== null)      
+    if(cookie !== null)
         localDataStore.set("lastview", cookie);
         if (callback) callback();
     });
@@ -327,6 +327,7 @@ function initalizePopupNotifications(callback) {
 function initalize(callback) {
     var url = "http://forum.bodybuilding.com/";
     var aviurl = "http://my.bodybuilding.com/photos/view/type/profile";
+    var avi;
     var defaultGMT = formatGMT(-7);
 
     if (localStorage.getItem("popout") === null)
@@ -338,6 +339,7 @@ function initalize(callback) {
         // find username in the page source
         var myregex = /s\.prop42="([^"]*)"/;
         var matchArray = myregex.exec(data);
+        var userGMT;
 
         // find avi in the page source
         var avisrc = $(data).find('div.profile-imgbox:first .profile-imgbox-pic a img').attr('src');
@@ -352,28 +354,29 @@ function initalize(callback) {
         var username = matchArray[1];
         if (avisrc === undefined) {
             avisrc = "/icons/profiledefault_thumb.jpg";
-            var avi = avisrc;
+            avi = avisrc;
         } else
-            var avi = avisrc;
+            avi = avisrc;
 
         // Get the time difference for when cookies removed
         $.get(url, function(data) {
-            var matchArray = /\bGMT +(.+?)(?=\. )/.exec(data);;
+            var matchArray = /\bGMT +(.+?)(?=\. )/.exec(data);
             if (matchArray) {
-                var userGMT = formatGMT(matchArray[1]);
+                userGMT = formatGMT(matchArray[1]);
             }
             else
-                var userGMT = formatGMT(defaultGMT);
+                userGMT = formatGMT(defaultGMT);
 
+            var tempuserinfo;
             if (localStorage.getItem("fb_userinfo") === null)
-                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, true, true, false, true);
+                tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, true, true, false, true);
             else {
                 var enabled = localDataStore.get("fb_userinfo").enabled;
                 var mentions = localDataStore.get("fb_userinfo").mentions;
                 var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
                 var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
 
-                var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
+                tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
             }
             localDataStore.set("fb_userinfo", tempuserinfo);
             if(callback) callback();
@@ -409,7 +412,7 @@ function minePosts(callback) {
     
     $.each(localDataStore.get("threads"), function(index) {
         
-        var offsetThread = parseInt((this).offset);
+        var offsetThread = parseInt((this).offset, 10);
         offsetThread = offsetThread + 1;
         
         var mineURL = (this).url;
@@ -453,34 +456,32 @@ function minePosts(callback) {
                     
                     var threadRepliesBuffer = 0;
                     var threadViewsBuffer = 0;
+                    var postDescBuffer;
+
                     if (postDescLongBuffer.length > 48)
-                        var postDescBuffer = postDescLongBuffer.substring(0, 47) + " ...";
+                        postDescBuffer = postDescLongBuffer.substring(0, 47) + " ...";
                     else
-                        var postDescBuffer = postDescLongBuffer;
+                        postDescBuffer = postDescLongBuffer;
                     
                     // Convert date into real date
                     if (postDateBuffer === "Yesterday")
                         postDateBuffer = getYesterday();
                     if (postDateBuffer === "Today")
                         postDateBuffer = getToday();
-                    
+
+                    var userGMT, defaultGMT;
                     if(localDataStore.get("fb_userinfo") !== false) {
-                        var userGMT = localDataStore.get("fb_userinfo").userGMT;
-                        var defaultGMT = localDataStore.get("fb_userinfo").defaultGMT;
+                        userGMT = localDataStore.get("fb_userinfo").userGMT;
+                        defaultGMT = localDataStore.get("fb_userinfo").defaultGMT;
                     }
                     else{
-                        var userGMT = "00:00";
-                        var defaultGMT = "00:00";
+                        userGMT = "00:00";
+                        defaultGMT = "00:00";
                     }
                     
                     // fail safe if cant get post from page
                     if (postAuthorBuffer === "")
                         return false;
-                    
-                    /* uncomment this and erase next 2 lines when proxy issue is resolved
-                     var fullDate = postDateBuffer + " " + postTimeBuffer + " " + defaultGMT;
-                     
-                     var fullDateBuffer = moment(fullDate, "MM-DD-YYYY hh:mm A Z").zone(userGMT).format("MM-DD-YYYY hh:mm A"); */
                     
                     var fullDate = postDateBuffer + " " + postTimeBuffer;
                     
@@ -493,10 +494,10 @@ function minePosts(callback) {
                 }
             });
             
-            for (var i = 0; i < mineBuffer.length; i++) {
-                var newPost = mineBuffer[i];
+            $.each(mineBuffer, function(i, val) {
+                var newPost = val;
                 var filtered = $(localDataStore.get("replies")).filter(function() {
-                    return this.postID === mineBuffer[i].postID;
+                    return this.postID === val;
                 });
                 // if post not yet stored in replies, add it
                 if (filtered.length === 0) {
@@ -507,7 +508,7 @@ function minePosts(callback) {
                 sortReplies();
                 onStorage();
                 }
-            }
+            });
 
             whenDone();
             
@@ -523,14 +524,12 @@ function minePosts(callback) {
             localDataStore.set("threads", updateThreads);
         }
     });
-    //listenNot();
-    sortReplies();
 }
 
 
 // function to query, store, and fetch posts
 function fetchPosts(callback) {
-
+    
     if(callback)
         var cbGenerator = callback.multiCb();
 
@@ -559,18 +558,18 @@ function fetchPosts(callback) {
     var refresh = localStorage.getItem("refresh");
 
     // add 1 to the offset and store new offset
-    offset = parseInt(offset) + 1;
+    offset = parseInt(offset, 10) + 1;
 
     localStorage.setItem("offset", offset);
 
     // Reset offset after it reaches 99
-    if (parseInt(offset) > 98) {
+    if (parseInt(offset, 10) > 98) {
         localStorage.setItem("offset", 0);
         offset = 0;
     }
 
     // Reset refresh after it reaches 99
-    if (parseInt(refresh) > 98) {
+    if (parseInt(refresh, 10) > 98) {
         localStorage.setItem("refresh", 0);
         refresh = 0;
     }
@@ -589,8 +588,9 @@ function fetchPosts(callback) {
             findVariable = "#searchbits";
         }
 
+        var whenDone;
         if(callback)
-            var whenDone = cbGenerator();
+            whenDone = cbGenerator();
 
         $(data).find(findVariable).children().each(function() {
 
@@ -633,16 +633,14 @@ function fetchPosts(callback) {
             var postBuffer = new post(postIDBuffer, threadTitleBuffer, threadTitleLinkBuffer, threadRepliesBuffer, threadViewsBuffer, postAuthorBuffer, postAuthorLinkBuffer, postDateBuffer, postTimeBuffer, fullDateBuffer, postDescBuffer, postDescLongBuffer, postLinkBuffer);
 
             // fill new array of data to concat with data in localstore
-
             repliesBuffer.push(postBuffer);
         });
-        for (var i = 0; i < repliesBuffer.length; i++) {
-            var newPost = repliesBuffer[i];
 
+        $.each(repliesBuffer, function(i, val) {
+            var newPost = val;
             var filtered = $(localDataStore.get("replies")).filter(function() {
-                return this.postID === repliesBuffer[i].postID;
-            });
-
+                    return this.postID === val.postID;
+                });
             // if post not yet stored in replies, add it
             if (filtered.length === 0) {
                 localDataStore.appendToFront("replies", newPost);
@@ -652,10 +650,9 @@ function fetchPosts(callback) {
                 sortReplies();
                 onStorage();
             }
-            if(callback)
-                whenDone();
-        }
+            });
+
+        if(callback)
+            whenDone();
     });
-    sortReplies();
-    //if (callback) callback();
 }

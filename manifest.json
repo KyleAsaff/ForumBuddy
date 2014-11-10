@@ -20,7 +20,7 @@
         "default_popup": "src/browser_action/popup.html"
     },
     "content_scripts": [{
-        "js": ["js/jquery-1.11.1.js", "js/data.js", "content_script.js"],
+        "js": ["js/jquery-1.11.1.js", "js/data.js", "js/content_script.js"],
         "css": ["css/forumbuddy.css"],
         "matches": ["http://forum.bodybuilding.com/*", "https://forum.bodybuilding.com/*"]
     }],

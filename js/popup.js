@@ -1,3 +1,9 @@
+/*!
+ * popup.js
+ * Functions and actions for everything involving 
+ * the browser action popup
+ */
+
 // add fade class
 Handlebars.registerHelper("addClasses", function() {
     if (this.visible === true) {
@@ -50,23 +56,23 @@ Handlebars.registerHelper("switch", function() {
 function newItem() {
     //sortReplies();
     var repliesCopy = localDataStore.get("replies");
-    var numItems = localDataStore.get("replies").length - (parseInt($('.timeline').children().last().attr('id')) + 1);
+    var numItems = localDataStore.get("replies").length - (parseInt($('.timeline').children().last().attr('id'), 10) + 1);
     if (numItems < 1)
         return false;
     else {
         $(".post").each(function(index) {
-            var newID = parseInt($(this).attr("id")) + numItems;
+            var newID = parseInt($(this).attr("id"), 10) + numItems;
             $(this).attr("id", newID);
         });
         for (var i = 0; i < numItems; i++) {
-
+            var desc;
             if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
-                var desc = localDataStore.get("replies")[i].postDescLong;
+                desc = localDataStore.get("replies")[i].postDescLong;
             else
-                var desc = localDataStore.get("replies")[i].postDesc;
+                desc = localDataStore.get("replies")[i].postDesc;
 
             if (i < numItems) {
-                var fade = ""
+                var fade = "";
                 if (!localDataStore.get("replies")[i].visible)
                     fade = "fade";
                 $(".timeline").prepend("\
@@ -87,7 +93,7 @@ function newItem() {
                     </div>");
                 $("#" + i).slideDown("slow");
             }
-        };
+        }
     }
 }
 
@@ -316,7 +322,7 @@ $(document).ready(function() {
             height: 573,
             type: "popup"
         });
-        window.close()
+        window.close();
         chrome.browserAction.disable();
     });
 
@@ -338,5 +344,5 @@ $(document).ready(function() {
             else
                 localStorage.setItem("popout", true);
         }
-    })
+    });
 });
