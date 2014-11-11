@@ -1,7 +1,7 @@
 /* content_script.js
  *
- * Injects the forum buddy icon into the forum page by donators usernames.
- *
+ * Injects the forum buddy icon 
+ * into the forum page by donators usernames.
  */
 
 // Custom localstorage methods for parsing JSON data

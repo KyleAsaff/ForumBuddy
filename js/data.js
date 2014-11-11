@@ -107,6 +107,7 @@ function listenNotification() {
 }
 
 // Update badge number when a new post is added to storage
+// Call every time a change is made to replies in localstorage
 function onStorage() {
     badgeColor = "#646464";
     chrome.browserAction.setBadgeBackgroundColor({

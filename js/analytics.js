@@ -1,3 +1,10 @@
+/*!
+ * analytics.js
+ * Script tag for Google Analytics
+ * 
+ */
+
+
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-53208960-1']);
 _gaq.push(['_trackPageview']);
