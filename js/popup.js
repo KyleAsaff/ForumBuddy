@@ -54,47 +54,79 @@ Handlebars.registerHelper("switch", function() {
 
 // Function for when new items get added to the list, update old items ID in timeline
 function newItem() {
-    //sortReplies();
     var repliesCopy = localDataStore.get("replies");
-    var numItems = localDataStore.get("replies").length - (parseInt($('.timeline').children().last().attr('id'), 10) + 1);
+    var numItems = localDataStore.get("replies").length - $(".post").length;
+    var added = 0;
+    var fade;
+    var desc;
+    // Quit function if there are no items to add
     if (numItems < 1)
         return false;
-    else {
-        $(".post").each(function(index) {
-            var newID = parseInt($(this).attr("id"), 10) + numItems;
-            $(this).attr("id", newID);
-        });
-        for (var i = 0; i < numItems; i++) {
-            var desc;
-            if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
-                desc = localDataStore.get("replies")[i].postDescLong;
-            else
-                desc = localDataStore.get("replies")[i].postDesc;
-
-            if (i < numItems) {
-                var fade = "";
-                if (!localDataStore.get("replies")[i].visible)
+    // Iterate through each post and find out if you need to append or prepend a new post
+    $(".post").each(function(index) {
+            if($(this).find("a.title").attr("href") === repliesCopy[index+added].postLink) {
+                // increment ID because a new post was added
+                $(this).attr("id", index+added);
+            }
+            // Satement to dynamically add new posts at the start or the middle of the news feed
+            else {
+                added++;
+                $(this).attr("id", index+added);
+                if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
+                    desc = repliesCopy[index].postDescLong;
+                else
+                    desc = repliesCopy[index].postDesc;
+                    fade = "";
+                if (!repliesCopy[index].visible)
                     fade = "fade";
                 $(".timeline").prepend("\
-                    <div class='post " + fade + "' id='" + i + "' style='display: none;'>\
+                    <div class='post " + fade +"' id='" + (index) + "'style='display: none;'>\
                         <div class='posttop'>\
                             <span class='postdate'>\
-                                <span class='date'>" + localDataStore.get("replies")[i].fullDate + "</span>\
+                                <span class='date'>" + repliesCopy[index].fullDate + "</span>\
                                 <a class='close' >x</a>\
                             </span>\
                         </div>\
                     <div class='postbody'>\
                             <span class='postinfo'>\
-                                <a class='author' href='" + localDataStore.get("replies")[i].postAuthorLink + "' target='_blank'><span class='icon'>U</span>" + localDataStore.get("replies")[i].postAuthor + "</a>\
-                                <a class='title' href='" + localDataStore.get("replies")[i].postLink + "' target='_blank'>" + localDataStore.get("replies")[i].threadTitle + "</a>\
+                                <a class='author' href='" + repliesCopy[index].postAuthorLink + "' target='_blank'><span class='icon'>U</span>" + repliesCopy[index].postAuthor + "</a>\
+                                <a class='title' href='" + repliesCopy[index].postLink + "' target='_blank'>" + repliesCopy[index].threadTitle + "</a>\
                                 <a class='desc'>" + desc + "</a>\
                             </span>\
                         </div>\
                     </div>");
-                $("#" + i).slideDown("slow");
+                $("#" + index).slideDown("slow");
             }
-        }
-    }
+            // Statement to dynamically add notifications from the end of the array
+            if(index === repliesCopy.length-numItems-1) {
+                for(var k = added; k<numItems; k++) {
+                if ((localDataStore.get("fb_userinfo").mentions_longdesc) === true)
+                    desc = repliesCopy[index+k+1].postDescLong;
+                else
+                    desc = repliesCopy[index+k+1].postDesc;
+                fade = "";
+                if (!repliesCopy[index+k+1].visible)
+                    fade = "fade";
+                $(".timeline").append("\
+                    <div class='post " + fade +"' id='" + (index+k+1) + "'style='display: none;'>\
+                        <div class='posttop'>\
+                            <span class='postdate'>\
+                                <span class='date'>" + repliesCopy[index+k+1].fullDate + "</span>\
+                                <a class='close' >x</a>\
+                            </span>\
+                        </div>\
+                    <div class='postbody'>\
+                            <span class='postinfo'>\
+                                <a class='author' href='" + repliesCopy[index+k+1].postAuthorLink + "' target='_blank'><span class='icon'>U</span>" + repliesCopy[index+k+1].postAuthor + "</a>\
+                                <a class='title' href='" + repliesCopy[index+k+1].postLink + "' target='_blank'>" + repliesCopy[index+k+1].threadTitle + "</a>\
+                                <a class='desc'>" + desc + "</a>\
+                            </span>\
+                        </div>\
+                    </div>");
+                $("#" + (index+k+1)).slideDown("slow");
+                }
+            }
+    });
 }
 
 // Sort items before inserting them

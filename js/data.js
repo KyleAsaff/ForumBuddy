@@ -493,11 +493,10 @@ function minePosts(callback) {
                         mineBuffer.push(postBuffer);
                 }
             });
-            
-            $.each(mineBuffer, function(i, val) {
-                var newPost = val;
+            for (var i = 0; i < mineBuffer.length; i++) {
+                var newPost = mineBuffer[i];
                 var filtered = $(localDataStore.get("replies")).filter(function() {
-                    return this.postID === val;
+                    return this.postID === mineBuffer[i].postID;
                 });
                 // if post not yet stored in replies, add it
                 if (filtered.length === 0) {
@@ -508,7 +507,7 @@ function minePosts(callback) {
                 sortReplies();
                 onStorage();
                 }
-            });
+            }
 
             whenDone();
             
@@ -524,6 +523,7 @@ function minePosts(callback) {
             localDataStore.set("threads", updateThreads);
         }
     });
+    sortReplies();
 }
 
 
@@ -636,11 +636,13 @@ function fetchPosts(callback) {
             repliesBuffer.push(postBuffer);
         });
 
-        $.each(repliesBuffer, function(i, val) {
-            var newPost = val;
+        for (var i = 0; i < repliesBuffer.length; i++) {
+            var newPost = repliesBuffer[i];
+
             var filtered = $(localDataStore.get("replies")).filter(function() {
-                    return this.postID === val.postID;
-                });
+                return this.postID === repliesBuffer[i].postID;
+            });
+
             // if post not yet stored in replies, add it
             if (filtered.length === 0) {
                 localDataStore.appendToFront("replies", newPost);
@@ -650,7 +652,7 @@ function fetchPosts(callback) {
                 sortReplies();
                 onStorage();
             }
-            });
+        }
 
         if(callback)
             whenDone();

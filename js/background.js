@@ -67,7 +67,6 @@ chrome.runtime.onMessage.addListener(
 function instantReplies() {
     getCookie(function(){
         minePosts(function(){
-            sortReplies();
             removeCookie(function(){
                 setCookie();
             });
