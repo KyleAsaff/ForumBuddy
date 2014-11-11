@@ -154,18 +154,11 @@ if (localStorage.getItem("popout") === null)
 
 // When document is ready
 $(document).ready(function() {
-
     // Listen to dynamically add new posts if new post gets added to storage
     if (window.addEventListener) {
         window.addEventListener("storage", sortNewItem, false);
     } else {
         window.attachEvent("onstorage", sortNewItem);
-    }
-
-    // If the user is running the popout, make the timeline dynamic
-    if (localDataStore.get("popout") === true) {
-        $(window).load(sizeContent);
-      $(window).resize(sizeContent);
     }
 
     // Compile handlebars template and append data to template
@@ -377,4 +370,11 @@ $(document).ready(function() {
                 localStorage.setItem("popout", true);
         }
     });
+
+    // If the user is running the popout, make the timeline dynamic
+    if (localDataStore.get("popout") === true) {
+        $("#popout").hide();
+        $(window).load(sizeContent);
+      $(window).resize(sizeContent);
+    }
 });
