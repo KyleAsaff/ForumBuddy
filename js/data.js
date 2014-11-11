@@ -493,6 +493,7 @@ function minePosts(callback) {
                         mineBuffer.push(postBuffer);
                 }
             });
+
             for (var i = 0; i < mineBuffer.length; i++) {
                 var newPost = mineBuffer[i];
                 var filtered = $(localDataStore.get("replies")).filter(function() {

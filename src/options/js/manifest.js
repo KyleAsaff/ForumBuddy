@@ -96,7 +96,7 @@ this.manifest = {
             "group": "Version 1.4.1",
             "name": "changelog_131",
             "type": "description",
-            "text": "- Popup notifications are now disabled on initialization<br>- The extension now continues to work when the Forum Buddy server goes down<br>- Fixed issue of popup window growing in width due to not breaking long words and URLs<br>- Fixed avatar not displaying on Account Refresh<br>- Overall performance enhancement"
+            "text": "- Popup notifications are now disabled until initialization is over<br>- The extension now continues to work when the Forum Buddy server goes down<br>- New quotes are now dynamically added when Forum Buddy is open in the popup or popout<br>- Fixed issue of popup window growing in width due to URLs and long words not breaking<br>- Fixed avatar not displaying on Account Refresh<br>- Overall performance enhancement"
         },      {
             "tab": "Changelog",
             "group": "Version 1.4.0",
