@@ -1,4 +1,4 @@
-ForumBUDDY
+Forum Buddy
 
 DESCRIPTION
 
@@ -8,7 +8,7 @@ work on all vBulletin forums.
 
 HOW IT WORKS
 
-Scrapes the search database of a forum with your username and records all fourm posts in localStorage. The extension
+Scrapes the search database and recently visited threads of a forum with your username and records all fourm posts in localStorage. The extension
 uses background.js constantly scrape the forum every minute and stores all information.
 
 
