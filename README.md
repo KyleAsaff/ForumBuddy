@@ -35,6 +35,7 @@ DONE:
 - Sort results by date field in memory instead of top query search
 
 TO DO:
+
 - Display subscriptions in popup page
 - Scrape and display latest reputation received data
 - Hide posts from reds
