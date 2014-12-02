@@ -15,10 +15,15 @@ uses background.js constantly scrape the forum every minute and stores all infor
 PROJECT STATUS
 
 DONE:
+
 - Basic scraping algorithm for querying the search results database.
+
 - Timer to scrape every minute
+
 - Store all posts in localStorage
+
 - Change "yesterday" and "today" to the real date
+
 - Created basic UI for chrome extension
 - Settings page
 - Popup page
