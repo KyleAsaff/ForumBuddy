@@ -338,7 +338,8 @@ function initalize(callback) {
     $.get(aviurl, function(data) {
 
         // find username in the page source
-        var myregex = /s\.prop42="([^"]*)"/;
+        var myregex = /s_omni\.memberName = "([^"]*)"/;
+
         var matchArray = myregex.exec(data);
         var userGMT;
 
@@ -347,6 +348,7 @@ function initalize(callback) {
 
         //quit statement, not logged in
         if (matchArray === null) {
+            console.log("not logged in");
             localStorage.removeItem("fb_userinfo");
             if(callback) callback();
             return false;
@@ -426,12 +428,19 @@ function minePosts(callback) {
         var whenDone = cbGenerator();
         
         $.get(mineURL, function(data) {
-            var myregex = /s\.prop39="([^"]*)"/;
-            var threadTitle = myregex.exec(data)[1];
+            var threadTitle;
+            var threadTitleLinkBuffer = url + $(this).find(".postcounter").attr("href");
             
             var black = false;
             if ($(data).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
                 black = true;
+
+            if (black === true) {
+                var myregex = /s\.prop39="([^"]*)"/;
+                threadTitle = myregex.exec(data)[1];
+            }
+            else
+                threadTitle = $(data).find('.threadtitle').text();
             
             
             $(data).find("#posts").children().each(function() {

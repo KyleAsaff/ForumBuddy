@@ -137,11 +137,11 @@ $(document).ready(function() {
 
     //watch put a watch on threads replied to
     $("#vB_Editor_001_save").click(function() {
-
         chrome.runtime.sendMessage({
-            greeting: "sumbitreply",
+            greeting: "submitreply",
             threadid: $("input[name=t]").val(),
-            threadtitle: $('body').text().match(/s\.prop39="([^"]*)"/)[1]
+            // threadtitle: $('body').text().match(/s\.prop39="([^"]*)"/)[1]
+            threadtitle: "thread_title"
         }, function(response) {
            // console.log(response.received);
         });
@@ -152,9 +152,10 @@ $(document).ready(function() {
         chrome.runtime.sendMessage({
             greeting: "quickreply",
             threadid: $("#qr_threadid").val(),
-            threadtitle: $('body').text().match(/s\.prop39="([^"]*)"/)[1]
+            //threadtitle: $('body').text().match(/s\.prop39="([^"]*)"/)[1]
+            threadtitle: "thread_title"
         }, function(response) {
-          //  console.log(response.received);
+           //console.log(response.received);
         });
     });
 });
