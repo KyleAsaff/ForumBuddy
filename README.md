@@ -21,7 +21,7 @@ DONE:
 - Popup page
 - Pull username for the search query from the forum website
 - Display a badge by donators usernames
-- disable x button
+- Disable x button
 - Donation page
 - Improve scrape algorithm to get mention results almost instantaneously
 - Sort results by date field in memory instead of top query search
