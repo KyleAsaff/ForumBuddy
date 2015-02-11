@@ -12,15 +12,10 @@ Scrapes the search database and recently visited threads of a forum and records 
 PROJECT STATUS
 
 DONE:
-
 - Basic scraping algorithm for querying the search results database.
-
 - Timer to scrape every minute
-
 - Store all posts in localStorage
-
 - Change "yesterday" and "today" to the real date
-
 - Created basic UI for chrome extension
 - Settings page
 - Popup page
@@ -32,7 +27,6 @@ DONE:
 - Sort results by date field in memory instead of top query search
 
 TO DO:
-
 - Display subscriptions in popup page
 - Scrape and display latest reputation received data
 - Hide posts from reds
