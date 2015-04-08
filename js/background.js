@@ -15,7 +15,6 @@ if (window.addEventListener) {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-
         var url, newTread, currentThreads, filtered, index;
         if (request.greeting == "quickreply") {
             if (request.threadid === "undefined")
