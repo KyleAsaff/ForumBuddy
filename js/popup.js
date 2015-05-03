@@ -24,10 +24,10 @@ Handlebars.registerHelper("Desc", function(longDesc, shortDesc) {
 // Helper to display default avi or user's avi
 Handlebars.registerHelper("avi", function() {
     if (localStorage.getItem("fb_userinfo") === null)
-        return "/icons/profiledefault_thumb.jpg";
+        return "/css/images/profiledefault_thumb.jpg";
 
     if (localDataStore.get("fb_userinfo").enabled === false)
-        return "/icons/profiledefault_thumb.jpg";
+        return "/css/images/profiledefault_thumb.jpg";
     else
         return localDataStore.get("fb_userinfo").avi;
 });

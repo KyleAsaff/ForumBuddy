@@ -356,7 +356,7 @@ function initalize(callback) {
 
         var username = matchArray[1];
         if (avisrc === undefined) {
-            avisrc = "/icons/profiledefault_thumb.jpg";
+            avisrc = "/css/images/profiledefault_thumb.jpg";
             avi = avisrc;
         } else
             avi = avisrc;
@@ -525,11 +525,11 @@ function minePosts(callback) {
         }); // end .get
     });// end outer .each
     
-    // Remove thread from storage after 6 hours
+    // Remove thread from storage after 48 hours
     var updateThreads = localDataStore.get("threads");
     var shallowCopy = $.extend({}, updateThreads);
     $.each(shallowCopy, function(index) {
-        if ((this).offset > 2880) {
+        if ((this).offset > 5760) {
             updateThreads.splice(index);
             localDataStore.set("threads", updateThreads);
         }

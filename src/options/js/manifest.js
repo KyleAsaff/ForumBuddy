@@ -36,7 +36,7 @@ this.manifest = {
             "group": "Update Accounts",
             "name": "refresh_acc",
             "type": "description",
-            "text": "<div class='refresh_acc'><button type='button' class='refresh_btn'>Refresh</button></div><div class='loading'><img src='/icons/loading_gif.gif' alt='loading'></div>"
+            "text": "<div class='refresh_acc'><button type='button' class='refresh_btn'>Refresh</button></div><div class='loading'><img src='/css/images/loading.gif' alt='loading'></div>"
         }, {
             "tab": "News Feed Options",
             "group": "Active Accounts",
