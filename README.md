@@ -15,7 +15,7 @@ DONE:
 - Basic scraping algorithm for querying the search results database.
 - Timer to scrape every minute
 - Store all posts in localStorage
-- Parse "yesterday" and "today" to the real date
+- Parse "yesterday" and "today" to actual date
 - Created basic UI for chrome extension
 - Settings page
 - Popup page
