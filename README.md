@@ -2,7 +2,7 @@
 
 ### DESCRIPTION
 
-A Google Chrome extension that logs whenever someone mentions your username on a forum and provides information about the post. Right now this extension only works for http://forum.bodybuilding.com/ but will eventually work on all vBulletin forums.
+A Google Chrome extension that logs whenever someone mentions your username on a forum and provides information about the post. Right now, this extension only works for http://forum.bodybuilding.com/ but will eventually work on all vBulletin forums and message boards.
 
 ### HOW IT WORKS
 
