@@ -6,7 +6,7 @@ A Google Chrome extension that logs whenever someone mentions your username on a
 
 ### HOW IT WORKS
 
-Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in localStorage. The extension uses background.js constantly scrape a message board every minute to find posts with your username mentioned.
+Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in Local Storage. The extension uses background.js constantly scrape a message board every minute to find posts with your username mentioned.
 
 
 ### PROJECT STATUS
@@ -14,7 +14,7 @@ Scrapes the search database and recently visited threads of a forum and records 
 DONE:
 - Basic scraping algorithm for querying the search results database.
 - Timer to scrape every minute
-- Store all posts in localStorage
+- Store all posts in Local Storage
 - Parse "yesterday" and "today" to actual date
 - Created basic UI for chrome extension
 - Settings page
