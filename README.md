@@ -18,7 +18,7 @@ DONE:
 - Parse "yesterday" and "today" to actual date
 - Created basic UI for chrome extension
 - Settings page
-- Popup page
+- Popup/popout page
 - Pull username for the search query from the forum website
 - Display a badge by donators usernames
 - Disable x button
