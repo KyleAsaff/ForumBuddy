@@ -29,4 +29,4 @@ TO DO:
 - Display subscriptions in popup page
 - Scrape and display latest reputation received data
 - Hide posts from reds
-- Make universal for all vBulletin Forums
+- Make universal for all vBulletin Forums and message boards
