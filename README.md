@@ -2,11 +2,11 @@
 
 ### DESCRIPTION
 
-A Google Chrome extension that logs whenever someone mentions your username on a forum and provides information about the post. Right now, this extension only works for http://forum.bodybuilding.com/ but will eventually support all vBulletin forums and message boards.
+A Google Chrome App that logs whenever someone mentions your username on a forum and provides information about the post. Right now, this app only works for http://forum.bodybuilding.com/ but will eventually support all vBulletin forums and message boards.
 
 ### HOW IT WORKS
 
-Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in Local Storage. The extension uses background.js constantly scrape a message board every minute to find posts with your username mentioned.
+Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in Local Storage. The app uses background.js constantly scrape a message board every minute to find posts with your username mentioned.
 
 
 ### PROJECT STATUS
@@ -16,7 +16,7 @@ DONE:
 - Timer to scrape every minute
 - Store all posts in Local Storage
 - Parse "yesterday" and "today" to actual date
-- Created basic UI for chrome extension
+- Created basic UI for chrome app
 - Settings page
 - Popup/popout page
 - Pull username for the search query from the forum website
