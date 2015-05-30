@@ -6,7 +6,7 @@ A Google Chrome App that logs whenever someone mentions your username on a forum
 
 ### HOW IT WORKS
 
-Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in Local Storage. The app uses background.js constantly scrape any specified message board to instantly find posts with your username mentioned.
+Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in Local Storage. Forum Buddy uses background.js constantly scrape any specified message board to instantly find posts with your username mentioned.
 
 
 ### PROJECT STATUS
