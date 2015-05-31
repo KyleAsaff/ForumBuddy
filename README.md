@@ -2,7 +2,7 @@
 
 ### DESCRIPTION
 
-A Google Chrome App that logs whenever someone mentions your username on a forum and provides information about the post. Right now, this app only works for http://forum.bodybuilding.com/ but will eventually support all vBulletin forums and message boards.
+A Google Chrome App that logs and creates a feed for whenever someone mentions your username on a forum and provides information about the post. Right now, this app only works for http://forum.bodybuilding.com/ but will eventually support all vBulletin forums and message boards.
 
 ### HOW IT WORKS
 
