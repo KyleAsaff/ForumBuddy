@@ -26,8 +26,9 @@ DONE:
 - Sort results by date field in memory instead of top query search
 
 TO DO:
-- Display subscriptions in popup page
 - Update UI
+- Write custom sort function for posts
+- Display subscriptions in popup page
 - Scrape and display latest reputation received data
 - Hide posts from reds
 - Make universal for all vBulletin Forums and message boards
