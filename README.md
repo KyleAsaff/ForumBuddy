@@ -27,6 +27,7 @@ DONE:
 
 TO DO:
 - Display subscriptions in popup page
+- Update UI
 - Scrape and display latest reputation received data
 - Hide posts from reds
 - Make universal for all vBulletin Forums and message boards
