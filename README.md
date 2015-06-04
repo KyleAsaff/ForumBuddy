@@ -13,7 +13,7 @@ Scrapes the search database and recently visited threads of a forum and records 
 
 DONE:
 - Basic scraping algorithm for querying the search results database.
-- Timer to scrape every minute
+- Automatically scrape on an interval
 - Store all posts in Local Storage
 - Parse "yesterday" and "today" to actual date
 - Created basic UI for chrome app
