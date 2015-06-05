@@ -17,7 +17,7 @@ DONE:
 - Store all posts in Local Storage
 - Parse "yesterday" and "today" to actual date
 - Created basic UI for chrome app
-- Settings page
+- Fully functioning settings page
 - Popup/popout page
 - Pull username for the search query from the forum website
 - Display a badge by donators usernames
