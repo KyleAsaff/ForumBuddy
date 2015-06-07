@@ -3,6 +3,7 @@
  * contains methods for retrieving object data from localStorage
  */
 
+// Custom variable for local storage
 var localDataStore = {
     // Get item
     get: function (key) {
