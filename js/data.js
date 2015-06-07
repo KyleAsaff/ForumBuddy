@@ -19,7 +19,7 @@ var localDataStore = {
             return (JSON.parse(localStorage.getItem(key))[index]);
     },
 
-    // Create new Item 
+    // Create new item 
     set: function(key, value) {
         localStorage.setItem(key, JSON.stringify(value));
     },
