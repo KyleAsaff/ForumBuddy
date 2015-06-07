@@ -1,6 +1,6 @@
 /*!
  * data.js
- * contains methods for retrieving object data from localStorage
+ * Contains methods for retrieving object data from local storage
  */
 
 // Custom variable for local storage
