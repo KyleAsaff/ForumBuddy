@@ -24,7 +24,7 @@ var localDataStore = {
         localStorage.setItem(key, JSON.stringify(value));
     },
 
-    // Adds new items to the front of an array in localStorage
+    // Adds new items to the front of an array in local storage
     appendToFront: function(key, data) {
 
         var t = data.constructor,
