@@ -12,7 +12,7 @@ Scrapes the search database and recently visited threads of a forum and records 
 ### PROJECT STATUS
 
 DONE:
-- Scraping algorithm for querying the search results database.
+- Scraping algorithm for querying the search database.
 - Automatically scrape on an interval
 - Store all posts in Local Storage
 - Parse "yesterday" and "today" to actual date
