@@ -339,16 +339,14 @@ function initalize(callback) {
     $.get(aviurl, function(data) {
 
         // find username in the page source
-        var myregex = /s_omni\.memberName = "([^"]*)"/;
-
-        var matchArray = myregex.exec(data);
+        var matchArray = data.match(/\"username":"(.*?)\",/);
         var userGMT;
 
         // find avi in the page source
-        var avisrc = $(data).find('div.profile-imgbox:first .profile-imgbox-pic a img').attr('src');
+        var avisrc = data.match(/\meta property="og:image:url" content="(.*?)\"/);
 
         //quit statement, not logged in
-        if (matchArray === null) {
+        if (!matchArray) {
             console.log("not logged in");
             localStorage.removeItem("fb_userinfo");
             if(callback) callback();
@@ -356,11 +354,12 @@ function initalize(callback) {
         }
 
         var username = matchArray[1];
-        if (avisrc === undefined) {
+        if (!avisrc) {
             avisrc = "/css/images/profiledefault_thumb.jpg";
             avi = avisrc;
-        } else
-            avi = avisrc;
+        } else {
+            avi = avisrc[1];
+        }
 
         // Get the time difference for when cookies removed
         $.get(url, function(data) {
