@@ -339,7 +339,8 @@ function initalize(callback) {
     $.get(aviurl, function(data) {
 
         // find username in the page source
-        var matchArray = data.match(/s_omni.memberName = "(.*?)\"/);
+        var matchArray = data.match(/s_omni.memberName = "(.*?)\"/) || data.match(/s.prop42="(.*?)\"/) ||  data.match(/s.eVar42="(.*?)\"/);
+
         var userGMT;
 
         // find avi in the page source
