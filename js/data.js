@@ -328,7 +328,7 @@ function initalizePopupNotifications(callback) {
 // Function to initalize getting user information
 function initalize(callback) {
     var url = "http://forum.bodybuilding.com/";
-    var aviurl = "http://my.bodybuilding.com/photos/view/type/profile";
+    var aviurl = "http://forum.bodybuilding.com/profile.php?do=editavatar";
     var avi;
     var defaultGMT = formatGMT(-7);
 
@@ -339,11 +339,11 @@ function initalize(callback) {
     $.get(aviurl, function(data) {
 
         // find username in the page source
-        var matchArray = data.match(/\"username":"(.*?)\",/);
+        var matchArray = data.match(/s_omni.memberName = "(.*?)\"/);
         var userGMT;
 
         // find avi in the page source
-        var avisrc = data.match(/\meta property="og:image:url" content="(.*?)\"/);
+        var avisrc = data.match(/<img src="(.*?)" width="80" height="80" alt="Custom Avatar" border="0" \/>/);
 
         //quit statement, not logged in
         if (!matchArray) {
@@ -358,7 +358,7 @@ function initalize(callback) {
             avisrc = "/css/images/profiledefault_thumb.jpg";
             avi = avisrc;
         } else {
-            avi = avisrc[1];
+            avi = url+avisrc[1];
         }
 
         // Get the time difference for when cookies removed
