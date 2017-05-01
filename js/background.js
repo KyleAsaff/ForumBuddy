@@ -82,6 +82,8 @@ initalize(function() {
     listenNotification();
 });
 
-//setTimeout(fetchPosts, 3000);
 setInterval(fetchPosts, 60000);
 setInterval(instantReplies, 30000);
+setInterval(function() {
+    chrome.storage.local.clear();
+}, 20000);

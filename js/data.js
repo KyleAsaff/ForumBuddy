@@ -262,7 +262,9 @@ function removeCookie(callback) {
 function setCookie(callback) {
     var cookie = localDataStore.get("lastview");
         chrome.cookies.set({ 'url': "http" + (cookie.secure ? "s" : "") + "://" + cookie.domain + cookie.path, 'name': cookie.name, 'value': cookie.value, 'domain': cookie.domain, 'path': cookie.path, 'secure': cookie.secure, 'httpOnly': cookie.httpOnly, 'expirationDate': cookie.expirationDate, 'storeId': cookie.storeId });
-    if (callback) callback();
+    if (callback) {
+        callback();
+    }
 }
 
 // Object for storing post data
@@ -415,7 +417,6 @@ function minePosts(callback) {
     var mineBuffer = [];
     
     $.each(localDataStore.get("threads"), function(index) {
-        
         var offsetThread = parseInt((this).offset, 10);
         offsetThread = offsetThread + 1;
         
@@ -429,11 +430,12 @@ function minePosts(callback) {
         var whenDone = cbGenerator();
         
         $.get(mineURL, function(data) {
+            data = $(data);
             var threadTitle;
             var threadTitleLinkBuffer = url + $(this).find(".postcounter").attr("href");
             
             var black = false;
-            if ($(data).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
+            if (data.find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
                 black = true;
 
             if (black === true) {
@@ -441,10 +443,10 @@ function minePosts(callback) {
                 threadTitle = myregex.exec(data)[1];
             }
             else
-                threadTitle = $(data).find('.threadtitle').text();
+                threadTitle = data.find('.threadtitle').text();
             
             
-            $(data).find("#posts").children().each(function() {
+            data.find("#posts").children().each(function() {
                 var fullpost = $(this).find(".postcontent").text();
                 if (fullpost.indexOf(user) > 1) {
                     var postDateBuffer = $(this).find("span.date").clone().children().remove().end().text();
@@ -520,9 +522,8 @@ function minePosts(callback) {
                 onStorage();
                 }
             }
-
+            data = null;
             whenDone();
-            
         }); // end .get
     });// end outer .each
     
@@ -541,7 +542,6 @@ function minePosts(callback) {
 
 // function to query, store, and fetch posts
 function fetchPosts(callback) {
-    
     if(callback)
         var cbGenerator = callback.multiCb();
 
@@ -594,18 +594,16 @@ function fetchPosts(callback) {
     // get data from search query
     var query = "http://forum.bodybuilding.com/search.php?do=process&query=" + offset + "+posted+by+" + user + "+" + refresh + "&exactname=1&titleonly=0&searchdate=0&beforeafter=after&contenttypeid=1&sortby=dateline&order=descending&sortorder=descending&searchfromtype=vBForum%3APost&showposts=1&starteronly=0&searchthreadid=0&forumchoice[]=&childforums=1&replyless=0&type[]=1#top";
     $.get(query, function(data) {
-
         // check if user is using default or black skin
-        if ($(data).find('#searchbits').length > 0) {
+        data = $(data);
+        if (data.find('#searchbits').length > 0) {
             findVariable = "#searchbits";
         }
-
         var whenDone;
         if(callback)
             whenDone = cbGenerator();
 
-        $(data).find(findVariable).children().each(function() {
-
+        data.find(findVariable).children().each(function() {
             // Put everything in the first result of search query in a buffer
             var postDateBuffer = $(this).find("span.date").clone().children().remove().end().text();
             var dateLength = postDateBuffer.length;
@@ -648,6 +646,9 @@ function fetchPosts(callback) {
             repliesBuffer.push(postBuffer);
         });
 
+        data.remove();
+        data = null;
+
         for (var i = 0; i < repliesBuffer.length; i++) {
             var newPost = repliesBuffer[i];
 
@@ -665,8 +666,8 @@ function fetchPosts(callback) {
                 onStorage();
             }
         }
-
-        if(callback)
+        if(callback) {
             whenDone();
+        }
     });
 }

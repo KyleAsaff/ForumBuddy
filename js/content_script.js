@@ -56,13 +56,13 @@ var localDataStore = {
 
 // Function to get donators from external JSON
 function donators() {
-    var jsonURL = "http://kylesbox.com/donators.json";
-
+    var jsonURL = "https://kylesbox.com/donators.json";
     var xhr = new XMLHttpRequest();
     xhr.open("GET", jsonURL, true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             localDataStore.set("fb_donators", xhr.responseText);
+            xhr = null;
         }
     };
     xhr.send();
@@ -85,7 +85,6 @@ function insertBadge() {
     $("img.onlinestatus").each(function(index) {
         var match = $(this).attr('title');
         var $this = $(this);
-
         $.each(data.donators, function(i, item) {
             var username = data.donators[i].username;
 
