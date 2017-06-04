@@ -435,16 +435,19 @@ function minePosts(callback) {
             var threadTitleLinkBuffer = url + $(this).find(".postcounter").attr("href");
             
             var black = false;
-            if (data.find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")
+            if (data.find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png") {
                 black = true;
-
-            if (black === true) {
-                var myregex = /s\.prop39="([^"]*)"/;
-                threadTitle = myregex.exec(data)[1];
             }
-            else
-                threadTitle = data.find('.threadtitle').text();
+
+            // if (black === true) {
+            //     var myregex = /s\.prop39="([^"]*)"/;
+            //     threadTitle = myregex.exec(data)[1];
+            // }
+            // else {
+            //     threadTitle = data.find('.threadtitle').text();
+            // }
             
+            threadTitle = data.find('.threadtitle').text();
             
             data.find("#posts").children().each(function() {
                 var fullpost = $(this).find(".postcontent").text();
