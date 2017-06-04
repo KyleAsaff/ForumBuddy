@@ -89,7 +89,9 @@ $(document).ready(function() {
                     var avi = localDataStore.get("fb_userinfo").avi;
                     $('#popup_notification').prop('checked', true);
                     $('#useravi').attr("src", avi);
-                    initalizePopupNotifications();
+                    setTimeout(function() {
+                        initalizePopupNotifications();
+                    }, 10000);
                 });
                 $(".loading").hide();
             });

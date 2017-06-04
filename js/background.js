@@ -77,17 +77,25 @@ function instantReplies() {
 initalize(function() {
     fetchPosts(function() {
         sortReplies();
-        initalizePopupNotifications();
+        setTimeout(function() {
+            initalizePopupNotifications();
+        }, 10000);
     });
     listenNotification();
 });
 
-setInterval(function() {
-    chrome.storage.local.clear();
-    fetchPosts();
-}, 60000);
+// Broken until bodybuilding.com fixes their forums
+// setInterval(function() {
+//     chrome.storage.local.clear();
+//     fetchPosts();
+// }, 60000);
 
 setInterval(function() {
     chrome.storage.local.clear();
     instantReplies();
 }, 30000);
+
+setInterval(function() {
+    chrome.storage.local.clear();
+    addRecentThreads();
+}, 60000);

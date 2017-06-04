@@ -118,7 +118,8 @@ function insertBlackBadge() {
             var username = data.donators[i].username;
 
             if (match.indexOf(username + " ") > -1) {
-                $($this).next().next().next().next().find('a').after('<a class="forumbuddy" title="Forum Buddy Supporter"><img src=' + iconURL + ' alt="" height="24px" width="22px"></a>');
+                var badge = '<a class="forumbuddy" title="Forum Buddy Supporter"><img src=' + iconURL + ' alt="" height="24px" width="22px"></a>';
+                ($this).parent().append(badge);
             }
 
         });

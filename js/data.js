@@ -28,7 +28,7 @@ var localDataStore = {
     appendToFront: function(key, data) {
 
         var t = data.constructor,
-            tmp, tmp2 = [],
+            tmp = null, tmp2 = [],
             concat;
 
         switch (t) {
@@ -295,9 +295,10 @@ function thread(url, title) {
 }
 
 // Object to hold the user information
-function userinfo(forum, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc) {
+function userinfo(forum, userid, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc) {
     this.forum = forum;
     this.username = username;
+    this.userid = userid;
     this.avi = avi;
     this.defaultGMT = defaultGMT;
     this.userGMT = userGMT;
@@ -320,8 +321,9 @@ function initalizePopupNotifications(callback) {
         var mentions = localDataStore.get("fb_userinfo").mentions;
         var popup_notification = true;
         var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
+        var userid = localDataStore.get("fb_userinfo").userid;
 
-        var tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
+        var tempuserinfo = new userinfo(url, userid, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
         localDataStore.set("fb_userinfo", tempuserinfo);
 
         if (callback) callback();
@@ -344,7 +346,7 @@ function initalize(callback) {
         var matchArray = data.match(/s_omni.memberName = "(.*?)\"/) || data.match(/s.prop42="(.*?)\"/) ||  data.match(/s.eVar42="(.*?)\"/);
 
         var userGMT;
-
+        var userid = null;
         // find avi in the page source
         var avisrc = data.match(/<img src="(.*?)" width="80" height="80" alt="Custom Avatar" border="0" \/>/);
 
@@ -362,6 +364,7 @@ function initalize(callback) {
             avi = avisrc;
         } else {
             avi = url+avisrc[1];
+            userid = avisrc[1].match(/u=(.*?)&/) ? avisrc[1].match(/u=(.*?)&/)[1] : null;
         }
 
         // Get the time difference for when cookies removed
@@ -375,16 +378,26 @@ function initalize(callback) {
 
             var tempuserinfo;
             if (localStorage.getItem("fb_userinfo") === null)
-                tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, true, true, false, true);
+                tempuserinfo = new userinfo(url, userid, username, avi, defaultGMT, userGMT, true, true, false, true);
             else {
                 var enabled = localDataStore.get("fb_userinfo").enabled;
                 var mentions = localDataStore.get("fb_userinfo").mentions;
                 var mentions_longdesc = localDataStore.get("fb_userinfo").mentions_longdesc;
                 var popup_notification = localDataStore.get("fb_userinfo").popup_notification;
 
-                tempuserinfo = new userinfo(url, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
+                tempuserinfo = new userinfo(url, userid, username, avi, defaultGMT, userGMT, enabled, mentions, popup_notification, mentions_longdesc);
             }
+
             localDataStore.set("fb_userinfo", tempuserinfo);
+            addRecentThreads(function() {
+                getCookie(function(){
+                    minePosts(function(){
+                        removeCookie(function(){
+                            setCookie();
+                        });
+                    });
+                });
+            });
             if(callback) callback();
         });
     });
@@ -543,6 +556,7 @@ function minePosts(callback) {
 }
 
 
+
 // function to query, store, and fetch posts
 function fetchPosts(callback) {
     if(callback)
@@ -671,6 +685,52 @@ function fetchPosts(callback) {
         }
         if(callback) {
             whenDone();
+        }
+    });
+}
+
+function addRecentThreads(callback) {
+    if(!localStorage.getItem("fb_userinfo")) {
+        console.log('returning');
+        return false;
+    }
+    var userid = localDataStore.get("fb_userinfo").userid;
+    var query = 'https://forum.bodybuilding.com/search.php?do=finduser&userid='+userid+'&showposts=1';
+    $.get(query, function(data) {
+        data = $(data);
+        var posts = data.find('.username_container > h2 > a');
+        posts.each(function() {
+            var split = this.href.split("?t=");
+            if(split) {
+                var threadid = split[1];
+                if (!threadid) {
+                    return;
+                }
+                var url = "http://forum.bodybuilding.com/showthread.php?t=" + threadid + "&page=1000";
+                var newThread = new thread(url, "thread_title");
+                var currentThreads = localDataStore.get("threads");
+                var filtered = $(localDataStore.get("threads")).filter(function() {
+                    return this.url === url;
+                });
+                // if thread not yet stored in localstorage, add it
+                if (filtered.length === 0)
+                    localDataStore.appendToFront("threads", newThread);
+                else {
+                    // reset offset back to 0 if thread exists
+                    index = currentThreads.map(function(e) {
+                        return e.url;
+                    }).indexOf(url);
+                    currentThreads[index].offset = 0;
+                    localDataStore.set("threads", currentThreads);
+                }
+            }
+        });
+        posts.remove();
+        posts = null;
+        data.remove();
+        data = null;
+        if(callback) {
+            callback();
         }
     });
 }
