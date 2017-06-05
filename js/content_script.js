@@ -1,7 +1,11 @@
 /* content_script.js
  *
- * Injects the forum buddy icon 
- * into the forum page by donators usernames.
+ * Insert icon by donators names
+ * 
+ * THIS IS NOT AN ADVERTISEMENT. 
+ * 
+ * ANYONE WHO DONATES TO THIS CHROME EXTENSION GETS A BADGE BESIDE THEIR NAME ON
+ * THE BODYBUILDING.COM FORUMS. I REPEAT - THIS IS A PERK NOT AN ADVERTISEMENT
  */
 
 // Custom localstorage methods for parsing JSON data
@@ -55,6 +59,11 @@ var localDataStore = {
 };
 
 // Function to get donators from external JSON
+// 
+// THIS IS NOT AN ADVERTISEMENT. 
+// 
+// ANYONE WHO DONATES TO THIS CHROME EXTENSION GETS A BADGE BESIDE THEIR NAME ON
+// THE BODYBUILDING.COM FORUMS. I REPEAT - THIS IS A PERK NOT AN ADVERTISEMENT
 function donators() {
     var jsonURL = "https://kylesbox.com/donators.json";
     var xhr = new XMLHttpRequest();
@@ -68,7 +77,12 @@ function donators() {
     xhr.send();
 }
 
-// Inject icon by donators names
+// Insert icon by donators names
+// 
+// THIS IS NOT AN ADVERTISEMENT. 
+// 
+// ANYONE WHO DONATES TO THIS CHROME EXTENSION GETS A BADGE BESIDE THEIR NAME ON
+// THE BODYBUILDING.COM FORUMS. I REPEAT - THIS IS A PERK NOT AN ADVERTISEMENT
 function insertBadge() {
     donators();
 
@@ -96,7 +110,12 @@ function insertBadge() {
     });
 }
 
-// Inject icon by donators names
+// Insert icon by donators names
+// 
+// THIS IS NOT AN ADVERTISEMENT. 
+// 
+// ANYONE WHO DONATES TO THIS CHROME EXTENSION GETS A BADGE BESIDE THEIR NAME ON
+// THE BODYBUILDING.COM FORUMS. I REPEAT - THIS IS A PERK NOT AN ADVERTISEMENT
 function insertBlackBadge() {
     donators();
 
@@ -126,7 +145,6 @@ function insertBlackBadge() {
     });
 }
 
-// run injection on ready
 $(document).ready(function() {
 
     if ($(this).find(".searchbutton").attr("src") === "images/BP-Black/buttons/search.png")

@@ -19,6 +19,7 @@
         "default_title": "Forum Buddy",
         "default_popup": "src/browser_action/popup.html"
     },
+    "_comment": "This content script does NOT insert advertisements into the webpage",
     "content_scripts": [{
         "js": ["js/jquery-1.11.2.min.js", "js/data.js", "js/content_script.js"],
         "css": ["css/forumbuddy.css"],
