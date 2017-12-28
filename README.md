@@ -6,7 +6,7 @@ A Google Chrome App that logs and creates a personalized newsfeed for whenever s
 
 ### HOW IT WORKS
 
-Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in local storage. Forum Buddy uses background.js constantly scrape any specified message board to instantly find posts with your username mentioned and displays them in a personalized timeline.
+Scrapes the search database and recently visited threads of a forum and records all fourm posts that cointains your username in local storage. Forum Buddy uses background.js constantly scrape any specified message board to instantly find posts with your username mentioned and displays them in a personalized timeline. 
 
 
 ### PROJECT STATUS  
