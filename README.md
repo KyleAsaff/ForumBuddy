@@ -10,7 +10,7 @@ Scrapes the search database and recently visited threads of a forum and records 
 
  
 ### PROJECT STATUS  
-
+ 
 DONE:
 - Scraping algorithm for querying the search database.
 - Automatically scrapes on an interval
