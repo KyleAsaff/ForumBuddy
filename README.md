@@ -1,6 +1,6 @@
 # Forum Buddy
 
-### DESCRIPTION
+### DESCRIPTION 
  
 A Google Chrome App that logs and creates a personalized newsfeed for whenever someone mentions your username on a forum and provides information and details about the post. Forum Buddy only supports http://forum.bodybuilding.com/ at the moment but will support all vBulletin forums and message boards in the future.
 
